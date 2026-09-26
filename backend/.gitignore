@@ -36,3 +36,8 @@ Thumbs.db
 
 # Build
 backend/public/build
+
+
+
+# OSPanel
+.osp/
