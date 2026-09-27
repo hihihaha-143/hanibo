@@ -1,0 +1,14 @@
+@use '../../abstracts' as *;
+@use './_sidebar/_sidebar';
+
+.main-layout {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;        // ← 16px сверху + 16px снизу
+  min-height: 100vh;    // ← ровно высота экрана
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+}

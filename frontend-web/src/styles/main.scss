@@ -1,0 +1,10 @@
+@use './abstracts' as *;
+@use './base';
+
+// layouts
+@use './layouts/MainLayout/main-layout';
+@use './layouts/MainLayout/mobile-nav/mobile-nav';
+
+// pages
+@use './pages/HomePage/home-page';
+@use './pages/CoursePage/course-page';

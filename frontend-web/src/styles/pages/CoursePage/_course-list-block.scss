@@ -1,0 +1,13 @@
+.course-list-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-start;
+
+  &--loading {
+    display: block;
+    opacity: 0.6;
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+  }
+}

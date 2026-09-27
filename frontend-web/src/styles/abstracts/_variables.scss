@@ -1,0 +1,66 @@
+// =============================================================================
+// COLORS — SEMANTIC TOKENS
+// =============================================================================
+// Светлая тема — по умолчанию.
+// Тёмная тема переопределяет эти же токены ниже.
+
+:root {
+  // --- Background / Surface ---
+  --color-bg:            #E8EBED;
+  --color-surface:       #FFF7EC;
+  --color-surface-alt:   #F1EEE6;   
+
+  // --- Text ---
+  --color-text:          #0A132A;
+  --color-text-secondary:#2C3F70;
+
+  // --- Border ---
+  --color-border:        #D9D9D8;
+
+  // --- Primary ---
+  --color-primary:       #2C3F70;
+  --color-primary-hover: rgb(28, 64, 126);  
+
+  // --- Secondary ---
+  --color-secondary:     #C8D4E5;
+
+  // --- Accent (клубничный, для акцентных элементов) ---
+  --color-accent:        #83140e;
+    --color-accent-hover:        #740e08;
+
+  // --- Semantic ---
+  --color-error:         #A5231C;
+
+  // --- Резерв (не используются сейчас, но пусть будут под рукой) ---
+  --color-neutral-light: #F5EFDC;
+  --color-neutral-mid:   #B1BBC8;
+  --color-neutral-dark:  #282B4A;
+}
+
+// =============================================================================
+// DARK THEME OVERRIDES
+// =============================================================================
+
+[data-theme="dark"] {
+  --color-bg:            #0A132A;
+  --color-surface:       #1F3357;
+  --color-surface-alt:   #2C3F70;
+
+  --color-text:          #F7F2E0;
+  --color-text-secondary:#9BABCD;
+
+  --color-border:        #2C3F70;
+
+  --color-primary:       #1F3357;
+  --color-primary-hover: #26538D;
+
+  --color-secondary:     #476D9E;
+
+  --color-accent:        #630100;
+
+  --color-error:         #A5231C;
+
+  --color-nav-active:    #630100;
+}
+
+

@@ -1,0 +1,32 @@
+// =============================================================================
+// BASE — глобальные стили
+// =============================================================================
+
+html, body {
+  overflow-x: hidden;  // ← отсекает горизонтальный скролл
+  max-width: 100%;
+}
+
+
+#root {
+  height: 100%;   // ← фиксированная высота = высоте body
+  display: flex;
+  flex-direction: column;
+}
+
+// --- Контейнер ---
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+// --- Утилитарные классы ---
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-error {
+  color: var(--color-error);
+}

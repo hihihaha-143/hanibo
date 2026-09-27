@@ -1,0 +1,37 @@
+:root {
+  // --- Easing ---
+  --ease-spring: linear(
+    0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%,
+    0.723 12.9%, 0.938 16.7%, 1.017, 1.077,
+    1.121, 1.149 24.3%, 1.159, 1.163, 1.161,
+    1.154 29.9%, 1.129 32.8%, 1.051 39.6%,
+    1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%,
+    0.975 57.1%, 0.997 69.8%, 1.003 76.9%,
+    1.004 83.2%, 1
+  );
+  
+  --ease-bounce: linear(
+    0, 0.004, 0.016, 0.035, 0.063, 0.098, 0.141 8.5%,
+    0.191, 0.25, 0.316, 0.391, 0.473, 0.562, 0.659 21.3%,
+    0.859, 0.969 27.7%, 1.035, 1.076, 1.097, 1.106,
+    1.107 36.2%, 1.102, 1.092, 1.079 42.6%,
+    1.063, 1.046, 1.028 49%, 1.011, 1.001 53.2%,
+    0.997 57.1%, 0.997 63.2%, 1.001 69.8%,
+    1.003 76.9%, 1.004 83.2%, 1
+  );
+
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  // --- Durations ---
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+
+  // --- Transitions ---
+  --transition-fast: var(--duration-fast) var(--ease-spring);
+  --transition-base: var(--duration-base) var(--ease-spring);
+  --transition-slow: var(--duration-slow) var(--ease-spring);
+  --transition-theme: var(--duration-base) var(--ease-out);
+  --transition-bounce: var(--duration-fast) var(--ease-bounce);
+}

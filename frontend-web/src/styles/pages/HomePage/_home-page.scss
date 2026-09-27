@@ -1,0 +1,40 @@
+@use '../../abstracts' as *;
+@use './about-block';
+@use './tip-block';
+@use './auth-prompt-block';
+
+.home-page {
+  display: grid;
+  // ✅ Две колонки: контент + фиксированный сайдбар
+  grid-template-columns: minmax(0, 1fr) 450px;
+  gap: 1.5rem;
+  // ✅ Растягиваем колонки по высоте, чтобы правая была как левая
+  align-items: stretch;
+
+  &__col {
+    &--about {
+      grid-column: 1;
+    }
+
+    &--side {
+      grid-column: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      // height: 100% не нужен — grid уже растянул колонку
+    }
+  }
+
+  // Мобилка: всё в одну колонку
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    &__col {
+      &--about,
+      &--side {
+        grid-column: 1;
+      }
+    }
+  }
+}

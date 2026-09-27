@@ -1,0 +1,29 @@
+@use '../../../abstracts' as *;
+@use './mobile-nav-bar';
+@use './mobile-nav-sheet';
+
+.mobile-nav-bar,
+.mobile-nav-sheet,
+.mobile-nav-overlay {
+  // По умолчанию — скрыты (десктоп)
+  display: none;
+}
+
+@media (hover: none), (max-width: 767px) {
+  .mobile-nav-bar {
+    display: flex;
+  }
+
+  .mobile-nav-sheet {
+    display: block;
+  }
+
+  .mobile-nav-overlay {
+    display: block;
+  }
+
+  // Прячем десктопный сайдбар на мобилке
+  .sidebar {
+    display: none;
+  }
+}

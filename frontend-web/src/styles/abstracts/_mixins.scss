@@ -1,0 +1,91 @@
+// =============================================================================
+// MIXINS
+// =============================================================================
+
+@use "sass:map";
+@use "sass:math";
+@use "./variables" as *;
+
+// --- Breakpoints ---
+$breakpoints: (
+  "sm": 576px,
+  "md": 768px,
+  "lg": 992px,
+  "xl": 1200px,
+);
+
+/// Media query up (min-width)
+@mixin up($bp) {
+  $value: map.get($breakpoints, $bp);
+  @if $value {
+    @media (min-width: $value) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$bp}";
+  }
+}
+
+/// Media query down (max-width)
+@mixin down($bp) {
+  $value: map.get($breakpoints, $bp);
+  @if $value {
+    @media (max-width: ($value - 0.02px)) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$bp}";
+  }
+}
+
+// --- Flexbox helpers ---
+@mixin flex($direction: row, $justify: flex-start, $align: stretch, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  @if $gap != 0 {
+    gap: $gap;
+  }
+}
+
+// --- Truncate text ---
+@mixin truncate($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+// --- Visually hidden (для a11y) ---
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// --- Transitions ---
+@mixin transition($props: all, $duration: var(--transition-base)) {
+  transition-property: $props;
+  transition-duration: $duration;
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@mixin transition-theme {
+  transition:
+    background-color var(--transition-theme),
+    color var(--transition-theme),
+    border-color var(--transition-theme);
+}
