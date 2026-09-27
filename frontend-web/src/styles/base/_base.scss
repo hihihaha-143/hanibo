@@ -3,13 +3,13 @@
 // =============================================================================
 
 html, body {
-  overflow-x: hidden;  // ← отсекает горизонтальный скролл
+  overflow-x: hidden; 
   max-width: 100%;
 }
 
 
 #root {
-  height: 100%;   // ← фиксированная высота = высоте body
+  height: 100%;   
   display: flex;
   flex-direction: column;
 }

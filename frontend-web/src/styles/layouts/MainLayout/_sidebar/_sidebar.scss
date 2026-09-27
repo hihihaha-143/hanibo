@@ -3,11 +3,13 @@
 @use './sidebar-bottom';
 
 .sidebar {
-  position: sticky;
+  position: fixed;
   top: 1rem;
+  left: 1rem; 
+  
   width: 64px;
-  flex-shrink: 0;
-  height: calc(100vh - 2rem);
+  height: calc(100vh - 2rem); 
+  
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -16,6 +18,8 @@
   border-radius: 1rem;
   overflow: hidden;
   transition: width var(--transition-theme);
+
+  z-index: 100;
 
   &--expanded {
     width: 220px;
