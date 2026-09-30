@@ -3,7 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\Tip;
 use App\Models\CourseItem;
+use App\Http\Controllers\Api\CourseItemWordController;
+use App\Http\Controllers\Api\CourseItemGrammarController;
 
+Route::get('/course-items/{courseItem}/grammar', [CourseItemGrammarController::class, 'index']);
+Route::get('/course-items/{courseItem}/words', [CourseItemWordController::class, 'index']);
 // --- Ping (проверка связи) ---
 Route::get('/ping', function () {
     return response()->json([

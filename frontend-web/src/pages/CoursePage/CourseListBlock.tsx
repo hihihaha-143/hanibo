@@ -24,10 +24,10 @@ export default function CourseListBlock() {
   }, []);
 
   const handleClick = (item: CourseItem) => {
-    if (item.type === "extra") {
-      navigate(`/course/extra/${item.id}`);
+    if (item.type === "extra" || item.type === "lesson") {
+      navigate(`/course/item/${item.id}`);
     }
-    // урок и тест — позже
+    // test — позже
   };
 
   if (loading) {

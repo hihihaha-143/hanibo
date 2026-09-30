@@ -8,7 +8,6 @@ yarn-error.log*
 
 # PHP / Composer
 vendor/
-composer.lock
 
 # Laravel
 backend/storage/*.key

@@ -10,14 +10,13 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
+
 public function run(): void
 {
     $this->call([
-        TipSeeder::class,
-        CourseItemSeeder::class,
-        ExtraSeeder::class,
+        DictionarySeeder::class,
+        LessonContentSeeder::class,
+        GrammarSeeder::class,
     ]);
 }
-
-
 }

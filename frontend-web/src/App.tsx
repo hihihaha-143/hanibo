@@ -2,11 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout/MainLayout";
 import HomePage from "./pages/HomePage/HomePage";
 import CoursePage from "./pages/CoursePage/CoursePage";
-import ExtraPage from "./pages/ExtraPage/ExtraPage";
-
-function Empty() {
-  return <div>Пустая страница</div>;
-}
+import ItemPage from "./pages/ItemPage/ItemPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -15,9 +12,9 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/course" element={<CoursePage />} />
-          <Route path="/course/extra/:id" element={<ExtraPage />} />
+          <Route path="/course/item/:id" element={<ItemPage />} />
         </Route>
-        <Route path="/login" element={<Empty />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );
