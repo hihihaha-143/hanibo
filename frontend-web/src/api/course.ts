@@ -24,6 +24,9 @@ export interface CourseItemDetails extends CourseItem {
   extra: ExtraContent | null;
   next: CourseItemLink | null;
   prev: CourseItemLink | null;
+  next_lesson: CourseItemLink | null;
+  prev_lesson: CourseItemLink | null;
+  lesson_ids: number[];
 }
 
 // ---------- общие справочники ----------
@@ -66,6 +69,14 @@ export interface PhraseToken {
   } | null;
 }
 
+// ---------- короткое правило (внутри фразы) ----------
+
+export interface PhraseGrammarRule {
+  id: number;
+  title: string;
+  construction: string;
+}
+
 // ---------- фраза (пример) ----------
 
 export interface Phrase {
@@ -73,6 +84,7 @@ export interface Phrase {
   hangul: string;
   translation: string;
   tokens: PhraseToken[];
+  grammar_rules: PhraseGrammarRule[];
 }
 
 // ---------- слова урока ----------
@@ -106,6 +118,7 @@ export interface GrammarRule {
 export interface CourseItemGrammarResponse {
   course_item: CourseItem;
   grammar: GrammarRule[];
+  pool: PhraseGrammarRule[];
 }
 
 // ---------- запросы ----------
@@ -136,6 +149,23 @@ export async function getCourseItemGrammar(
 ): Promise<CourseItemGrammarResponse> {
   const { data } = await apiClient.get<CourseItemGrammarResponse>(
     `/course-items/${id}/grammar`,
+  );
+  return data;
+}
+
+export interface CourseTestDataResponse {
+  course_item: CourseItem;
+  words: CourseItemWord[];
+  grammar: GrammarRule[];
+  pool: PhraseGrammarRule[];
+  lesson_ids: number[];
+}
+
+export async function getCourseTestData(
+  id: number,
+): Promise<CourseTestDataResponse> {
+  const { data } = await apiClient.get<CourseTestDataResponse>(
+    `/course-tests/${id}/data`,
   );
   return data;
 }

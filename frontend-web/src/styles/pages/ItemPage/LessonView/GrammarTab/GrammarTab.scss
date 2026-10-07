@@ -1,8 +1,0 @@
-@use '../../../../abstracts/' as *;
-@use './GrammarRuleCard';
-
-.grammar-tab {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}

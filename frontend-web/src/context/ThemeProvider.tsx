@@ -1,9 +1,8 @@
-import { createContext, useEffect, useState, type ReactNode } from "react";
-import type { Theme, ThemeContextValue } from "../types/theme";
+import { useEffect, useState, type ReactNode } from "react";
+import type { Theme } from "../types/theme";
+import { ThemeContext } from "./ThemeContext";
 
 const STORAGE_KEY = "hanibo-theme";
-
-export const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 function getInitialTheme(): Theme {
   // 1. Сохранённый выбор

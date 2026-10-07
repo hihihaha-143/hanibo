@@ -1,8 +1,10 @@
-@use '../../../abstracts' as *;
+@use '../../abstracts/' as *;
 @use './DictionaryTab/DictionaryTab';
 @use './GrammarTab/GrammarTab';
 @use './PhraseBlock';
 @use './PhraseToken';
+@use './Test/Test';
+
 
 .lesson-view {
   display: flex;
@@ -53,6 +55,16 @@
     &--active {
       color: var(--color-text);
       border-bottom-color: var(--color-accent);
+    }
+
+    &--locked {
+      opacity: 0.4;
+      filter: grayscale(1);
+      cursor: not-allowed;
+
+      &:hover {
+        color: var(--color-text-secondary);
+      }
     }
   }
 

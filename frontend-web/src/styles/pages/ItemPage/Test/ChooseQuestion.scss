@@ -1,0 +1,94 @@
+@use '../../../abstracts/' as *;
+
+.choose-question {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  &__prompt {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__prompt-text {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  &__speak {
+    display: flex;
+    gap: 0.375rem;
+  }
+
+  &__speak-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    background: none;
+    color: var(--color-text-secondary);
+    font-family: inherit;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+      color: var(--color-text);
+      border-color: var(--color-text);
+    }
+  }
+
+  &__variants {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  &__variant {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 1rem;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+
+    &:hover:not(:disabled) {
+      border-color: var(--color-primary);
+    }
+
+    &:disabled {
+      cursor: default;
+    }
+
+    &--correct {
+      border-color: #2d7d3a;
+      background: rgba(45, 125, 58, 0.12);
+      color: #2d7d3a;
+    }
+
+    &--wrong {
+      border-color: var(--color-error);
+      background: rgba(165, 35, 28, 0.12);
+      color: var(--color-error);
+    }
+  }
+
+  &__instruction {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+}
+
+&--grammar {
+  .choose-question__prompt {
+    display: block;
+  }
+}
+}

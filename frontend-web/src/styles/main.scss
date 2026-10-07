@@ -1,6 +1,9 @@
 @use './abstracts' as *;
 @use './base';
 
+// components
+@use './components/StateBlock/state-block';
+
 // layouts
 @use './layouts/MainLayout/main-layout';
 @use './layouts/MainLayout/mobile-nav/mobile-nav';
@@ -9,4 +12,5 @@
 @use './pages/HomePage/home-page';
 @use './pages/CoursePage/course-page';
 @use './pages/ExtraPage/extra-page';
-@use './pages/ItemPage/LessonView/LessonView';
+@use './pages/ItemPage/item-page';
+@use './pages/ItemPage/LessonView';

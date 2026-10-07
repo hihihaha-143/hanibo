@@ -12,7 +12,7 @@ const items = [
 
 export default function SidebarNav({ expanded }: SidebarNavProps) {
   return (
-    <nav className="sidebar-nav">
+    <nav className={`sidebar-nav${expanded ? " sidebar-nav--expanded" : ""}`}>
       {items.map(({ to, label, icon: Icon }) => (
         <NavLink
           key={to}

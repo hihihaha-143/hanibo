@@ -1,16 +1,66 @@
+import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import type { CourseItemWord } from "../../../../api/course";
+import {
+  generateWordsTest,
+  type TestQuestion,
+} from "../../../../utils/testGenerator";
+import { setWordsPercent } from "../../../../utils/progress";
 import WordListBlock from "./WordListBlock";
+import Test from "../Test/Test";
 
 interface DictionaryTabProps {
+  itemId: number;
   words: CourseItemWord[];
+  onGoToGrammar: () => void;
+  onProgressChange: () => void;
 }
 
-export default function DictionaryTab({ words }: DictionaryTabProps) {
-  const handleStartTest = () => {
-    // TODO: переход на тест по словарю — позже
-    console.log("start dictionary test");
+type Mode = "cards" | "test";
+
+export default function DictionaryTab({
+  itemId,
+  words,
+  onGoToGrammar,
+  onProgressChange,
+}: DictionaryTabProps) {
+  const [mode, setMode] = useState<Mode>("cards");
+  const [questions, setQuestions] = useState<TestQuestion[]>([]);
+
+  const startTest = () => {
+    setQuestions(generateWordsTest(words));
+    setMode("test");
   };
+
+  const handleFinish = (correct: number, total: number, _isPassed: boolean) => {
+    const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
+    setWordsPercent(itemId, percent);
+    onProgressChange();
+  };
+
+  const handleRepeat = () => {
+    setQuestions(generateWordsTest(words));
+  };
+
+  const handleBack = () => {
+    setMode("cards");
+  };
+
+  if (mode === "test") {
+    return (
+      <div className="dictionary-tab">
+        <Test
+          questions={questions}
+          onFinish={handleFinish}
+          onRepeat={handleRepeat}
+          onBack={handleBack}
+          backLabel="К словарю"
+          onNext={onGoToGrammar}
+          nextLabel="К грамматике"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="dictionary-tab">
@@ -20,7 +70,7 @@ export default function DictionaryTab({ words }: DictionaryTabProps) {
         <button
           type="button"
           className="dictionary-tab__test-button"
-          onClick={handleStartTest}
+          onClick={startTest}
         >
           <span>Пройти тест</span>
           <ArrowRight size={18} />

@@ -11,7 +11,9 @@ export default function SidebarBottom({ expanded }: SidebarBottomProps) {
   const isDark = theme === "dark";
 
   return (
-    <div className="sidebar-bottom">
+    <div
+      className={`sidebar-bottom${expanded ? " sidebar-bottom--expanded" : ""}`}
+    >
       {/* Switch — временный, стили потом переделаем */}
       <label className="theme-switch">
         <input type="checkbox" checked={isDark} onChange={toggleTheme} />

@@ -12,16 +12,3 @@ export default function ExtraContentBlock({ content }: ExtraContentBlockProps) {
     </div>
   );
 }
-const handleClick = (item: CourseItem) => {
-  switch (item.type) {
-    case "extra":
-      navigate(`/course/extra/${item.id}`);
-      break;
-    case "lesson":
-      navigate(`/course/lesson/${item.id}`);
-      break;
-    case "test":
-      navigate(`/course/test/${item.id}`);
-      break;
-  }
-};

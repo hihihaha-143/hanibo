@@ -14,6 +14,7 @@ class PhraseResource extends JsonResource
             'hangul' => $this->hangul,
             'translation' => $this->translation,
             'tokens' => PhraseTokenResource::collection($this->whenLoaded('tokens')),
+            'grammar_rules' => GrammarRuleResource::collection($this->whenLoaded('grammarRules')),
         ];
     }
 }

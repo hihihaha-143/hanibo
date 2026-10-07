@@ -11,6 +11,7 @@ class CourseItem extends Model
     protected $fillable = [
         'type',
         'order',
+        'level_id',
         'title',
         'extra_id',
     ];
@@ -38,11 +39,25 @@ class CourseItem extends Model
             ->orderBy('lesson_phrase.order');
     }
 
-
     public function grammarRules(): BelongsToMany
-{
-    return $this->belongsToMany(GrammarRule::class, 'lesson_grammar')
-        ->withPivot('order')
-        ->orderBy('lesson_grammar.order');
-}
+    {
+        return $this->belongsToMany(GrammarRule::class, 'lesson_grammar')
+            ->withPivot('order')
+            ->orderBy('lesson_grammar.order');
+    }
+
+    public function level(): BelongsTo
+    {
+        return $this->belongsTo(Level::class);
+    }
+
+    public function testLessons(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            CourseItem::class,
+            'course_test_lessons',
+            'course_test_id',
+            'course_lesson_id',
+        )->orderBy('course_lesson_id');
+    }
 }

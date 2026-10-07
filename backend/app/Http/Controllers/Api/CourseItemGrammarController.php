@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\GrammarRuleResource;
 use App\Models\CourseItem;
+use App\Models\GrammarRule;
 use Illuminate\Http\JsonResponse;
 
 class CourseItemGrammarController extends Controller
@@ -17,8 +18,19 @@ class CourseItemGrammarController extends Controller
                 'level',
                 'phrases.tokens.word',
                 'phrases.tokens.grammarRule',
+                'phrases.grammarRules',
             ])
             ->get();
+
+        $grammarIds = $grammar->pluck('id')->all();
+
+        $pool = collect();
+        if ($courseItem->level_id) {
+            $pool = GrammarRule::where('level_id', $courseItem->level_id)
+                ->whereNotIn('id', $grammarIds)
+                ->orderBy('id')
+                ->get();
+        }
 
         return response()->json([
             'course_item' => [
@@ -28,6 +40,7 @@ class CourseItemGrammarController extends Controller
                 'order' => $courseItem->order,
             ],
             'grammar' => GrammarRuleResource::collection($grammar),
+            'pool' => GrammarRuleResource::collection($pool),
         ]);
     }
 }

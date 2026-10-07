@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   getCourseItemWords,
@@ -7,9 +7,17 @@ import {
   type CourseItemDetails,
   type CourseItemWord,
   type GrammarRule,
+  type PhraseGrammarRule,
 } from "../../../api/course";
+import {
+  generateFinalTest,
+  type TestQuestion,
+} from "../../../utils/testGenerator";
+import { getLessonProgress, PASS_THRESHOLD } from "../../../utils/progress";
 import DictionaryTab from "./DictionaryTab/DictionaryTab";
 import GrammarTab from "./GrammarTab/GrammarTab";
+import FinalTestTab from "./FinalTestTab";
+
 type Tab = "words" | "grammar" | "test";
 
 interface LessonViewProps {
@@ -19,14 +27,24 @@ interface LessonViewProps {
 export default function LessonView({ item }: LessonViewProps) {
   const navigate = useNavigate();
   const [tab, setTab] = useState<Tab>("words");
+  const [progress, setProgress] = useState(() => getLessonProgress(item.id));
 
   const [words, setWords] = useState<CourseItemWord[] | null>(null);
   const [wordsLoading, setWordsLoading] = useState(true);
   const [wordsError, setWordsError] = useState(false);
 
   const [grammar, setGrammar] = useState<GrammarRule[] | null>(null);
+  const [grammarPool, setGrammarPool] = useState<PhraseGrammarRule[]>([]);
   const [grammarLoading, setGrammarLoading] = useState(true);
   const [grammarError, setGrammarError] = useState(false);
+
+  const [finalQuestions, setFinalQuestions] = useState<TestQuestion[] | null>(
+    null,
+  );
+
+  useEffect(() => {
+    setProgress(getLessonProgress(item.id));
+  }, [item.id]);
 
   useEffect(() => {
     const loadWords = async () => {
@@ -45,6 +63,7 @@ export default function LessonView({ item }: LessonViewProps) {
       try {
         const data = await getCourseItemGrammar(item.id);
         setGrammar(data.grammar);
+        setGrammarPool(data.pool ?? []);
       } catch (e) {
         console.error("Не удалось загрузить грамматику:", e);
         setGrammarError(true);
@@ -57,11 +76,53 @@ export default function LessonView({ item }: LessonViewProps) {
     loadGrammar();
   }, [item.id]);
 
-  const handleNext = () => {
+  const refreshProgress = () => {
+    setProgress(getLessonProgress(item.id));
+  };
+
+const goToFinalTest = () => {
+  if (!(progress.grammarPercent > PASS_THRESHOLD)) return;
+  if (!finalQuestions && words && grammar) {
+    console.log(
+      "words:",
+      words.length,
+      "grammar:",
+      grammar.length,
+      "grammar[0].phrases:",
+      grammar[0]?.phrases?.length,
+      "pool:",
+      grammarPool.length,
+    );
+    const q = generateFinalTest(words, grammar, grammarPool);
+    console.log(
+      "Final questions:",
+      q.length,
+      "types:",
+      q.map((x) => x.type),
+    );
+    setFinalQuestions(q);
+  }
+  setTab("test");
+};
+
+  const handleFinalRepeat = () => {
+    if (words && grammar) {
+      setFinalQuestions(generateFinalTest(words, grammar, grammarPool));
+    }
+  };
+
+  const handleFinalBack = () => {
+    navigate("/course");
+  };
+
+  const handleFinalNext = () => {
     if (item.next) {
       navigate(`/course/item/${item.next.id}`);
     }
   };
+
+  const grammarLocked = !(progress.wordsPercent > PASS_THRESHOLD);
+  const finalLocked = !(progress.grammarPercent > PASS_THRESHOLD);
 
   return (
     <div className="lesson-view">
@@ -82,15 +143,19 @@ export default function LessonView({ item }: LessonViewProps) {
         </button>
         <button
           type="button"
-          className={`lesson-view__tab ${tab === "grammar" ? "lesson-view__tab--active" : ""}`}
-          onClick={() => setTab("grammar")}
+          className={`lesson-view__tab ${tab === "grammar" ? "lesson-view__tab--active" : ""} ${grammarLocked ? "lesson-view__tab--locked" : ""}`}
+          onClick={() => {
+            if (!grammarLocked) setTab("grammar");
+          }}
+          disabled={grammarLocked}
         >
           Грамматика
         </button>
         <button
           type="button"
-          className={`lesson-view__tab ${tab === "test" ? "lesson-view__tab--active" : ""}`}
-          onClick={() => setTab("test")}
+          className={`lesson-view__tab ${tab === "test" ? "lesson-view__tab--active" : ""} ${finalLocked ? "lesson-view__tab--locked" : ""}`}
+          onClick={goToFinalTest}
+          disabled={finalLocked}
         >
           Итоговый тест
         </button>
@@ -101,7 +166,17 @@ export default function LessonView({ item }: LessonViewProps) {
           <>
             {wordsLoading && <p>Загрузка...</p>}
             {wordsError && <p>Не удалось загрузить слова.</p>}
-            {words && <DictionaryTab words={words} />}
+            {words && (
+              <DictionaryTab
+                itemId={item.id}
+                words={words}
+                onGoToGrammar={() => {
+                  refreshProgress();
+                  setTab("grammar");
+                }}
+                onProgressChange={refreshProgress}
+              />
+            )}
           </>
         )}
 
@@ -109,27 +184,35 @@ export default function LessonView({ item }: LessonViewProps) {
           <>
             {grammarLoading && <p>Загрузка...</p>}
             {grammarError && <p>Не удалось загрузить грамматику.</p>}
-            {grammar && <GrammarTab rules={grammar} />}
+            {grammar && (
+              <GrammarTab
+                itemId={item.id}
+                rules={grammar}
+                pool={grammarPool}
+                onGoToFinalTest={goToFinalTest}
+                onProgressChange={refreshProgress}
+              />
+            )}
           </>
         )}
 
         {tab === "test" && (
-          <p className="lesson-view__placeholder">Итоговый тест — позже.</p>
+          <>
+            {finalQuestions ? (
+              <FinalTestTab
+                itemId={item.id}
+                questions={finalQuestions}
+                onRepeat={handleFinalRepeat}
+                onBack={handleFinalBack}
+                onNext={item.next ? handleFinalNext : undefined}
+                nextLabel={item.next ? item.next.title : undefined}
+              />
+            ) : (
+              <p>Загрузка...</p>
+            )}
+          </>
         )}
       </div>
-
-      {item.next && (
-        <div className="lesson-view__footer">
-          <button
-            type="button"
-            className="lesson-view__next"
-            onClick={handleNext}
-          >
-            <span>{item.next.title}</span>
-            <ArrowRight size={18} />
-          </button>
-        </div>
-      )}
     </div>
   );
 }
