@@ -1,18 +1,8 @@
-@use '../../../abstracts' as *;
-
 .mobile-nav-overlay {
   position: fixed;
   inset: 0;
   z-index: 90;
   background-color: rgba(0, 0, 0, 0.4);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--transition-base);
-
-  &--visible {
-    opacity: 1;
-    pointer-events: auto;
-  }
 }
 
 .mobile-nav-sheet {
@@ -25,10 +15,4 @@
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   padding: 1.5rem 1rem calc(1.5rem + 72px); // отступ снизу под панель
-  transform: translateY(100%);
-  transition: transform var(--transition-base);
-
-  &--open {
-    transform: translateY(0);
-  }
 }

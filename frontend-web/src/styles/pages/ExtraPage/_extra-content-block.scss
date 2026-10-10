@@ -39,6 +39,7 @@
   a {
     color: var(--color-primary);
     text-decoration: underline;
+    transition: color var(--transition-fast);
 
     &:hover {
       color: var(--color-primary-hover);

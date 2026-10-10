@@ -1,10 +1,17 @@
 import { Volume2 } from "lucide-react";
+import { motion } from "framer-motion";
 import type { Phrase } from "../../../api/course";
 import PhraseToken from "./PhraseToken";
+import { spring } from "../../../lib/motion";
 
 interface PhraseBlockProps {
   phrase: Phrase;
 }
+
+const SPEED_OPTIONS = [
+  { rate: 0.5, label: "0.5", title: "Медленно" },
+  { rate: 1, label: "1", title: "Обычно" },
+];
 
 export default function PhraseBlock({ phrase }: PhraseBlockProps) {
   const speak = (text: string, rate: number) => {
@@ -33,24 +40,21 @@ export default function PhraseBlock({ phrase }: PhraseBlockProps) {
       <div className="phrase-block__hangul">
         <span className="phrase-block__tokens">{renderTokens()}</span>
         <div className="phrase-block__speak">
-          <button
-            type="button"
-            className="phrase-block__speak-button"
-            onClick={() => speak(phrase.hangul, 0.5)}
-            title="Медленно"
-          >
-            <Volume2 size={16} />
-            <span>0.5</span>
-          </button>
-          <button
-            type="button"
-            className="phrase-block__speak-button"
-            onClick={() => speak(phrase.hangul, 1)}
-            title="Обычно"
-          >
-            <Volume2 size={16} />
-            <span>1</span>
-          </button>
+          {SPEED_OPTIONS.map(({ rate, label, title }) => (
+            <motion.button
+              key={rate}
+              type="button"
+              className="phrase-block__speak-button"
+              onClick={() => speak(phrase.hangul, rate)}
+              title={title}
+              whileHover={{ y: -1 }}
+              whileTap={{ scale: 0.94 }}
+              transition={spring.bouncy}
+            >
+              <Volume2 size={16} />
+              <span>{label}</span>
+            </motion.button>
+          ))}
         </div>
       </div>
 

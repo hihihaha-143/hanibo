@@ -1,17 +1,13 @@
 @use '../../abstracts' as *;
 
 .about-block {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  @include flex(column, flex-start, stretch, 1rem);
   background-color: var(--color-secondary);
   color: var(--color-text);
   border: 1px solid var(--color-border);
   padding: 2rem;
   border-radius: 1rem;
   line-height: 1.4;
-
-  // ✅ растягиваем на всю высоту колонки (если нужно)
   height: 100%;
 
   p {

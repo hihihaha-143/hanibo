@@ -5,10 +5,8 @@
 
 .home-page {
   display: grid;
-  // ✅ Две колонки: контент + фиксированный сайдбар
   grid-template-columns: minmax(0, 1fr) 450px;
   gap: 1.5rem;
-  // ✅ Растягиваем колонки по высоте, чтобы правая была как левая
   align-items: stretch;
 
   &__col {
@@ -18,15 +16,11 @@
 
     &--side {
       grid-column: 2;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      // height: 100% не нужен — grid уже растянул колонку
+      @include flex(column, flex-start, stretch, 1.5rem);
     }
   }
 
-  // Мобилка: всё в одну колонку
-  @media (max-width: 767px) {
+  @include down('md') {
     grid-template-columns: 1fr;
     gap: 1rem;
 

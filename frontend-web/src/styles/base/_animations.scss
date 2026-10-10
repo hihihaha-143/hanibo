@@ -1,0 +1,63 @@
+// =============================================================================
+// COURSE ITEM — заливка и волна
+// =============================================================================
+
+@keyframes course-item-wave {
+  from { background-position-x: 0; }
+  to   { background-position-x: 120px; }
+}
+
+@keyframes course-item-fill-sway {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2px); }
+}
+
+// =============================================================================
+// STARBURST — блеск звезды для завершённых элементов
+// =============================================================================
+
+// Мягкое пульсирующее свечение
+@keyframes star-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px var(--glow-color))
+            drop-shadow(0 0 6px var(--glow-color));
+  }
+  50% {
+    filter: drop-shadow(0 0 4px var(--glow-color-bright))
+            drop-shadow(0 0 10px var(--glow-color-bright));
+  }
+}
+
+// Мерцание (яркость)
+@keyframes star-twinkle {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.85; }
+}
+
+// Искры — вылетают из центра
+@keyframes sparkle-fly {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(0.4);
+    opacity: 0;
+  }
+}
+
+// Луч проходит по кругу (вращение)
+@keyframes star-rays {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Вспышка в центре
+@keyframes star-flash {
+  0%, 70%, 100% { opacity: 0; }
+  75%           { opacity: 1; }
+  85%           { opacity: 0; }
+} 

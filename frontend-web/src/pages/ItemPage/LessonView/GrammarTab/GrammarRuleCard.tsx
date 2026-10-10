@@ -1,5 +1,7 @@
+import { motion } from "framer-motion";
 import type { GrammarRule } from "../../../../api/course";
 import PhraseBlock from "../PhraseBlock";
+import { spring } from "../../../../lib/motion";
 
 interface GrammarRuleCardProps {
   rule: GrammarRule;
@@ -7,7 +9,14 @@ interface GrammarRuleCardProps {
 
 export default function GrammarRuleCard({ rule }: GrammarRuleCardProps) {
   return (
-    <div className="grammar-rule-card">
+    <motion.div
+      className="grammar-rule-card"
+      variants={{
+        hidden: { opacity: 0, y: 8 },
+        visible: { opacity: 1, y: 0 },
+      }}
+      transition={spring.base}
+    >
       <div className="grammar-rule-card__header">
         <h3 className="grammar-rule-card__title">{rule.title}</h3>
         {rule.form && (
@@ -24,6 +33,6 @@ export default function GrammarRuleCard({ rule }: GrammarRuleCardProps) {
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

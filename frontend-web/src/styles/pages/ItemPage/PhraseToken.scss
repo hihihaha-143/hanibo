@@ -4,35 +4,29 @@
   position: relative;
   display: inline-block;
 
-&__text {
-  cursor: help;
-  border-bottom: 1px dashed var(--color-accent);
-  transition: border-color 0.15s ease;
+  &__text {
+    cursor: help;
+    border-bottom: 1px dashed var(--color-accent);
+    transition: border-color var(--transition-fast);
 
-  &:hover {
-    border-bottom-color: var(--color-text);
+    &:hover {
+      border-bottom-color: var(--color-text);
+    }
   }
-}
 
   &__tooltip {
     position: absolute;
     top: calc(100% + 0.5rem);
     left: 0;
     z-index: 10;
-    display: none;
-    flex-direction: column;
-    gap: 0.25rem;
+    @include flex(column, flex-start, stretch, 0.25rem);
     padding: 0.5rem 0.75rem;
     background: var(--color-primary);
-    color: var(--color-bg);
+    color: var(--color-on-primary);
     border-radius: 0.5rem;
     font-size: 0.8125rem;
     white-space: nowrap;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  &:hover &__tooltip {
-    display: flex;
   }
 
   &__tooltip-line {

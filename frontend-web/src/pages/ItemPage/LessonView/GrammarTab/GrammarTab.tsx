@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 import type { GrammarRule, PhraseGrammarRule } from "../../../../api/course";
 import {
   generateGrammarTest,
@@ -8,6 +9,7 @@ import {
 import { setGrammarPercent } from "../../../../utils/progress";
 import GrammarRuleCard from "./GrammarRuleCard";
 import Test from "../Test/Test";
+import { spring } from "../../../../lib/motion";
 
 interface GrammarTabProps {
   itemId: number;
@@ -76,19 +78,32 @@ export default function GrammarTab({
 
   return (
     <div className="grammar-tab">
-      {rules.map((rule) => (
-        <GrammarRuleCard key={rule.id} rule={rule} />
-      ))}
+      <motion.div
+        className="grammar-tab__cards"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.05 } },
+        }}
+      >
+        {rules.map((rule) => (
+          <GrammarRuleCard key={rule.id} rule={rule} />
+        ))}
+      </motion.div>
 
       <div className="grammar-tab__footer">
-        <button
+        <motion.button
           type="button"
           className="grammar-tab__test-button"
           onClick={startTest}
+          whileHover={{ y: -1, scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          transition={spring.bouncy}
         >
           <span>Пройти тест</span>
           <ArrowRight size={18} />
-        </button>
+        </motion.button>
       </div>
     </div>
   );

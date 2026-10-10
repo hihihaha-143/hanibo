@@ -1,48 +1,44 @@
+@use '../../../abstracts' as *;
+
 .sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  @include flex(column, flex-start, stretch, 0.25rem);
   padding: 0 0.5rem;
 
   &__item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    @include flex(row, flex-start, center, 0.75rem);
+    position: relative;
     height: 48px;
     padding: 0 0.75rem;
     border-radius: 8px;
     color: var(--color-neutral-light);
     white-space: nowrap;
-    transition:
-      color var(--transition-fast),
-      background-color var(--transition-fast);
+    transition: color var(--transition-fast);
+    z-index: 1;
 
     &:hover,
     &--active {
-      color: var(--color-accent);
-      background-color: var(--color-neutral-light);
-
-      .sidebar-nav__icon {
-        transform: scale(1.15);
-      }
+      color: var(--color-on-accent);
     }
+  }
+
+  &__highlight {
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-accent);
+    border-radius: 8px;
+    z-index: -1;
   }
 
   &__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex(row, center, center);
     flex-shrink: 0;
     width: 24px;
-    transition: transform var(--duration-base) var(--ease-spring);
+    position: relative;
+    z-index: 2;
   }
 
   &__label {
-    opacity: 0;
-    transition: opacity var(--transition-fast);
-
-    .sidebar--expanded & {
-      opacity: 1;
-    }
+    position: relative;
+    z-index: 2;
   }
 }

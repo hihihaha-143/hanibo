@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Home, BookOpen, LogIn, Menu } from "lucide-react";
+import { spring } from "../../../lib/motion";
 
 interface MobileNavBarProps {
   sheetOpen: boolean;
@@ -16,30 +19,56 @@ export default function MobileNavBar({
   sheetOpen,
   onToggleSheet,
 }: MobileNavBarProps) {
+  const [hovered, setHovered] = useState<string | null>(null);
+
   return (
     <nav className="mobile-nav-bar">
       {items.map(({ to, label, icon: Icon }) => (
         <NavLink
           key={to}
           to={to}
-          className={({ isActive }) =>
-            `mobile-nav-bar__item${isActive ? " mobile-nav-bar__item--active" : ""}`
-          }
+          className="mobile-nav-bar__item"
+          onMouseEnter={() => setHovered(to)}
+          onMouseLeave={() => setHovered(null)}
         >
-          <Icon size={22} />
-          <span className="mobile-nav-bar__label">{label}</span>
+          {({ isActive }) => {
+            const showHighlight = hovered ? hovered === to : isActive;
+            return (
+              <>
+                {showHighlight && (
+                  <motion.span
+                    className="mobile-nav-bar__highlight"
+                    layoutId="mobile-nav-highlight"
+                    transition={spring.bouncy}
+                  />
+                )}
+                <span className="mobile-nav-bar__icon">
+                  <Icon size={22} />
+                </span>
+                <span className="mobile-nav-bar__label">{label}</span>
+              </>
+            );
+          }}
         </NavLink>
       ))}
 
-      <button
+      <motion.button
         type="button"
-        className={`mobile-nav-bar__item mobile-nav-bar__burger${sheetOpen ? " mobile-nav-bar__burger--open" : ""}`}
+        className="mobile-nav-bar__item"
         onClick={onToggleSheet}
         aria-label={sheetOpen ? "Закрыть меню" : "Открыть меню"}
+        whileTap={{ scale: 0.9 }}
+        transition={spring.bouncy}
       >
-        <Menu size={22} />
+        <motion.span
+          className="mobile-nav-bar__icon"
+          animate={{ rotate: sheetOpen ? 90 : 0 }}
+          transition={spring.bouncy}
+        >
+          <Menu size={22} />
+        </motion.span>
         <span className="mobile-nav-bar__label">Меню</span>
-      </button>
+      </motion.button>
     </nav>
   );
 }

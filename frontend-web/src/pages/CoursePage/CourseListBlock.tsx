@@ -44,17 +44,9 @@ export default function CourseListBlock() {
     }
   };
 
-  if (loading) {
-    return <StateBlock variant="loading" />;
-  }
-
-  if (error) {
-    return <StateBlock variant="error" onRetry={load} />;
-  }
-
-  if (items.length === 0) {
-    return <StateBlock variant="empty" />;
-  }
+  if (loading) return <StateBlock variant="loading" />;
+  if (error) return <StateBlock variant="error" onRetry={load} />;
+  if (items.length === 0) return <StateBlock variant="empty" />;
 
   return (
     <div className="course-list-block">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   getCourseItemWords,
   getCourseItemGrammar,
@@ -17,12 +18,21 @@ import { getLessonProgress, PASS_THRESHOLD } from "../../../utils/progress";
 import DictionaryTab from "./DictionaryTab/DictionaryTab";
 import GrammarTab from "./GrammarTab/GrammarTab";
 import FinalTestTab from "./FinalTestTab";
+import { spring } from "../../../lib/motion";
+
+const MotionLink = motion.create(Link);
 
 type Tab = "words" | "grammar" | "test";
 
 interface LessonViewProps {
   item: CourseItemDetails;
 }
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: "words", label: "Словарь" },
+  { id: "grammar", label: "Грамматика" },
+  { id: "test", label: "Итоговый тест" },
+];
 
 export default function LessonView({ item }: LessonViewProps) {
   const navigate = useNavigate();
@@ -80,30 +90,14 @@ export default function LessonView({ item }: LessonViewProps) {
     setProgress(getLessonProgress(item.id));
   };
 
-const goToFinalTest = () => {
-  if (!(progress.grammarPercent > PASS_THRESHOLD)) return;
-  if (!finalQuestions && words && grammar) {
-    console.log(
-      "words:",
-      words.length,
-      "grammar:",
-      grammar.length,
-      "grammar[0].phrases:",
-      grammar[0]?.phrases?.length,
-      "pool:",
-      grammarPool.length,
-    );
-    const q = generateFinalTest(words, grammar, grammarPool);
-    console.log(
-      "Final questions:",
-      q.length,
-      "types:",
-      q.map((x) => x.type),
-    );
-    setFinalQuestions(q);
-  }
-  setTab("test");
-};
+  const goToFinalTest = () => {
+    if (!(progress.grammarPercent > PASS_THRESHOLD)) return;
+    if (!finalQuestions && words && grammar) {
+      const q = generateFinalTest(words, grammar, grammarPool);
+      setFinalQuestions(q);
+    }
+    setTab("test");
+  };
 
   const handleFinalRepeat = () => {
     if (words && grammar) {
@@ -111,54 +105,65 @@ const goToFinalTest = () => {
     }
   };
 
-  const handleFinalBack = () => {
-    navigate("/course");
-  };
+  const handleFinalBack = () => navigate("/course");
 
   const handleFinalNext = () => {
-    if (item.next) {
-      navigate(`/course/item/${item.next.id}`);
-    }
+    if (item.next) navigate(`/course/item/${item.next.id}`);
   };
 
   const grammarLocked = !(progress.wordsPercent > PASS_THRESHOLD);
   const finalLocked = !(progress.grammarPercent > PASS_THRESHOLD);
 
+  const lockedMap: Record<Tab, boolean> = {
+    words: false,
+    grammar: grammarLocked,
+    test: finalLocked,
+  };
+
   return (
     <div className="lesson-view">
-      <Link to="/course" className="lesson-view__back">
+      <MotionLink
+        to="/course"
+        className="lesson-view__back"
+        whileHover={{ x: -2 }}
+        whileTap={{ scale: 0.96 }}
+        transition={spring.bouncy}
+      >
         <ArrowLeft size={18} />
         <span>Назад к курсу</span>
-      </Link>
+      </MotionLink>
 
       <h1 className="lesson-view__title">{item.title}</h1>
 
       <div className="lesson-view__tabs">
-        <button
-          type="button"
-          className={`lesson-view__tab ${tab === "words" ? "lesson-view__tab--active" : ""}`}
-          onClick={() => setTab("words")}
-        >
-          Словарь
-        </button>
-        <button
-          type="button"
-          className={`lesson-view__tab ${tab === "grammar" ? "lesson-view__tab--active" : ""} ${grammarLocked ? "lesson-view__tab--locked" : ""}`}
-          onClick={() => {
-            if (!grammarLocked) setTab("grammar");
-          }}
-          disabled={grammarLocked}
-        >
-          Грамматика
-        </button>
-        <button
-          type="button"
-          className={`lesson-view__tab ${tab === "test" ? "lesson-view__tab--active" : ""} ${finalLocked ? "lesson-view__tab--locked" : ""}`}
-          onClick={goToFinalTest}
-          disabled={finalLocked}
-        >
-          Итоговый тест
-        </button>
+        {TABS.map(({ id, label }) => {
+          const isActive = tab === id;
+          const isLocked = lockedMap[id];
+          return (
+            <motion.button
+              key={id}
+              type="button"
+              className={`lesson-view__tab${isActive ? " lesson-view__tab--active" : ""}${isLocked ? " lesson-view__tab--locked" : ""}`}
+              onClick={() => {
+                if (isLocked) return;
+                if (id === "test") goToFinalTest();
+                else setTab(id);
+              }}
+              disabled={isLocked}
+              whileTap={isLocked ? undefined : { scale: 0.97 }}
+              transition={spring.bouncy}
+            >
+              {label}
+              {isActive && (
+                <motion.span
+                  className="lesson-view__tab-indicator"
+                  layoutId="lesson-tab-indicator"
+                  transition={spring.bouncy}
+                />
+              )}
+            </motion.button>
+          );
+        })}
       </div>
 
       <div className="lesson-view__content">

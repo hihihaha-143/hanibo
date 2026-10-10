@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   getCourseItem,
   getCourseItems,
@@ -10,6 +11,9 @@ import { getItemStatus } from "../../utils/courseStatus";
 import ExtraView from "./ExtraView/ExtraView";
 import LessonView from "./LessonView/LessonView";
 import CourseTestView from "./CourseTestView/CourseTestView";
+import { spring } from "../../lib/motion";
+
+const MotionLink = motion.create(Link);
 
 export default function ItemPage() {
   const { id } = useParams<{ id: string }>();
@@ -48,9 +52,15 @@ export default function ItemPage() {
     return (
       <div className="item-page item-page--error">
         <p>Не удалось загрузить материал.</p>
-        <Link to="/course" className="item-page__back">
+        <MotionLink
+          to="/course"
+          className="item-page__back"
+          whileHover={{ x: -2 }}
+          whileTap={{ scale: 0.96 }}
+          transition={spring.bouncy}
+        >
           ← Назад к курсу
-        </Link>
+        </MotionLink>
       </div>
     );
   }
@@ -61,9 +71,15 @@ export default function ItemPage() {
     return (
       <div className="item-page item-page--locked">
         <p>Урок заблокирован, пройди предыдущие.</p>
-        <Link to="/course" className="item-page__back">
+        <MotionLink
+          to="/course"
+          className="item-page__back"
+          whileHover={{ x: -2 }}
+          whileTap={{ scale: 0.96 }}
+          transition={spring.bouncy}
+        >
           ← Назад к курсу
-        </Link>
+        </MotionLink>
       </div>
     );
   }
@@ -83,9 +99,15 @@ export default function ItemPage() {
   return (
     <div className="item-page item-page--unknown">
       <p>Этот тип пока не поддерживается.</p>
-      <Link to="/course" className="item-page__back">
+      <MotionLink
+        to="/course"
+        className="item-page__back"
+        whileHover={{ x: -2 }}
+        whileTap={{ scale: 0.96 }}
+        transition={spring.bouncy}
+      >
         ← Назад к курсу
-      </Link>
+      </MotionLink>
     </div>
   );
 }

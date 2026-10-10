@@ -1,15 +1,11 @@
 @use '../../abstracts' as *;
 
 .auth-prompt-block {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  @include flex(column, flex-start, stretch, 0.75rem);
   padding: 1rem;
   background-color: var(--color-primary);
   border: 1px solid var(--color-border);
   border-radius: 0.75rem;
-
-  // ✅ Растягиваем блок наравне с TipBlock
   flex: 1;
 
   &__text {
@@ -20,30 +16,17 @@
   }
 
   &__button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+    @include flex(row, center, center, 0.5rem);
     padding: 0.625rem 1rem;
     background-color: var(--color-accent);
-    color: var(--color-bg);
+    color: var(--color-on-accent);
     border-radius: 0.5rem;
     font-weight: 600;
-    transition:
-      background-color var(--transition-fast),
-      transform var(--transition-fast);
-
-    // ✅ Прижимаем кнопку к низу растянутого блока
     margin-top: auto;
+    transition: background-color var(--transition-fast);
 
     &:hover {
       background-color: var(--color-accent-hover);
-      transform: translateY(-1px);
-      color: var(--color-bg);
-    }
-
-    &:active {
-      transform: translateY(0);
     }
   }
 }

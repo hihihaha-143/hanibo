@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import MobileNavBar from "./MobileNavBar";
 import MobileNavSheet from "./MobileNavSheet";
 
@@ -11,7 +12,14 @@ export default function MobileNav() {
         sheetOpen={sheetOpen}
         onToggleSheet={() => setSheetOpen((v) => !v)}
       />
-      <MobileNavSheet open={sheetOpen} onClose={() => setSheetOpen(false)} />
+      <AnimatePresence>
+        {sheetOpen && (
+          <MobileNavSheet
+            key="mobile-nav-sheet"
+            onClose={() => setSheetOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

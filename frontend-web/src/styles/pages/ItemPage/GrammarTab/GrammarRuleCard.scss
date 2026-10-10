@@ -1,18 +1,14 @@
 @use '../../../abstracts/' as *;
 
 .grammar-rule-card {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  @include flex(column, flex-start, stretch, 1rem);
   padding: 1.25rem;
   background: var(--color-surface);
   border-radius: 0.75rem;
   border: 1px solid var(--color-border);
 
   &__header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    @include flex(row, flex-start, center, 0.75rem);
   }
 
   &__title {
@@ -40,8 +36,6 @@
   }
 
   &__phrases {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    @include flex(column, flex-start, stretch, 0.75rem);
   }
 }

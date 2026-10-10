@@ -1,7 +1,5 @@
 @use '../../../abstracts/' as *;
 
 .word-list-block {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  @include flex(column, flex-start, stretch, 0.75rem);
 }

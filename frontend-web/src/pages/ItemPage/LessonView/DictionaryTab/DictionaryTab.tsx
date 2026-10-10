@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 import type { CourseItemWord } from "../../../../api/course";
 import {
   generateWordsTest,
@@ -8,6 +9,7 @@ import {
 import { setWordsPercent } from "../../../../utils/progress";
 import WordListBlock from "./WordListBlock";
 import Test from "../Test/Test";
+import { spring } from "../../../../lib/motion";
 
 interface DictionaryTabProps {
   itemId: number;
@@ -67,14 +69,17 @@ export default function DictionaryTab({
       <WordListBlock words={words} />
 
       <div className="dictionary-tab__footer">
-        <button
+        <motion.button
           type="button"
           className="dictionary-tab__test-button"
           onClick={startTest}
+          whileHover={{ y: -1, scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          transition={spring.bouncy}
         >
           <span>Пройти тест</span>
           <ArrowRight size={18} />
-        </button>
+        </motion.button>
       </div>
     </div>
   );

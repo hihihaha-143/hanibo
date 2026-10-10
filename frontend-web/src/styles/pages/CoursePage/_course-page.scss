@@ -3,9 +3,7 @@
 @use './course-item-block';
 
 .course-page {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  @include flex(column, flex-start, stretch, 1.5rem);
 
   &__title {
     margin: 0;

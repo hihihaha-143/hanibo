@@ -1,43 +1,57 @@
-// =============================================================================
-// COLORS — SEMANTIC TOKENS
-// =============================================================================
 // Светлая тема — по умолчанию.
 // Тёмная тема переопределяет эти же токены ниже.
 
 :root {
   // --- Background / Surface ---
-  --color-bg:            #E8EBED;
-  --color-surface:       #FFF7EC;
-  --color-surface-alt:   #F1EEE6;   
+  --color-bg:            #F3EBDD;
+  --color-surface:       #FAF4EA;
+  --color-surface-alt:   #E8DFCE;
 
   // --- Text ---
-  --color-text:          #0A132A;
-  --color-text-secondary:#2C3F70;
+  --color-text:           #1D223F;
+  --color-text-secondary: #51446B;
 
   // --- Border ---
-  --color-border:        #D9D9D8;
+  --color-border:        #D4C8B8;
 
-  // --- Primary ---
-  --color-primary:       #2C3F70;
-  --color-primary-hover: rgb(28, 64, 126);  
+  // --- Primary (тёмно-синий, бренд) ---
+  --color-primary:       #1D223F;
+  --color-primary-hover: #2D3455;
 
-  // --- Secondary ---
-  --color-secondary:     #C8D4E5;
+  // --- Secondary (лаванда, фоны блоков) ---
+  --color-secondary:     #888CBB;
 
-  // --- Accent (клубничный, для акцентных элементов) ---
-  --color-accent:        #83140e;
-    --color-accent-hover:        #740e08;
+  // --- Accent (яркий голубой — CTA, кнопки, hover) ---
+  --color-accent:        #3B82F6;
+  --color-accent-hover:  #2E6FD4;
+
+  // --- Yellow (семантика прогресса — «заполнено») ---
+  --color-yellow:         #E8B04A;
+  --color-yellow-hover:   #D49B36;
+
+  // --- Neutral ---
+  --color-neutral-light: #F3EBDD;
 
   // --- Semantic ---
-  --color-error:         #A5231C;
+  --color-success:       #4A8B5C;
+  --color-success-bg:    rgba(74, 139, 92, 0.12);
+  --color-warning:       #D9963B;
+  --color-error:         #B84A52;
+  --color-error-bg:      rgba(184, 74, 82, 0.12);
 
-  // --- Резерв (не используются сейчас, но пусть будут под рукой) ---
-  --color-neutral-light: #F5EFDC;
-  --color-neutral-mid:   #B1BBC8;
-  --color-neutral-dark:  #282B4A;
+  // --- Progress (использует --color-yellow) ---
+  --color-progress-partial:  var(--color-yellow);
+  --color-progress-complete: #E8C24F;
 
-  --color-progress-partial:  #CB8E16;
---color-progress-complete: #FAE03C;
+  // --- On-colored (текст на цветных фонах) ---
+  --color-on-primary: #F3EBDD;
+  --color-on-accent:  #FFFFFF;
+
+
+    // --- Glow (свечение для complete) ---
+  --glow-color:        rgba(230, 150, 30, 0.6);
+  --glow-color-bright: rgba(230, 150, 30, 0.85);
+  --glow-white:        rgba(255, 255, 255, 0.85);
 }
 
 // =============================================================================
@@ -45,25 +59,53 @@
 // =============================================================================
 
 [data-theme="dark"] {
-  --color-bg:            #0A132A;
-  --color-surface:       #1F3357;
-  --color-surface-alt:   #2C3F70;
+  // --- Background / Surface ---
+  --color-bg:            #1D223F;
+  --color-surface:       #262B4A;
+  --color-surface-alt:   #313659;
 
-  --color-text:          #F7F2E0;
-  --color-text-secondary:#9BABCD;
+  // --- Text ---
+  --color-text:           #F3EBDD;
+  --color-text-secondary: #A8A8C4;
 
-  --color-border:        #2C3F70;
+  // --- Border ---
+  --color-border:        #3D4368;
 
-  --color-primary:       #1F3357;
-  --color-primary-hover: #26538D;
+  // --- Primary ---
+  --color-primary:       #313659;
+  --color-primary-hover: #3E4472;
 
-  --color-secondary:     #476D9E;
+  // --- Secondary ---
+  --color-secondary:     #6C72A0;
 
-  --color-accent:        #630100;
+  // --- Accent (яркий голубой — тот же) ---
+  --color-accent:        #3B82F6;
+  --color-accent-hover:  #5A98F8;
 
-  --color-error:         #A5231C;
+  // --- Yellow ---
+  --color-yellow:         #F0C765;
+  --color-yellow-hover:   #E0B050;
 
-  --color-nav-active:    #630100;
+  // --- Neutral ---
+  --color-neutral-light: #F3EBDD;
+
+  // --- Semantic ---
+  --color-success:       #6BB17D;
+  --color-success-bg:    rgba(107, 177, 125, 0.15);
+  --color-warning:       #E8B158;
+  --color-error:         #D9676F;
+  --color-error-bg:      rgba(217, 103, 111, 0.15);
+
+  // --- Progress ---
+  --color-progress-partial:  var(--color-yellow);
+  --color-progress-complete: #F0D77A;
+
+  // --- On-colored ---
+  --color-on-primary: #F3EBDD;
+  --color-on-accent:  #FFFFFF;
+
+    --glow-color:        rgba(255, 235, 120, 0.7);
+  --glow-color-bright: rgba(255, 245, 150, 0.95);
+  --glow-white:        rgba(255, 255, 255, 0.9);
 }
-
 
