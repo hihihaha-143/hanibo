@@ -1,4 +1,6 @@
+import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { spring } from "../../../../lib/motion";
 
 interface TestResultProps {
   correct: number;
@@ -38,33 +40,42 @@ export default function TestResult({
       </div>
 
       <div className="test-result__actions">
-        <button
+        <motion.button
           type="button"
           className="test-result__button test-result__button--secondary"
           onClick={onRepeat}
+          whileHover={{ y: -1, scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          transition={spring.bouncy}
         >
           Пройти снова
-        </button>
+        </motion.button>
 
         {!passed && (
-          <button
+          <motion.button
             type="button"
             className="test-result__button test-result__button--secondary"
             onClick={onBack}
+            whileHover={{ y: -1, scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            transition={spring.bouncy}
           >
             {backLabel ?? "Назад"}
-          </button>
+          </motion.button>
         )}
 
         {passed && onNext && (
-          <button
+          <motion.button
             type="button"
             className="test-result__button test-result__button--primary"
             onClick={onNext}
+            whileHover={{ y: -1, scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            transition={spring.bouncy}
           >
             <span>{nextLabel ?? "Далее"}</span>
             <ArrowRight size={18} />
-          </button>
+          </motion.button>
         )}
       </div>
     </div>

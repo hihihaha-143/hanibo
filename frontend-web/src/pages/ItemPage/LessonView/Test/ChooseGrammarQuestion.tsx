@@ -1,5 +1,7 @@
+import { motion } from "framer-motion";
 import type { TestQuestionChooseGrammar } from "../../../../utils/testGenerator";
 import PhraseBlock from "../PhraseBlock";
+import { spring } from "../../../../lib/motion";
 
 interface ChooseGrammarQuestionProps {
   question: TestQuestionChooseGrammar;
@@ -32,15 +34,18 @@ export default function ChooseGrammarQuestion({
               modifier = "choose-question__variant--wrong";
           }
           return (
-            <button
+            <motion.button
               key={index}
               type="button"
               className={`choose-question__variant ${modifier}`}
               onClick={() => onSelect(index)}
               disabled={answered}
+              whileHover={answered ? undefined : { y: -1, scale: 1.02 }}
+              whileTap={answered ? undefined : { scale: 0.97 }}
+              transition={spring.bouncy}
             >
               {variant}
-            </button>
+            </motion.button>
           );
         })}
       </div>

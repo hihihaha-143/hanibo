@@ -1,8 +1,13 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import type { TestQuestion } from "../../../../utils/testGenerator";
+import { checkTextAnswer } from "../../../../utils/test/shared";
 import ChooseQuestion from "./ChooseQuestion";
 import ChooseGrammarQuestion from "./ChooseGrammarQuestion";
+import TrueFalseQuestion from "./TrueFalseQuestion";
+import TextInputQuestion from "./TextInputQuestion";
 import TestResult from "./TestResult";
+import { spring } from "../../../../lib/motion";
 
 interface TestProps {
   questions: TestQuestion[];
@@ -26,20 +31,30 @@ export default function Test({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answered, setAnswered] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedValue, setSelectedValue] = useState<boolean | null>(null);
+  const [textInputCorrect, setTextInputCorrect] = useState<boolean | null>(
+    null,
+  );
   const [correctCount, setCorrectCount] = useState(0);
   const [finished, setFinished] = useState(false);
 
   const total = questions.length;
 
-  // Защита: если вопросов нет — сразу показываем «пустой» результат.
   if (total === 0) {
     return (
       <div className="test">
         <div className="test__empty">Вопросы для этого теста не найдены.</div>
         <div className="test__footer">
-          <button type="button" className="test__next" onClick={onBack}>
+          <motion.button
+            type="button"
+            className="test__next"
+            onClick={onBack}
+            whileHover={{ y: -1, scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            transition={spring.bouncy}
+          >
             {backLabel ?? "Назад"}
-          </button>
+          </motion.button>
         </div>
       </div>
     );
@@ -47,13 +62,31 @@ export default function Test({
 
   const current = questions[currentIndex];
 
-  const handleSelect = (index: number) => {
+  const handleSelectIndex = (index: number) => {
     if (answered) return;
     setSelectedIndex(index);
     setAnswered(true);
-    if (current.correctIndices.includes(index)) {
+    if ("correctIndices" in current && current.correctIndices.includes(index)) {
       setCorrectCount((c) => c + 1);
     }
+  };
+
+  const handleSelectBoolean = (value: boolean) => {
+    if (answered) return;
+    setSelectedValue(value);
+    setAnswered(true);
+    if (current.type === "true-false" && value === current.correct) {
+      setCorrectCount((c) => c + 1);
+    }
+  };
+
+  const handleSubmitText = (value: string) => {
+    if (answered) return;
+    if (current.type !== "text-input") return;
+    const correct = checkTextAnswer(value, current.correctAnswer);
+    setTextInputCorrect(correct);
+    setAnswered(true);
+    if (correct) setCorrectCount((c) => c + 1);
   };
 
   const handleNext = () => {
@@ -66,6 +99,8 @@ export default function Test({
       setCurrentIndex((i) => i + 1);
       setAnswered(false);
       setSelectedIndex(null);
+      setSelectedValue(null);
+      setTextInputCorrect(null);
     }
   };
 
@@ -73,6 +108,8 @@ export default function Test({
     setCurrentIndex(0);
     setAnswered(false);
     setSelectedIndex(null);
+    setSelectedValue(null);
+    setTextInputCorrect(null);
     setCorrectCount(0);
     setFinished(false);
     onRepeat();
@@ -96,12 +133,15 @@ export default function Test({
     );
   }
 
+  const progressPercent = ((currentIndex + 1) / total) * 100;
+
   return (
     <div className="test">
       <div className="test__progress">
-        <div
+        <motion.div
           className="test__progress-bar"
-          style={{ width: `${((currentIndex + 1) / total) * 100}%` }}
+          animate={{ width: `${progressPercent}%` }}
+          transition={spring.bouncy}
         />
       </div>
 
@@ -110,29 +150,62 @@ export default function Test({
       </div>
 
       <div className="test__question">
-        {current.type === "choose" && (
-          <ChooseQuestion
-            question={current}
-            selectedIndex={selectedIndex}
-            answered={answered}
-            onSelect={handleSelect}
-          />
-        )}
-        {current.type === "choose-grammar" && (
-          <ChooseGrammarQuestion
-            question={current}
-            selectedIndex={selectedIndex}
-            answered={answered}
-            onSelect={handleSelect}
-          />
-        )}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={spring.base}
+          >
+            {current.type === "choose" && (
+              <ChooseQuestion
+                question={current}
+                selectedIndex={selectedIndex}
+                answered={answered}
+                onSelect={handleSelectIndex}
+              />
+            )}
+            {current.type === "choose-grammar" && (
+              <ChooseGrammarQuestion
+                question={current}
+                selectedIndex={selectedIndex}
+                answered={answered}
+                onSelect={handleSelectIndex}
+              />
+            )}
+            {current.type === "true-false" && (
+              <TrueFalseQuestion
+                question={current}
+                selectedValue={selectedValue}
+                answered={answered}
+                onSelect={handleSelectBoolean}
+              />
+            )}
+            {current.type === "text-input" && (
+              <TextInputQuestion
+                question={current}
+                answered={answered}
+                isCorrect={textInputCorrect}
+                onSubmit={handleSubmitText}
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {answered && (
         <div className="test__footer">
-          <button type="button" className="test__next" onClick={handleNext}>
+          <motion.button
+            type="button"
+            className="test__next"
+            onClick={handleNext}
+            whileHover={{ y: -1, scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            transition={spring.bouncy}
+          >
             Далее
-          </button>
+          </motion.button>
         </div>
       )}
     </div>
