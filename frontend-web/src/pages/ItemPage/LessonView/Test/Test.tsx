@@ -6,6 +6,8 @@ import ChooseQuestion from "./ChooseQuestion";
 import ChooseGrammarQuestion from "./ChooseGrammarQuestion";
 import TrueFalseQuestion from "./TrueFalseQuestion";
 import TextInputQuestion from "./TextInputQuestion";
+import MatchQuestion from "./MatchQuestion";
+import FillBlankQuestion from "./FillBlankQuestion";
 import TestResult from "./TestResult";
 import { spring } from "../../../../lib/motion";
 
@@ -33,6 +35,9 @@ export default function Test({
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [selectedValue, setSelectedValue] = useState<boolean | null>(null);
   const [textInputCorrect, setTextInputCorrect] = useState<boolean | null>(
+    null,
+  );
+  const [fillBlankCorrect, setFillBlankCorrect] = useState<boolean | null>(
     null,
   );
   const [correctCount, setCorrectCount] = useState(0);
@@ -89,6 +94,33 @@ export default function Test({
     if (correct) setCorrectCount((c) => c + 1);
   };
 
+  const handleMatchSubmit = (correct: boolean) => {
+    if (answered) return;
+    setAnswered(true);
+    if (correct) setCorrectCount((c) => c + 1);
+  };
+
+  const handleFillBlankSelect = (index: number) => {
+    if (answered) return;
+    if (current.type !== "fill-blank") return;
+    if (current.mode !== "choice") return;
+    const correct = index === current.correctIndex;
+    setSelectedIndex(index);
+    setFillBlankCorrect(correct);
+    setAnswered(true);
+    if (correct) setCorrectCount((c) => c + 1);
+  };
+
+  const handleFillBlankSubmit = (value: string) => {
+    if (answered) return;
+    if (current.type !== "fill-blank") return;
+    if (current.mode !== "input") return;
+    const correct = checkTextAnswer(value, current.correctAnswer);
+    setFillBlankCorrect(correct);
+    setAnswered(true);
+    if (correct) setCorrectCount((c) => c + 1);
+  };
+
   const handleNext = () => {
     if (currentIndex + 1 >= total) {
       const percent = (correctCount / total) * 100;
@@ -101,6 +133,7 @@ export default function Test({
       setSelectedIndex(null);
       setSelectedValue(null);
       setTextInputCorrect(null);
+      setFillBlankCorrect(null);
     }
   };
 
@@ -110,6 +143,7 @@ export default function Test({
     setSelectedIndex(null);
     setSelectedValue(null);
     setTextInputCorrect(null);
+    setFillBlankCorrect(null);
     setCorrectCount(0);
     setFinished(false);
     onRepeat();
@@ -188,6 +222,23 @@ export default function Test({
                 answered={answered}
                 isCorrect={textInputCorrect}
                 onSubmit={handleSubmitText}
+              />
+            )}
+            {current.type === "match" && (
+              <MatchQuestion
+                question={current}
+                answered={answered}
+                onSubmit={handleMatchSubmit}
+              />
+            )}
+            {current.type === "fill-blank" && (
+              <FillBlankQuestion
+                question={current}
+                answered={answered}
+                isCorrect={fillBlankCorrect}
+                selectedIndex={selectedIndex}
+                onSelect={handleFillBlankSelect}
+                onSubmit={handleFillBlankSubmit}
               />
             )}
           </motion.div>

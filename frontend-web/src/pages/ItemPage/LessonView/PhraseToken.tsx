@@ -2,6 +2,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { PhraseToken as PhraseTokenType } from "../../../api/course";
 import { spring } from "../../../lib/motion";
+import type { PhraseToken } from "../../../api/course";
+
 
 interface PhraseTokenProps {
   token: PhraseTokenType;

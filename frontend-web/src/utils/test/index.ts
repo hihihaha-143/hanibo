@@ -7,6 +7,11 @@ import { generateChooseWordQuestions } from "./generators/chooseWord";
 import { generateChooseGrammarQuestions } from "./generators/chooseGrammar";
 import { generateTrueFalseQuestions } from "./generators/trueFalse";
 import { generateTextInputQuestions } from "./generators/textInput";
+import { generateMatchQuestions } from "./generators/match";
+import {
+  generateFillBlankQuestions,
+  buildWordPoolFromPhrases,
+} from "./generators/fillBlank";
 
 // реэкспорт типов и утилит — чтобы импорты снаружи остались короткими
 export * from "./types";
@@ -26,10 +31,14 @@ interface GrammarRuleLike {
  * Порядок вопросов перемешан.
  */
 export function generateWordsTest(words: CourseItemWord[]): TestQuestion[] {
+  const phrases = words.flatMap((w) => w.phrases);
+
   return shuffle([
     ...generateChooseWordQuestions(words),
     ...generateTrueFalseQuestions(words),
     ...generateTextInputQuestions(words),
+    ...generateMatchQuestions(words),
+    ...generateFillBlankQuestions(phrases, words),
   ]);
 }
 
@@ -43,7 +52,13 @@ export function generateGrammarTest(
   rules: GrammarRule[],
   poolRules: GrammarRuleLike[],
 ): TestQuestion[] {
-  return shuffle(generateChooseGrammarQuestions(rules, poolRules));
+  const phrases = rules.flatMap((r) => r.phrases);
+  const pool = buildWordPoolFromPhrases(phrases);
+
+  return shuffle([
+    ...generateChooseGrammarQuestions(rules, poolRules),
+    ...generateFillBlankQuestions(phrases, pool),
+  ]);
 }
 
 // ---------- вспомогательное: сборка теста с лимитом ----------
@@ -74,8 +89,6 @@ function buildTest(
 
   const selected = [...wordsSelected, ...grammarSelected];
 
-  // Если не добрали до max (одна из групп оказалась короче половины) —
-  // берём случайные вопросы из общего остатка.
   if (selected.length < max) {
     const usedIds = new Set(selected.map((q) => q.id));
     const remainder = combined.filter((q) => !usedIds.has(q.id));
@@ -111,9 +124,6 @@ const COURSE_TEST_MAX = 30;
 
 /**
  * Итоговый тест по группе уроков (элемент курса type === "test").
- * - words и rules — уже объединённые и дедуплицированные данные
- *   со всех уроков группы (это делает вызывающий код).
- * - Ограничиваем общее число вопросов COURSE_TEST_MAX.
  */
 export function generateCourseTest(
   words: CourseItemWord[],

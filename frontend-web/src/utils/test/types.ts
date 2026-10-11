@@ -1,4 +1,5 @@
-import type { Phrase } from "../../api/course";
+import type { Phrase, PhraseToken } from "../../api/course";
+
 // ---------- общие ----------
 
 /**
@@ -93,14 +94,26 @@ export interface TestQuestionFlashcard extends TestQuestionBase {
 
 // ---------- 9. Заполнение пропуска ----------
 
-export interface TestQuestionFillBlank extends TestQuestionBase {
+export interface TestQuestionFillBlankChoice extends TestQuestionBase {
   type: "fill-blank";
-  phraseHangul: string; // фраза целиком (для подсказки/контекста)
-  phraseTranslation: string;
-  prompt: string; // фраза с пропуском, например "저는 _ 학생입니다"
-  variants: string[]; // варианты слова
+  mode: "choice";
+  phraseTokens: PhraseToken[];
+  gapIndex: number; // индекс токена, который пропущен
+  variants: string[];
   correctIndex: number;
 }
+
+export interface TestQuestionFillBlankInput extends TestQuestionBase {
+  type: "fill-blank";
+  mode: "input";
+  phraseTokens: PhraseToken[];
+  gapIndex: number;
+  correctAnswer: string;
+}
+
+export type TestQuestionFillBlank =
+  | TestQuestionFillBlankChoice
+  | TestQuestionFillBlankInput;
 
 // ---------- 10. Порядок слов ----------
 
