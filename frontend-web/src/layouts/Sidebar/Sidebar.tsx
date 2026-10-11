@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import SidebarNav from "./SidebarNav";
 import SidebarBottom from "./SidebarBottom";
-import { spring } from "../../../lib/motion";
+import { spring } from "../../lib/motion";
 
 export default function Sidebar() {
   const [expanded, setExpanded] = useState(false);

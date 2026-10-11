@@ -5,8 +5,8 @@
 @use './components/StateBlock/state-block';
 
 // layouts
-@use './layouts/MainLayout/main-layout';
-@use './layouts/MainLayout/mobile-nav/mobile-nav';
+@use './layouts/main-layout';
+@use './layouts/mobile-nav/mobile-nav';
 
 // pages
 @use './pages/HomePage/home-page';

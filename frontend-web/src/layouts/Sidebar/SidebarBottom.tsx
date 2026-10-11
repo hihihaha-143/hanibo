@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LogIn } from "lucide-react";
-import { useTheme } from "../../../context/useTheme";
-import { spring } from "../../../lib/motion";
+import { useTheme } from "../../context/useTheme";
+import { spring } from "../../lib/motion";
 
 interface SidebarBottomProps {
   expanded: boolean;

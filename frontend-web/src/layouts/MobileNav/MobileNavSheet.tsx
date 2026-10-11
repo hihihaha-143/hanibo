@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { useTheme } from "../../../context/useTheme";
-import { spring } from "../../../lib/motion";
+import { useTheme } from "../../context/useTheme";
+import { spring } from "../../lib/motion";
 
 interface MobileNavSheetProps {
   onClose: () => void;

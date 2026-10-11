@@ -2,7 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Home, BookOpen, LogIn, Menu } from "lucide-react";
-import { spring } from "../../../lib/motion";
+import { spring } from "../../lib/motion";
 
 interface MobileNavBarProps {
   sheetOpen: boolean;

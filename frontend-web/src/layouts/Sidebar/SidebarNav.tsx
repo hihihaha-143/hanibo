@@ -2,7 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Home, BookOpen } from "lucide-react";
-import { spring } from "../../../lib/motion";
+import { spring } from "../../lib/motion";
 
 interface SidebarNavProps {
   expanded: boolean;
