@@ -1,6 +1,6 @@
 // frontend-web/src/utils/test/index.ts
 
-import type { CourseItemWord, GrammarRule } from "../../api/course";
+import type { CourseItemWord, GrammarRule, Phrase } from "../../api/course";
 import type { TestQuestion } from "./types";
 import { shuffle } from "./shared";
 import { generateChooseWordQuestions } from "./generators/chooseWord";
@@ -12,6 +12,7 @@ import {
   generateFillBlankQuestions,
   buildWordPoolFromPhrases,
 } from "./generators/fillBlank";
+import { generateWordOrderQuestions } from "./generators/wordOrder";
 
 // реэкспорт типов и утилит — чтобы импорты снаружи остались короткими
 export * from "./types";
@@ -24,6 +25,14 @@ interface GrammarRuleLike {
   title: string;
 }
 
+// ---------- утилита: дедупликация фраз по id ----------
+
+function uniquePhrases(phrases: Phrase[]): Phrase[] {
+  const map = new Map<number, Phrase>();
+  for (const p of phrases) map.set(p.id, p);
+  return Array.from(map.values());
+}
+
 // ---------- тест по словам ----------
 
 /**
@@ -31,7 +40,7 @@ interface GrammarRuleLike {
  * Порядок вопросов перемешан.
  */
 export function generateWordsTest(words: CourseItemWord[]): TestQuestion[] {
-  const phrases = words.flatMap((w) => w.phrases);
+  const phrases = uniquePhrases(words.flatMap((w) => w.phrases));
 
   return shuffle([
     ...generateChooseWordQuestions(words),
@@ -39,6 +48,7 @@ export function generateWordsTest(words: CourseItemWord[]): TestQuestion[] {
     ...generateTextInputQuestions(words),
     ...generateMatchQuestions(words),
     ...generateFillBlankQuestions(phrases, words),
+    ...generateWordOrderQuestions(phrases),
   ]);
 }
 
@@ -52,25 +62,18 @@ export function generateGrammarTest(
   rules: GrammarRule[],
   poolRules: GrammarRuleLike[],
 ): TestQuestion[] {
-  const phrases = rules.flatMap((r) => r.phrases);
+  const phrases = uniquePhrases(rules.flatMap((r) => r.phrases));
   const pool = buildWordPoolFromPhrases(phrases);
 
   return shuffle([
     ...generateChooseGrammarQuestions(rules, poolRules),
     ...generateFillBlankQuestions(phrases, pool),
+    ...generateWordOrderQuestions(phrases),
   ]);
 }
 
 // ---------- вспомогательное: сборка теста с лимитом ----------
 
-/**
- * Собирает итоговый тест из словесных и грамматических вопросов.
- *
- * Логика:
- * - Если общее число вопросов <= max — возвращаем всё перемешанным.
- * - Если больше max — режем честно: половина словесных, половина грамматических.
- * - Если одной из групп не хватило до половины — добираем из остатка другой группы.
- */
 function buildTest(
   wordsQuestions: TestQuestion[],
   grammarQuestions: TestQuestion[],
@@ -103,10 +106,6 @@ function buildTest(
 
 const FINAL_TEST_MAX = 20;
 
-/**
- * Итоговый тест по уроку.
- * Собираем все вопросы из словаря и грамматики, ограничиваем FINAL_TEST_MAX.
- */
 export function generateFinalTest(
   words: CourseItemWord[],
   rules: GrammarRule[],
@@ -122,9 +121,6 @@ export function generateFinalTest(
 
 const COURSE_TEST_MAX = 30;
 
-/**
- * Итоговый тест по группе уроков (элемент курса type === "test").
- */
 export function generateCourseTest(
   words: CourseItemWord[],
   rules: GrammarRule[],

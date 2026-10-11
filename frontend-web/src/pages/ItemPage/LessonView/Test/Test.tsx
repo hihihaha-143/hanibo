@@ -8,6 +8,7 @@ import TrueFalseQuestion from "./TrueFalseQuestion";
 import TextInputQuestion from "./TextInputQuestion";
 import MatchQuestion from "./MatchQuestion";
 import FillBlankQuestion from "./FillBlankQuestion";
+import WordOrderQuestion from "./WordOrderQuestion";
 import TestResult from "./TestResult";
 import { spring } from "../../../../lib/motion";
 
@@ -38,6 +39,9 @@ export default function Test({
     null,
   );
   const [fillBlankCorrect, setFillBlankCorrect] = useState<boolean | null>(
+    null,
+  );
+  const [wordOrderCorrect, setWordOrderCorrect] = useState<boolean | null>(
     null,
   );
   const [correctCount, setCorrectCount] = useState(0);
@@ -121,6 +125,13 @@ export default function Test({
     if (correct) setCorrectCount((c) => c + 1);
   };
 
+  const handleWordOrderSubmit = (correct: boolean) => {
+    if (answered) return;
+    setWordOrderCorrect(correct);
+    setAnswered(true);
+    if (correct) setCorrectCount((c) => c + 1);
+  };
+
   const handleNext = () => {
     if (currentIndex + 1 >= total) {
       const percent = (correctCount / total) * 100;
@@ -134,6 +145,7 @@ export default function Test({
       setSelectedValue(null);
       setTextInputCorrect(null);
       setFillBlankCorrect(null);
+      setWordOrderCorrect(null);
     }
   };
 
@@ -144,6 +156,7 @@ export default function Test({
     setSelectedValue(null);
     setTextInputCorrect(null);
     setFillBlankCorrect(null);
+    setWordOrderCorrect(null);
     setCorrectCount(0);
     setFinished(false);
     onRepeat();
@@ -239,6 +252,14 @@ export default function Test({
                 selectedIndex={selectedIndex}
                 onSelect={handleFillBlankSelect}
                 onSubmit={handleFillBlankSubmit}
+              />
+            )}
+            {current.type === "word-order" && (
+              <WordOrderQuestion
+                question={current}
+                answered={answered}
+                isCorrect={wordOrderCorrect}
+                onSubmit={handleWordOrderSubmit}
               />
             )}
           </motion.div>
