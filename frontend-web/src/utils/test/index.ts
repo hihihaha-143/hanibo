@@ -8,6 +8,10 @@ import { generateChooseGrammarQuestions } from "./generators/chooseGrammar";
 import { generateTrueFalseQuestions } from "./generators/trueFalse";
 import { generateTextInputQuestions } from "./generators/textInput";
 import { generateMatchQuestions } from "./generators/match";
+import { generateAudioChooseQuestions } from "./generators/audioChoose";
+
+
+
 import {
   generateFillBlankQuestions,
   buildWordPoolFromPhrases,
@@ -42,14 +46,15 @@ function uniquePhrases(phrases: Phrase[]): Phrase[] {
 export function generateWordsTest(words: CourseItemWord[]): TestQuestion[] {
   const phrases = uniquePhrases(words.flatMap((w) => w.phrases));
 
-  return shuffle([
-    ...generateChooseWordQuestions(words),
-    ...generateTrueFalseQuestions(words),
-    ...generateTextInputQuestions(words),
-    ...generateMatchQuestions(words),
-    ...generateFillBlankQuestions(phrases, words),
-    ...generateWordOrderQuestions(phrases),
-  ]);
+return shuffle([
+  ...generateChooseWordQuestions(words),
+  ...generateTrueFalseQuestions(words),
+  ...generateTextInputQuestions(words),
+  ...generateMatchQuestions(words),
+  ...generateFillBlankQuestions(phrases, words),
+  ...generateWordOrderQuestions(phrases),
+  ...generateAudioChooseQuestions(words),
+]);
 }
 
 // ---------- тест по грамматике ----------

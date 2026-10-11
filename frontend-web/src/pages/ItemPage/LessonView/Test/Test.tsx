@@ -11,6 +11,10 @@ import FillBlankQuestion from "./FillBlankQuestion";
 import WordOrderQuestion from "./WordOrderQuestion";
 import TestResult from "./TestResult";
 import { spring } from "../../../../lib/motion";
+import AudioChooseQuestion from "./AudioChooseQuestion";
+
+
+
 
 interface TestProps {
   questions: TestQuestion[];
@@ -260,6 +264,15 @@ export default function Test({
                 answered={answered}
                 isCorrect={wordOrderCorrect}
                 onSubmit={handleWordOrderSubmit}
+              />
+            )}
+
+            {current.type === "audio-choose" && (
+              <AudioChooseQuestion
+                question={current}
+                selectedIndex={selectedIndex}
+                answered={answered}
+                onSelect={handleSelectIndex}
               />
             )}
           </motion.div>

@@ -124,14 +124,19 @@ export interface TestQuestionWordOrder extends TestQuestionBase {
   correctOrder: string[]; // правильный порядок токенов
 }
 
-// ---------- 11. Аудио → выбор (TODO) ----------
+// ---------- 11. Аудио → выбор ----------
 
 export interface TestQuestionAudioChoose extends TestQuestionBase {
   type: "audio-choose";
-  audioUrl: string | null; // TODO: подставить реальный источник, когда найдём озвучку
+  audioText: string;              // что произносим (hangul слова)
+  mode: "translation" | "hangul"; // что показываем в вариантах
+  promptHangul: string;           // показываем после ответа
+  promptTranslation: string;      // показываем после ответа
   variants: string[];
   correctIndices: number[];
 }
+
+
 
 // ---------- объединение ----------
 
