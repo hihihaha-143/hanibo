@@ -11,7 +11,7 @@ import { generateMatchQuestions } from "./generators/match";
 import { generateAudioChooseQuestions } from "./generators/audioChoose";
 import { generateCorrectSpellingQuestions } from "./generators/correctSpelling";
 import { generateFlashcardQuestions } from "./generators/flashcard";
-
+import { generateSyllableGapQuestions } from "./generators/syllableGap";
 
 
 import {
@@ -58,6 +58,7 @@ return shuffle([
   ...generateAudioChooseQuestions(words),
   ...generateCorrectSpellingQuestions(words),
   ...generateFlashcardQuestions(words),
+  ...generateSyllableGapQuestions(words),
 ]);
 }
 

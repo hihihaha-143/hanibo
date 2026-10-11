@@ -555,6 +555,36 @@
   }
 }
 
+
+
+
+
+
+
+
+&--syllable-gap {
+  .syllable-gap__gap {
+    display: inline-block;
+    min-width: 2.5rem;
+    padding: 0 0.5rem;
+    border-bottom: 2px solid var(--color-accent);
+    color: var(--color-accent);
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .choose-question__variants--syllable {
+    grid-template-columns: repeat(4, 1fr);
+
+    .choose-question__variant {
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      padding: 1.25rem;
+    }
+  }
+}
+
 }
 
 .test__counter {

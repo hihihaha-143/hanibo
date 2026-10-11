@@ -12,6 +12,7 @@ import WordOrderQuestion from "./WordOrderQuestion";
 import AudioChooseQuestion from "./AudioChooseQuestion";
 import CorrectSpellingQuestion from "./CorrectSpellingQuestion";
 import FlashcardQuestion from "./FlashcardQuestion";
+import SyllableGapQuestion from "./SyllableGapQuestion";
 import TestResult from "./TestResult";
 import { spring } from "../../../../lib/motion";
 
@@ -47,11 +48,14 @@ export default function Test({
   const [wordOrderCorrect, setWordOrderCorrect] = useState<boolean | null>(
     null,
   );
+  const [syllableGapCorrect, setSyllableGapCorrect] = useState<boolean | null>(
+    null,
+  );
   const [correctCount, setCorrectCount] = useState(0);
   const [finished, setFinished] = useState(false);
 
-const total = questions.length;
-const gradableTotal = questions.filter((q) => q.type !== "flashcard").length;
+  const total = questions.length;
+  const gradableTotal = questions.filter((q) => q.type !== "flashcard").length;
 
   if (total === 0) {
     return (
@@ -136,19 +140,39 @@ const gradableTotal = questions.filter((q) => q.type !== "flashcard").length;
     if (correct) setCorrectCount((c) => c + 1);
   };
 
+  const handleSyllableGapSelect = (index: number) => {
+    if (answered) return;
+    if (current.type !== "syllable-gap") return;
+    if (current.mode !== "choice") return;
+    const correct = index === current.correctIndex;
+    setSelectedIndex(index);
+    setSyllableGapCorrect(correct);
+    setAnswered(true);
+    if (correct) setCorrectCount((c) => c + 1);
+  };
+
+  const handleSyllableGapSubmit = (value: string) => {
+    if (answered) return;
+    if (current.type !== "syllable-gap") return;
+    if (current.mode !== "input") return;
+    const correct = checkTextAnswer(value, current.correctAnswer);
+    setSyllableGapCorrect(correct);
+    setAnswered(true);
+    if (correct) setCorrectCount((c) => c + 1);
+  };
+
   const handleFlashcardAnswer = (_known: boolean) => {
     if (answered) return;
-    // "Знаю" / "Не знаю" — на correctCount НЕ влияет (карточки вне зачёта).
     setAnswered(true);
   };
 
   const handleNext = () => {
     if (currentIndex + 1 >= total) {
-     const percent =
-       gradableTotal > 0 ? (correctCount / gradableTotal) * 100 : 0;
-     const passed = percent > 70;
-     setFinished(true);
-     onFinish(correctCount, gradableTotal, passed);
+      const percent =
+        gradableTotal > 0 ? (correctCount / gradableTotal) * 100 : 0;
+      const passed = percent > 70;
+      setFinished(true);
+      onFinish(correctCount, gradableTotal, passed);
     } else {
       setCurrentIndex((i) => i + 1);
       setAnswered(false);
@@ -157,6 +181,7 @@ const gradableTotal = questions.filter((q) => q.type !== "flashcard").length;
       setTextInputCorrect(null);
       setFillBlankCorrect(null);
       setWordOrderCorrect(null);
+      setSyllableGapCorrect(null);
     }
   };
 
@@ -168,28 +193,29 @@ const gradableTotal = questions.filter((q) => q.type !== "flashcard").length;
     setTextInputCorrect(null);
     setFillBlankCorrect(null);
     setWordOrderCorrect(null);
+    setSyllableGapCorrect(null);
     setCorrectCount(0);
     setFinished(false);
     onRepeat();
   };
 
   if (finished) {
-  const percent =
-    gradableTotal > 0 ? Math.round((correctCount / gradableTotal) * 100) : 0;
-  const passed = percent > 70;
-  return (
-    <TestResult
-      correct={correctCount}
-      total={gradableTotal}
-      percent={percent}
-      passed={passed}
-      onRepeat={handleRepeatInternal}
-      onBack={onBack}
-      backLabel={backLabel}
-      onNext={onNext}
-      nextLabel={nextLabel}
-    />
-  );
+    const percent =
+      gradableTotal > 0 ? Math.round((correctCount / gradableTotal) * 100) : 0;
+    const passed = percent > 70;
+    return (
+      <TestResult
+        correct={correctCount}
+        total={gradableTotal}
+        percent={percent}
+        passed={passed}
+        onRepeat={handleRepeatInternal}
+        onBack={onBack}
+        backLabel={backLabel}
+        onNext={onNext}
+        nextLabel={nextLabel}
+      />
+    );
   }
 
   const progressPercent = ((currentIndex + 1) / total) * 100;
@@ -295,6 +321,16 @@ const gradableTotal = questions.filter((q) => q.type !== "flashcard").length;
                 question={current}
                 onAnswer={handleFlashcardAnswer}
                 onAutoNext={handleNext}
+              />
+            )}
+            {current.type === "syllable-gap" && (
+              <SyllableGapQuestion
+                question={current}
+                answered={answered}
+                isCorrect={syllableGapCorrect}
+                selectedIndex={selectedIndex}
+                onSelect={handleSyllableGapSelect}
+                onSubmit={handleSyllableGapSubmit}
               />
             )}
           </motion.div>

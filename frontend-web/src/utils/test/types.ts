@@ -74,13 +74,26 @@ export interface TestQuestionCorrectSpelling extends TestQuestionBase {
 
 // ---------- 7. Пропуск слога ----------
 
-export interface TestQuestionSyllableGap extends TestQuestionBase {
+export interface TestQuestionSyllableGapChoice extends TestQuestionBase {
   type: "syllable-gap";
+  mode: "choice";
   prompt: string; // слово с пропуском, например "안_"
   promptAudio: string | null;
-  variants: string[]; // варианты слога
+  variants: string[];
   correctIndex: number;
 }
+
+export interface TestQuestionSyllableGapInput extends TestQuestionBase {
+  type: "syllable-gap";
+  mode: "input";
+  prompt: string;
+  promptAudio: string | null;
+  correctAnswer: string;
+}
+
+export type TestQuestionSyllableGap =
+  | TestQuestionSyllableGapChoice
+  | TestQuestionSyllableGapInput;
 
 // ---------- 8. Карточки ----------
 
