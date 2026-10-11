@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useHotkeys } from "react-hotkeys-hook";
 import type { TestQuestion } from "../../../../utils/testGenerator";
 import { checkTextAnswer } from "../../../../utils/test/shared";
 import ChooseQuestion from "./ChooseQuestion";
@@ -198,6 +199,56 @@ export default function Test({
     setFinished(false);
     onRepeat();
   };
+
+  // ---------- keyboard hotkeys ----------
+
+  // 1–4: выбор варианта для choose-подобных типов
+  useHotkeys(
+    "1,2,3,4",
+    (e) => {
+      if (answered) return;
+      const idx = parseInt(e.key, 10) - 1;
+      if (idx < 0) return;
+
+      if (current.type === "choose") {
+        if (idx < current.variants.length) handleSelectIndex(idx);
+      } else if (current.type === "choose-grammar") {
+        if (idx < current.variants.length) handleSelectIndex(idx);
+      } else if (current.type === "audio-choose") {
+        if (idx < current.variants.length) handleSelectIndex(idx);
+      } else if (current.type === "correct-spelling") {
+        if (idx < current.variants.length) handleSelectIndex(idx);
+      } else if (current.type === "fill-blank" && current.mode === "choice") {
+        if (idx < current.variants.length) handleFillBlankSelect(idx);
+      } else if (current.type === "syllable-gap" && current.mode === "choice") {
+        if (idx < current.variants.length) handleSyllableGapSelect(idx);
+      }
+    },
+    [current, answered],
+  );
+
+  // 1,2: true-false
+  useHotkeys(
+    "1,2",
+    (e) => {
+      if (answered) return;
+      if (current.type !== "true-false") return;
+      handleSelectBoolean(e.key === "1");
+    },
+    [current, answered],
+  );
+
+  // Enter: "Далее" когда ответ дан (кроме инпутов — там нативный Enter)
+  useHotkeys(
+    "enter",
+    (e) => {
+      if (!answered) return;
+      if (current.type === "flashcard") return;
+      e.preventDefault();
+      handleNext();
+    },
+    [answered, current, correctCount, currentIndex],
+  );
 
   if (finished) {
     const percent =

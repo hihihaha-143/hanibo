@@ -1,5 +1,3 @@
-// frontend-web/src/pages/ItemPage/LessonView/Test/SyllableGapQuestion.tsx
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import type { TestQuestionSyllableGap } from "../../../../utils/testGenerator";
@@ -80,7 +78,10 @@ export default function SyllableGapQuestion({
                 whileTap={!answered ? { scale: 0.98 } : undefined}
                 transition={spring.bouncy}
               >
-                {variant}
+                <span className="choose-question__variant-key">
+                  {index + 1}
+                </span>
+                <span className="choose-question__variant-text">{variant}</span>
               </motion.button>
             );
           })}

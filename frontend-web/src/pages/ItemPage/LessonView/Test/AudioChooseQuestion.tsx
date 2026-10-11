@@ -1,5 +1,3 @@
-// frontend-web/src/pages/ItemPage/LessonView/Test/AudioChooseQuestion.tsx
-
 import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
 import type { TestQuestionAudioChoose } from "../../../../utils/testGenerator";
@@ -94,7 +92,8 @@ export default function AudioChooseQuestion({
               whileTap={!answered ? { scale: 0.98 } : undefined}
               transition={spring.bouncy}
             >
-              {variant}
+              <span className="choose-question__variant-key">{index + 1}</span>
+              <span className="choose-question__variant-text">{variant}</span>
             </motion.button>
           );
         })}

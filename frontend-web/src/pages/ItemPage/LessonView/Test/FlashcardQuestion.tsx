@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
+import { useHotkeys } from "react-hotkeys-hook";
 import type { TestQuestionFlashcard } from "../../../../utils/testGenerator";
 import { spring } from "../../../../lib/motion";
 
@@ -51,6 +52,40 @@ export default function FlashcardQuestion({
       setTimeout(() => speak(question.backAudio!, 1), 400);
     }
   };
+
+  // 1 — Не знаю
+  useHotkeys(
+    "1",
+    (e) => {
+      e.preventDefault();
+      if (flipped) return;
+      handleUnknown();
+    },
+    [flipped],
+  );
+
+  // 2 — Знаю
+  useHotkeys(
+    "2",
+    (e) => {
+      e.preventDefault();
+      if (flipped) return;
+      handleKnown();
+    },
+    [flipped],
+  );
+
+  // Enter — Далее (после «Не знаю»)
+  useHotkeys(
+    "enter",
+    (e) => {
+      e.preventDefault();
+      if (!flipped) return;
+      if (known) return;
+      onAutoNext();
+    },
+    [flipped, known],
+  );
 
   return (
     <div className="choose-question choose-question--flashcard">
@@ -136,6 +171,7 @@ export default function FlashcardQuestion({
             whileTap={{ scale: 0.97 }}
             transition={spring.bouncy}
           >
+            <span className="flashcard__key">1</span>
             Не знаю
           </motion.button>
           <motion.button
@@ -146,6 +182,7 @@ export default function FlashcardQuestion({
             whileTap={{ scale: 0.97 }}
             transition={spring.bouncy}
           >
+            <span className="flashcard__key">2</span>
             Знаю
           </motion.button>
         </div>

@@ -1,7 +1,5 @@
 import { Volume2 } from "lucide-react";
-import { motion } from "framer-motion";
 import type { TestQuestionChoose } from "../../../../utils/testGenerator";
-import { spring } from "../../../../lib/motion";
 
 interface ChooseQuestionProps {
   question: TestQuestionChoose;
@@ -9,11 +7,6 @@ interface ChooseQuestionProps {
   answered: boolean;
   onSelect: (index: number) => void;
 }
-
-const SPEED_OPTIONS = [
-  { rate: 0.5, label: "0.5", title: "Медленно" },
-  { rate: 1, label: "1", title: "Обычно" },
-];
 
 export default function ChooseQuestion({
   question,
@@ -37,21 +30,24 @@ export default function ChooseQuestion({
         <span className="choose-question__prompt-text">{question.prompt}</span>
         {question.promptAudio && (
           <div className="choose-question__speak">
-            {SPEED_OPTIONS.map(({ rate, label, title }) => (
-              <motion.button
-                key={rate}
-                type="button"
-                className="choose-question__speak-button"
-                onClick={() => speak(question.promptAudio!, rate)}
-                title={title}
-                whileHover={{ y: -1 }}
-                whileTap={{ scale: 0.94 }}
-                transition={spring.bouncy}
-              >
-                <Volume2 size={16} />
-                <span>{label}</span>
-              </motion.button>
-            ))}
+            <button
+              type="button"
+              className="choose-question__speak-button"
+              onClick={() => speak(question.promptAudio!, 0.5)}
+              title="Медленно"
+            >
+              <Volume2 size={16} />
+              <span>0.5</span>
+            </button>
+            <button
+              type="button"
+              className="choose-question__speak-button"
+              onClick={() => speak(question.promptAudio!, 1)}
+              title="Обычно"
+            >
+              <Volume2 size={16} />
+              <span>1</span>
+            </button>
           </div>
         )}
       </div>
@@ -66,18 +62,16 @@ export default function ChooseQuestion({
               modifier = "choose-question__variant--wrong";
           }
           return (
-            <motion.button
+            <button
               key={index}
               type="button"
               className={`choose-question__variant ${modifier}`}
               onClick={() => onSelect(index)}
               disabled={answered}
-              whileHover={answered ? undefined : { y: -1, scale: 1.02 }}
-              whileTap={answered ? undefined : { scale: 0.97 }}
-              transition={spring.bouncy}
             >
-              {variant}
-            </motion.button>
+              <span className="choose-question__variant-key">{index + 1}</span>
+              <span className="choose-question__variant-text">{variant}</span>
+            </button>
           );
         })}
       </div>

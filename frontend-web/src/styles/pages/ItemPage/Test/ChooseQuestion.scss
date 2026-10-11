@@ -3,6 +3,27 @@
 .choose-question {
   @include flex(column, flex-start, stretch, 1.5rem);
 
+
+  &__variant-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.375rem;
+  margin-right: 0.5rem;
+  border-radius: 0.375rem;
+  background: var(--color-surface-alt);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+&__variant-text {
+  flex: 1;
+}
+
+
   &__prompt {
     @include flex(row, center, center, 1rem);
   }
@@ -472,7 +493,6 @@
 
 
 
-
 &--flashcard {
   .flashcard {
     perspective: 1200px;
@@ -553,6 +573,22 @@
   .flashcard--flipped .flashcard__inner {
     transform: rotateY(180deg);
   }
+
+  .flashcard__key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.5rem;
+    padding: 0 0.375rem;
+    border-radius: 0.375rem;
+    background: rgba(0, 0, 0, 0.25);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+    opacity: 0.85;
+  }
 }
 
 
@@ -583,6 +619,58 @@
       padding: 1.25rem;
     }
   }
+
+  .text-input {
+  display: flex;
+  gap: 0.75rem;
+
+  &__field {
+    flex: 1;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 1rem;
+
+    &::placeholder {
+      color: var(--color-text-secondary);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: default;
+    }
+  }
+
+  &__submit {
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--color-primary);
+    border-radius: 0.75rem;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+
+    &:hover:not(:disabled) {
+      opacity: 0.85;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+  }
+}
 }
 
 }

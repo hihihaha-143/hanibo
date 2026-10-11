@@ -1,7 +1,5 @@
 import { Volume2 } from "lucide-react";
-import { motion } from "framer-motion";
 import type { TestQuestionTrueFalse } from "../../../../utils/testGenerator";
-import { spring } from "../../../../lib/motion";
 
 interface TrueFalseQuestionProps {
   question: TestQuestionTrueFalse;
@@ -9,11 +7,6 @@ interface TrueFalseQuestionProps {
   answered: boolean;
   onSelect: (value: boolean) => void;
 }
-
-const SPEED_OPTIONS = [
-  { rate: 0.5, label: "0.5", title: "Медленно" },
-  { rate: 1, label: "1", title: "Обычно" },
-];
 
 export default function TrueFalseQuestion({
   question,
@@ -29,9 +22,9 @@ export default function TrueFalseQuestion({
     speechSynthesis.speak(utterance);
   };
 
-  const options = [
-    { value: true, label: "Верно" },
-    { value: false, label: "Неверно" },
+  const options: { value: boolean; label: string; key: number }[] = [
+    { value: true, label: "Верно", key: 1 },
+    { value: false, label: "Неверно", key: 2 },
   ];
 
   return (
@@ -42,27 +35,30 @@ export default function TrueFalseQuestion({
         <span className="choose-question__prompt-text">{question.prompt}</span>
         {question.promptAudio && (
           <div className="choose-question__speak">
-            {SPEED_OPTIONS.map(({ rate, label, title }) => (
-              <motion.button
-                key={rate}
-                type="button"
-                className="choose-question__speak-button"
-                onClick={() => speak(question.promptAudio!, rate)}
-                title={title}
-                whileHover={{ y: -1 }}
-                whileTap={{ scale: 0.94 }}
-                transition={spring.bouncy}
-              >
-                <Volume2 size={16} />
-                <span>{label}</span>
-              </motion.button>
-            ))}
+            <button
+              type="button"
+              className="choose-question__speak-button"
+              onClick={() => speak(question.promptAudio!, 0.5)}
+              title="Медленно"
+            >
+              <Volume2 size={16} />
+              <span>0.5</span>
+            </button>
+            <button
+              type="button"
+              className="choose-question__speak-button"
+              onClick={() => speak(question.promptAudio!, 1)}
+              title="Обычно"
+            >
+              <Volume2 size={16} />
+              <span>1</span>
+            </button>
           </div>
         )}
       </div>
 
       <div className="choose-question__variants choose-question__variants--tf">
-        {options.map(({ value, label }) => {
+        {options.map(({ value, label, key }) => {
           const isCorrect = value === question.correct;
           let modifier = "";
           if (answered) {
@@ -71,18 +67,16 @@ export default function TrueFalseQuestion({
               modifier = "choose-question__variant--wrong";
           }
           return (
-            <motion.button
+            <button
               key={String(value)}
               type="button"
               className={`choose-question__variant ${modifier}`}
               onClick={() => onSelect(value)}
               disabled={answered}
-              whileHover={answered ? undefined : { y: -1, scale: 1.02 }}
-              whileTap={answered ? undefined : { scale: 0.97 }}
-              transition={spring.bouncy}
             >
-              {label}
-            </motion.button>
+              <span className="choose-question__variant-key">{key}</span>
+              <span className="choose-question__variant-text">{label}</span>
+            </button>
           );
         })}
       </div>
