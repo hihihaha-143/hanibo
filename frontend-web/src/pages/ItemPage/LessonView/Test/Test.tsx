@@ -9,12 +9,10 @@ import TextInputQuestion from "./TextInputQuestion";
 import MatchQuestion from "./MatchQuestion";
 import FillBlankQuestion from "./FillBlankQuestion";
 import WordOrderQuestion from "./WordOrderQuestion";
+import AudioChooseQuestion from "./AudioChooseQuestion";
+import CorrectSpellingQuestion from "./CorrectSpellingQuestion";
 import TestResult from "./TestResult";
 import { spring } from "../../../../lib/motion";
-import AudioChooseQuestion from "./AudioChooseQuestion";
-
-
-
 
 interface TestProps {
   questions: TestQuestion[];
@@ -266,9 +264,16 @@ export default function Test({
                 onSubmit={handleWordOrderSubmit}
               />
             )}
-
             {current.type === "audio-choose" && (
               <AudioChooseQuestion
+                question={current}
+                selectedIndex={selectedIndex}
+                answered={answered}
+                onSelect={handleSelectIndex}
+              />
+            )}
+            {current.type === "correct-spelling" && (
+              <CorrectSpellingQuestion
                 question={current}
                 selectedIndex={selectedIndex}
                 answered={answered}

@@ -9,6 +9,8 @@ import { generateTrueFalseQuestions } from "./generators/trueFalse";
 import { generateTextInputQuestions } from "./generators/textInput";
 import { generateMatchQuestions } from "./generators/match";
 import { generateAudioChooseQuestions } from "./generators/audioChoose";
+import { generateCorrectSpellingQuestions } from "./generators/correctSpelling";
+
 
 
 
@@ -54,6 +56,7 @@ return shuffle([
   ...generateFillBlankQuestions(phrases, words),
   ...generateWordOrderQuestions(phrases),
   ...generateAudioChooseQuestions(words),
+  ...generateCorrectSpellingQuestions(words),
 ]);
 }
 

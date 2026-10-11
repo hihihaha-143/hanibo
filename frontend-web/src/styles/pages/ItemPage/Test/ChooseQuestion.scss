@@ -457,6 +457,19 @@
       }
     }
   }
+
+
+
+  &--correct-spelling {
+  .choose-question__variant--hangul {
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 1.25rem;
+  }
+}
+
+
 }
 
 .test__counter {
