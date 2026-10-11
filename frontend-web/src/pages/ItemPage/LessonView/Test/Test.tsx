@@ -11,6 +11,7 @@ import FillBlankQuestion from "./FillBlankQuestion";
 import WordOrderQuestion from "./WordOrderQuestion";
 import AudioChooseQuestion from "./AudioChooseQuestion";
 import CorrectSpellingQuestion from "./CorrectSpellingQuestion";
+import FlashcardQuestion from "./FlashcardQuestion";
 import TestResult from "./TestResult";
 import { spring } from "../../../../lib/motion";
 
@@ -49,7 +50,8 @@ export default function Test({
   const [correctCount, setCorrectCount] = useState(0);
   const [finished, setFinished] = useState(false);
 
-  const total = questions.length;
+const total = questions.length;
+const gradableTotal = questions.filter((q) => q.type !== "flashcard").length;
 
   if (total === 0) {
     return (
@@ -134,12 +136,19 @@ export default function Test({
     if (correct) setCorrectCount((c) => c + 1);
   };
 
+  const handleFlashcardAnswer = (_known: boolean) => {
+    if (answered) return;
+    // "Знаю" / "Не знаю" — на correctCount НЕ влияет (карточки вне зачёта).
+    setAnswered(true);
+  };
+
   const handleNext = () => {
     if (currentIndex + 1 >= total) {
-      const percent = (correctCount / total) * 100;
-      const passed = percent > 70;
-      setFinished(true);
-      onFinish(correctCount, total, passed);
+     const percent =
+       gradableTotal > 0 ? (correctCount / gradableTotal) * 100 : 0;
+     const passed = percent > 70;
+     setFinished(true);
+     onFinish(correctCount, gradableTotal, passed);
     } else {
       setCurrentIndex((i) => i + 1);
       setAnswered(false);
@@ -165,21 +174,22 @@ export default function Test({
   };
 
   if (finished) {
-    const percent = Math.round((correctCount / total) * 100);
-    const passed = percent > 70;
-    return (
-      <TestResult
-        correct={correctCount}
-        total={total}
-        percent={percent}
-        passed={passed}
-        onRepeat={handleRepeatInternal}
-        onBack={onBack}
-        backLabel={backLabel}
-        onNext={onNext}
-        nextLabel={nextLabel}
-      />
-    );
+  const percent =
+    gradableTotal > 0 ? Math.round((correctCount / gradableTotal) * 100) : 0;
+  const passed = percent > 70;
+  return (
+    <TestResult
+      correct={correctCount}
+      total={gradableTotal}
+      percent={percent}
+      passed={passed}
+      onRepeat={handleRepeatInternal}
+      onBack={onBack}
+      backLabel={backLabel}
+      onNext={onNext}
+      nextLabel={nextLabel}
+    />
+  );
   }
 
   const progressPercent = ((currentIndex + 1) / total) * 100;
@@ -280,11 +290,18 @@ export default function Test({
                 onSelect={handleSelectIndex}
               />
             )}
+            {current.type === "flashcard" && (
+              <FlashcardQuestion
+                question={current}
+                onAnswer={handleFlashcardAnswer}
+                onAutoNext={handleNext}
+              />
+            )}
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {answered && (
+      {answered && current.type !== "flashcard" && (
         <div className="test__footer">
           <motion.button
             type="button"

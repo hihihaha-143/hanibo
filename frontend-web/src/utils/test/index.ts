@@ -10,7 +10,7 @@ import { generateTextInputQuestions } from "./generators/textInput";
 import { generateMatchQuestions } from "./generators/match";
 import { generateAudioChooseQuestions } from "./generators/audioChoose";
 import { generateCorrectSpellingQuestions } from "./generators/correctSpelling";
-
+import { generateFlashcardQuestions } from "./generators/flashcard";
 
 
 
@@ -57,6 +57,7 @@ return shuffle([
   ...generateWordOrderQuestions(phrases),
   ...generateAudioChooseQuestions(words),
   ...generateCorrectSpellingQuestions(words),
+  ...generateFlashcardQuestions(words),
 ]);
 }
 
