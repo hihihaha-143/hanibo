@@ -5,6 +5,16 @@ use App\Models\Tip;
 use App\Http\Controllers\Api\CourseItemController;
 use App\Http\Controllers\Api\CourseItemWordController;
 use App\Http\Controllers\Api\CourseItemGrammarController;
+use App\Http\Controllers\AuthController;
+
+// --- Auth ---
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::get('/auth/me', [AuthController::class, 'me']);
+});
 
 Route::get('/course-items/{courseItem}/grammar', [CourseItemGrammarController::class, 'index']);
 Route::get('/course-items/{courseItem}/words', [CourseItemWordController::class, 'index']);
