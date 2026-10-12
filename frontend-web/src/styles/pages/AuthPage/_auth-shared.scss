@@ -1,0 +1,168 @@
+@use '../../abstracts' as *;
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+
+  &__card {
+    width: 100%;
+    max-width: 420px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 32px 28px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+
+    @include down('sm') {
+      padding: 24px 20px;
+    }
+  }
+
+  &__logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    img {
+      width: 96px;
+      height: 96px;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }
+  }
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--color-text);
+  }
+
+  &__error-general {
+    background-color: var(--color-error-bg);
+    color: var(--color-error);
+    border: 1px solid var(--color-error);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.875rem;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  &__switch {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+
+    a {
+      color: var(--color-accent);
+      font-weight: 700;
+
+      &:hover {
+        color: var(--color-accent-hover);
+      }
+    }
+  }
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+  }
+
+  &__input-wrap {
+    position: relative;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--color-text);
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    outline: none;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+
+    &:focus {
+      border-color: var(--color-accent);
+    }
+  }
+
+  &__input-wrap &__input {
+    padding-right: 44px;
+  }
+
+  &__toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: color var(--transition-fast);
+
+    &:hover {
+      color: var(--color-text);
+    }
+  }
+
+  &__error {
+    font-size: 0.8125rem;
+    color: var(--color-error);
+  }
+
+  &__submit {
+    margin-top: 4px;
+    padding: 12px 16px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    color: var(--color-on-accent);
+    background-color: var(--color-accent);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-accent-hover);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}

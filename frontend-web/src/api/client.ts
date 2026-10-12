@@ -9,3 +9,13 @@ export const apiClient = axios.create({
   },
   timeout: 10000,
 });
+
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem("hanibo_token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
