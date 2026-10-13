@@ -1,25 +1,33 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Home, BookOpen, LogIn, Menu } from "lucide-react";
+import { Home, BookOpen, LogIn, Menu, Dumbbell } from "lucide-react";
 import { spring } from "../../lib/motion";
+import { useAuth } from "../../context/useAuth";
 
 interface MobileNavBarProps {
   sheetOpen: boolean;
   onToggleSheet: () => void;
 }
 
-const items = [
-  { to: "/", label: "Главная", icon: Home },
-  { to: "/course", label: "Курс", icon: BookOpen },
-  { to: "/login", label: "Войти", icon: LogIn },
-];
-
 export default function MobileNavBar({
   sheetOpen,
   onToggleSheet,
 }: MobileNavBarProps) {
+  const { isAuthenticated } = useAuth();
   const [hovered, setHovered] = useState<string | null>(null);
+
+  const items = isAuthenticated
+    ? [
+        { to: "/", label: "Главная", icon: Home },
+        { to: "/course", label: "Курс", icon: BookOpen },
+        { to: "/practice", label: "Практика", icon: Dumbbell },
+      ]
+    : [
+        { to: "/", label: "Главная", icon: Home },
+        { to: "/course", label: "Курс", icon: BookOpen },
+        { to: "/login", label: "Войти", icon: LogIn },
+      ];
 
   return (
     <nav className="mobile-nav-bar">
