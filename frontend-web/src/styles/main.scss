@@ -2,16 +2,10 @@
 @use './base';
 
 // components
-@use './components/StateBlock/state-block';
+@use './components';
 
 // layouts
-@use './layouts/main-layout';
-@use './layouts/mobile-nav/mobile-nav';
+@use './layouts';
 
 // pages
-@use './pages/HomePage/home-page';
-@use './pages/CoursePage/course-page';
-@use './pages/ExtraPage/extra-page';
-@use './pages/ItemPage/item-page';
-@use './pages/ItemPage/LessonView';
-@use './pages/AuthPage';
+@use './pages';

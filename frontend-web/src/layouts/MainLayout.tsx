@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Banner from "./Banner";
+import Banner from "./Banner/Banner";
 import Sidebar from "./Sidebar/Sidebar";
 import MobileNav from "./MobileNav/MobileNav";
 
