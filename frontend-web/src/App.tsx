@@ -2,10 +2,12 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import GuestOnlyRoute from "./components/GuestOnlyRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const CoursePage = lazy(() => import("./pages/CoursePage/CoursePage"));
 const ItemPage = lazy(() => import("./pages/ItemPage/ItemPage"));
+const LibraryPage = lazy(() => import("./pages/LibraryPage/LibraryPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 
@@ -18,6 +20,14 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/course" element={<CoursePage />} />
             <Route path="/course/item/:id" element={<ItemPage />} />
+            <Route
+              path="/library"
+              element={
+                <ProtectedRoute>
+                  <LibraryPage />
+                </ProtectedRoute>
+              }
+            />
           </Route>
           <Route
             path="/login"

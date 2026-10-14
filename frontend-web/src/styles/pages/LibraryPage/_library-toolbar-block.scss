@@ -1,0 +1,99 @@
+@use '../../abstracts' as *;
+
+.library-toolbar-block {
+  @include flex(column, flex-start, stretch, 1rem);
+  width: 100%;
+
+  &__chips {
+    @include flex(row, center, center, 0.5rem);
+    flex-wrap: wrap;
+  }
+
+  &__chip {
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    transition: background-color var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast);
+
+    &:hover {
+      border-color: var(--color-accent);
+      color: var(--color-text);
+    }
+
+    &--active {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      color: var(--color-on-accent);
+    }
+  }
+
+  &__search {
+    @include flex(row, flex-start, center, 0.5rem);
+    width: 100%;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.6rem 1.1rem;
+    color: var(--color-text-secondary);
+
+    input {
+      flex: 1;
+      min-width: 0;
+      color: var(--color-text);
+
+      &::placeholder {
+        color: var(--color-text-secondary);
+      }
+    }
+  }
+
+  &__filters {
+    @include flex(row, flex-start, center, 0.75rem);
+    width: 100%;
+
+    @include down('sm') {
+      @include flex(column, flex-start, stretch, 0.5rem);
+    }
+  }
+
+  &__select {
+    flex: 1;
+    min-width: 0;
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+
+    &:hover,
+    &:focus {
+      border-color: var(--color-accent);
+      outline: none;
+    }
+  }
+
+  &__reset {
+    @include flex(row, center, center, 0.4rem);
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    transition: border-color var(--transition-fast),
+                color var(--transition-fast);
+
+    &:hover {
+      border-color: var(--color-accent);
+      color: var(--color-text);
+    }
+  }
+}

@@ -1,0 +1,21 @@
+@use '../../abstracts' as *;
+
+.library-shelf-block {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+
+  &__shelf {
+    position: absolute;
+    height: 2rem;
+    background: linear-gradient(
+      to bottom,
+      var(--color-surface-alt) 0%,
+      var(--color-border) 50%,
+      var(--color-surface-alt) 100%
+    );
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+}

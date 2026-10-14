@@ -6,7 +6,9 @@ use App\Http\Controllers\Api\CourseItemController;
 use App\Http\Controllers\Api\CourseItemWordController;
 use App\Http\Controllers\Api\CourseItemGrammarController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\LibraryItemController;
 
+Route::get('/library/items', [LibraryItemController::class, 'index']);
 // --- Auth ---
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
