@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchLibraryItem } from "../../api/library";
+import { pushRecent } from "../../lib/libraryRecent";
 import type { LibraryItem } from "../../types/library";
 import LibraryViewerBlock from "./LibraryViewerBlock";
 import StateBlock from "../../components/StateBlock/StateBlock";
@@ -10,6 +11,8 @@ export default function LibraryViewPage() {
   const [item, setItem] = useState<LibraryItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
+  console.log("LibraryViewPage загружен, id:", id);
 
   const load = useCallback(async () => {
     if (!id) return;
@@ -29,6 +32,13 @@ export default function LibraryViewPage() {
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    if (item) {
+      console.log("Вызываю pushRecent для id:", item.id);
+      pushRecent(item.id);
+    }
+  }, [item]);
 
   if (loading) return <StateBlock variant="loading" />;
   if (error || !item) return <StateBlock variant="error" onRetry={load} />;

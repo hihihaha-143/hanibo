@@ -1,0 +1,84 @@
+@use '../../abstracts' as *;
+
+.library-continue-block {
+  @include flex(row, flex-start, center, 16px);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  border-radius: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+
+  &__cover {
+    flex: 0 0 auto;
+    width: 56px;
+    height: 78px;
+    border-radius: 8px;
+    overflow: hidden;
+    @include flex(row, center, center);
+    background: var(--color-surface-alt);
+    color: var(--color-text-secondary);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__info {
+    @include flex(column, flex-start, flex-start, 2px);
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  &__label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-secondary);
+  }
+
+  &__title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--color-text);
+    @include truncate(1);
+  }
+
+  &__author {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    @include truncate(1);
+  }
+
+  &__page {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-top: 2px;
+  }
+
+  &__btn {
+    flex: 0 0 auto;
+    padding: 10px 18px;
+    border-radius: 10px;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-weight: 600;
+    transition: background-color var(--transition-fast);
+
+    &:hover {
+      background: var(--color-primary-hover);
+      color: var(--color-on-primary);
+    }
+  }
+
+  @include down(md) {
+    flex-wrap: wrap;
+
+    &__btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}

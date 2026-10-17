@@ -1,10 +1,15 @@
 @use '../../abstracts' as *;
 
 .library-page {
-  @include flex(column, flex-start, stretch, 1.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   width: 100%;
+  min-width: 0;
+  overflow: hidden; // <--- вот это скроет вылезающие полки и уберет скролл
 
   &__grid-wrap {
     position: relative;
+    min-width: 0;
   }
 }

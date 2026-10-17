@@ -8,9 +8,7 @@ const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const CoursePage = lazy(() => import("./pages/CoursePage/CoursePage"));
 const ItemPage = lazy(() => import("./pages/ItemPage/ItemPage"));
 const LibraryPage = lazy(() => import("./pages/LibraryPage/LibraryPage"));
-const LibraryViewPage = lazy(
-  () => import("./pages/LibraryPage/LibraryViewPage"),
-);
+import LibraryViewPage from "./pages/LibraryPage/LibraryViewPage";
 
 
 const LoginPage = lazy(() => import("./pages/LoginPage"));
