@@ -87,4 +87,37 @@
     opacity: 0.9;
     @include truncate(3);
   }
-}
+  // --- ПРОГРЕСС ---
+  &__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 24px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 0 0 8px 8px;
+  }
+
+  &__progress-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: var(--color-accent);
+    opacity: 0.4;
+    transition: width 0.3s ease;
+  }
+
+  &__progress-text {
+    position: relative;
+    z-index: 1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }}

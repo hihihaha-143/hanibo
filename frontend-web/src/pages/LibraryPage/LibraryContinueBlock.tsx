@@ -11,9 +11,10 @@ export default function LibraryContinueBlock({
   item,
 }: LibraryContinueBlockProps) {
   const page = getLastPage(item);
+  const total = item.pages;
 
   return (
-    <div className="library-continue-block">
+    <Link to={`/library/${item.id}`} className="library-continue-block">
       <div className="library-continue-block__cover">
         {item.cover_url ? (
           <img src={item.cover_url} alt={item.title} />
@@ -27,11 +28,11 @@ export default function LibraryContinueBlock({
         {item.author && (
           <div className="library-continue-block__author">{item.author}</div>
         )}
-        <div className="library-continue-block__page">Стр. {page}</div>
+        <div className="library-continue-block__page">
+          Стр. {page} {total ? `из ${total}` : ""}
+        </div>
       </div>
-      <Link to={`/library/${item.id}`} className="library-continue-block__btn">
-        Продолжить
-      </Link>
-    </div>
+      <div className="library-continue-block__btn">Продолжить</div>
+    </Link>
   );
 }
