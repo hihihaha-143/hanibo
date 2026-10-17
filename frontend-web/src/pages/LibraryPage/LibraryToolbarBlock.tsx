@@ -1,6 +1,8 @@
 import { Search, RotateCcw } from "lucide-react";
 import type { LibraryItemType } from "../../types/library";
 
+export type LibrarySort = "newest" | "title" | "year";
+
 interface LibraryToolbarBlockProps {
   query: string;
   onQueryChange: (value: string) => void;
@@ -16,6 +18,8 @@ interface LibraryToolbarBlockProps {
   activeYear: number | null;
   onYearChange: (value: number | null) => void;
   onReset: () => void;
+  sort: LibrarySort;
+  onSortChange: (value: LibrarySort) => void;
 }
 
 const TYPE_LABELS: Record<LibraryItemType, string> = {
@@ -40,6 +44,12 @@ const LANGUAGE_LABELS: Record<string, string> = {
   mixed: "Смешанный",
 };
 
+const SORT_LABELS: Record<LibrarySort, string> = {
+  newest: "Сначала новые",
+  title: "По названию",
+  year: "По году",
+};
+
 export default function LibraryToolbarBlock({
   query,
   onQueryChange,
@@ -55,6 +65,8 @@ export default function LibraryToolbarBlock({
   activeYear,
   onYearChange,
   onReset,
+  sort,
+  onSortChange,
 }: LibraryToolbarBlockProps) {
   const toggleType = (type: LibraryItemType) => {
     onTypeChange(activeType === type ? null : type);
@@ -145,6 +157,18 @@ export default function LibraryToolbarBlock({
           {years.map((year) => (
             <option key={year} value={year}>
               {year}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={sort}
+          onChange={(e) => onSortChange(e.target.value as LibrarySort)}
+          className="library-toolbar-block__select"
+        >
+          {(Object.keys(SORT_LABELS) as LibrarySort[]).map((key) => (
+            <option key={key} value={key}>
+              {SORT_LABELS[key]}
             </option>
           ))}
         </select>

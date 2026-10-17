@@ -55,6 +55,7 @@
   &__filters {
     @include flex(row, flex-start, center, 0.75rem);
     width: 100%;
+    flex-wrap: wrap;
 
     @include down('sm') {
       @include flex(column, flex-start, stretch, 0.5rem);
@@ -63,7 +64,7 @@
 
   &__select {
     flex: 1;
-    min-width: 0;
+    min-width: 140px;
     padding: 0.45rem 0.9rem;
     border-radius: 8px;
     border: 1px solid var(--color-border);
@@ -77,6 +78,32 @@
     &:focus {
       border-color: var(--color-accent);
       outline: none;
+    }
+  }
+
+  &__view {
+    @include flex(row, center, center, 0);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--color-surface);
+  }
+
+  &__view-btn {
+    @include flex(row, center, center, 0);
+    width: 2.2rem;
+    height: 2.2rem;
+    color: var(--color-text-secondary);
+    transition: background-color var(--transition-fast),
+                color var(--transition-fast);
+
+    &:hover {
+      color: var(--color-text);
+    }
+
+    &--active {
+      background: var(--color-accent);
+      color: var(--color-on-accent);
     }
   }
 

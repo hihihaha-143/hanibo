@@ -6,7 +6,7 @@
   gap: 1.5rem;
   width: 100%;
   min-width: 0;
-  overflow: hidden; // <--- вот это скроет вылезающие полки и уберет скролл
+  overflow: hidden;
 
   &__grid-wrap {
     position: relative;

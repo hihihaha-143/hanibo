@@ -1,120 +1,201 @@
 @use '../../abstracts' as *;
 
 .library-viewer-block {
-  @include flex(column, flex-start, stretch, 0);
+  @include flex(column, flex-start, stretch, 1rem);
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 120px); // подгони под свой лейаут
+  min-height: 500px;
 
   &__controls {
     @include flex(row, flex-start, center, 0.5rem);
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid var(--color-border);
     background: var(--color-surface);
-    border-radius: 8px 8px 0 0;
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    flex-wrap: wrap;
+  }
+
+  &__btn {
+    @include flex(row, center, center, 0);
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.5rem;
+    border-radius: 6px;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    transition: background-color var(--transition-fast);
+
+    &:hover:not(:disabled) {
+      background: var(--color-surface-alt);
+      color: var(--color-text);
+    }
+
+    &--active {
+      background: var(--color-accent);
+      color: var(--color-on-accent);
+      &:hover { background: var(--color-accent-hover); }
+    }
+    
+    &:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+  }
+
+  &__page-info {
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0 0.5rem;
   }
 
   &__spacer {
     flex: 1;
   }
 
-  &__btn {
-    @include flex(row, center, center, 0);
-    min-width: 2.25rem;
-    height: 2.25rem;
-    padding: 0 0.6rem;
-    border-radius: 6px;
-    border: 1px solid var(--color-border);
+  // Контейнер для панели и скролла
+  &__body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    gap: 1rem;
+  }
+
+  &__panel {
+    flex: 0 0 240px;
+    display: flex;
+    flex-direction: column;
     background: var(--color-surface);
-    color: var(--color-text);
-    font-size: 0.9rem;
-    transition: border-color var(--transition-fast),
-                background-color var(--transition-fast),
-                color var(--transition-fast);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+    max-height: 100%;
 
-    &:hover:not(:disabled) {
-      border-color: var(--color-accent);
-      color: var(--color-accent);
-    }
-
-    &:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    &--active {
-      background: var(--color-accent);
-      border-color: var(--color-accent);
-      color: var(--color-on-accent);
-
-      &:hover:not(:disabled) {
-        color: var(--color-on-accent);
-      }
+    @include down('md') {
+      position: absolute;
+      z-index: 10;
+      height: calc(100% - 120px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
   }
 
-  &__page-info {
-    font-size: 0.9rem;
+  &__panel-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  &__panel-tab {
+    flex: 1;
+    padding: 0.75rem;
+    display: flex;
+    justify-content: center;
     color: var(--color-text-secondary);
-    padding: 0 0.5rem;
-    min-width: 4rem;
-    text-align: center;
+    border-bottom: 2px solid transparent;
+
+    &--active {
+      color: var(--color-accent);
+      border-bottom-color: var(--color-accent);
+    }
+  }
+
+  &__panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem;
   }
 
   &__scroll {
     flex: 1;
+    min-width: 0;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
     background: var(--color-bg);
-    border-radius: 0 0 8px 8px;
-    @include flex(column, flex-start, center, 1rem);
+    border-radius: 8px;
+    padding: 1rem;
   }
 
   &__group {
-    @include flex(row, center, flex-start, 1rem);
-    max-width: 100%;
-
-    &--double {
-      flex-wrap: nowrap;
-    }
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    width: 100%;
   }
 
   &__page {
-    @include flex(row, center, center, 0);
-    max-width: 100%;
-
-    .react-pdf__Page {
-      max-width: 100%;
-    }
-
-    .react-pdf__Page__canvas {
-      max-width: 100%;
-      height: auto !important;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      border-radius: 4px;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
+}
 
-  @include down('md') {
-    &__scroll {
-      padding: 0.5rem;
-    }
-
-    &__group {
-      gap: 0.5rem;
-    }
-  }
-
-    &__page {
-    @include flex(row, center, center, 0);
-    max-width: 100%;
-  }
-
-  &__canvas {
-    max-width: 100%;
-    height: auto !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+// Оглавление
+.library-outline-block {
+  display: flex;
+  flex-direction: column;
+  
+  &__item {
+    text-align: left;
+    padding: 0.4rem 0.5rem;
     border-radius: 4px;
-    display: block;
+    font-size: 0.85rem;
+    color: var(--color-text);
+    line-height: 1.3;
+    
+    &:hover {
+      background: var(--color-surface-alt);
+    }
+  }
+}
+
+// Миниатюры
+.library-thumbs-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    width: 130px;
+    opacity: 0.7;
+    transition: opacity var(--transition-fast);
+    
+    &:hover {
+      opacity: 1;
+    }
+    
+    &--active {
+      opacity: 1;
+      .library-thumbs-block__canvas-wrap {
+        border-color: var(--color-accent);
+      }
+    }
+  }
+
+  &__canvas-wrap {
+    width: 120px;
+    min-height: 160px;
+    border: 2px solid transparent;
+    background: var(--color-surface-alt);
+    display: flex;
+    justify-content: center;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  &__placeholder {
+    width: 100%;
+    height: 160px;
+  }
+
+  &__num {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
   }
 }

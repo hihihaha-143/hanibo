@@ -1,8 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Maximize2, Minimize2 } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
+  Minimize2,
+  List,
+  Image as ImageIcon,
+  Menu,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 import type { LibraryItem } from "../../types/library";
 import { pdfjs } from "../../lib/pdf";
 import PdfPageBlock from "./PdfPageBlock";
+import LibraryThumbsBlock from "./LibraryThumbsBlock";
 import StateBlock from "../../components/StateBlock/StateBlock";
 
 interface LibraryViewerBlockProps {
@@ -10,10 +21,18 @@ interface LibraryViewerBlockProps {
 }
 
 type FitMode = "width" | "page";
+type PanelTab = "outline" | "thumbs";
 
 const STORAGE_PREFIX = "hanibo:library:lastPage:";
 const STORAGE_PAGES_PER_VIEW = "hanibo:library:pagesPerView";
 const STORAGE_FIT_MODE = "hanibo:library:fitMode";
+const STORAGE_ZOOM = "hanibo:library:zoom";
+
+interface OutlineItem {
+  title: string;
+  dest: string | any[] | null;
+  items: OutlineItem[];
+}
 
 export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
   const [pdf, setPdf] = useState<pdfjs.PDFDocumentProxy | null>(null);
@@ -28,6 +47,15 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
     const saved = localStorage.getItem(STORAGE_FIT_MODE);
     return saved === "page" ? "page" : "width";
   });
+  const [zoom, setZoom] = useState<number>(() => {
+    const saved = localStorage.getItem(STORAGE_ZOOM);
+    return saved ? Number(saved) : 1;
+  });
+
+  const [outline, setOutline] = useState<OutlineItem[]>([]);
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [panelTab, setPanelTab] = useState<PanelTab>("outline");
+
   const [containerWidth, setContainerWidth] = useState(0);
   const [viewerHeight, setViewerHeight] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -52,6 +80,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
     setError(false);
     restoredRef.current = false;
     setObserverEnabled(false);
+    setOutline([]);
 
     const task = pdfjs.getDocument({
       url: item.file_url,
@@ -71,6 +100,15 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
           if (cancelled) return;
           const vp = first.getViewport({ scale: 1 });
           setAspectRatio(vp.height / vp.width);
+
+          // Загрузка оглавления
+          const docOutline = await doc.getOutline();
+          if (docOutline && !cancelled) {
+            setOutline(docOutline as OutlineItem[]);
+            setPanelTab("outline");
+          } else if (!cancelled) {
+            setPanelTab("thumbs");
+          }
         } catch {
           /* дефолт */
         }
@@ -147,6 +185,27 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
     scrollToPage(next);
   };
 
+  const handleOutlineClick = async (dest: string | any[] | null) => {
+    if (!pdf || !dest) return;
+    try {
+      const destination =
+        typeof dest === "string" ? await pdf.getDestination(dest) : dest;
+      if (!destination) return;
+      const ref = destination[0];
+      const pageIndex = await pdf.getPageIndex(ref);
+      const pageNum = pageIndex + 1;
+      setCurrentPage(pageNum);
+      scrollToPage(pageNum);
+    } catch (e) {
+      console.error("Не удалось перейти по оглавлению:", e);
+    }
+  };
+
+  const handleThumbClick = (page: number) => {
+    setCurrentPage(page);
+    scrollToPage(page);
+  };
+
   // Восстановление последней страницы
   useEffect(() => {
     if (!pdf || numPages === 0 || !storageKey) return;
@@ -166,35 +225,25 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
     });
   }, [pdf, numPages, storageKey, scrollToPage]);
 
-  // Сохранение текущей страницы
+  // Сохранение настроек
   useEffect(() => {
     if (!storageKey || !restoredRef.current) return;
-    try {
-      localStorage.setItem(storageKey, String(currentPage));
-    } catch {
-      /* noop */
-    }
+    localStorage.setItem(storageKey, String(currentPage));
   }, [currentPage, storageKey]);
 
-  // Сохранение режима "1/2 страницы"
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_PAGES_PER_VIEW, String(pagesPerView));
-    } catch {
-      /* noop */
-    }
+    localStorage.setItem(STORAGE_PAGES_PER_VIEW, String(pagesPerView));
   }, [pagesPerView]);
 
-  // Сохранение режима "по ширине / по экрану"
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_FIT_MODE, fitMode);
-    } catch {
-      /* noop */
-    }
+    localStorage.setItem(STORAGE_FIT_MODE, fitMode);
   }, [fitMode]);
 
-  // IntersectionObserver (только после восстановления)
+  useEffect(() => {
+    localStorage.setItem(STORAGE_ZOOM, String(zoom));
+  }, [zoom]);
+
+  // IntersectionObserver
   useEffect(() => {
     if (!observerEnabled) return;
     const container = scrollRef.current;
@@ -216,7 +265,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
     return () => observer.disconnect();
   }, [groups, observerEnabled]);
 
-  // Клавиатура: ←/→, PageUp/PageDown, Home/End
+  // Клавиатура
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
@@ -227,9 +276,8 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
           tag === "TEXTAREA" ||
           tag === "SELECT" ||
           target.isContentEditable
-        ) {
+        )
           return;
-        }
       }
 
       switch (e.key) {
@@ -266,7 +314,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
     return <StateBlock variant="empty" />;
   }
 
-  const pageWidth = (() => {
+  const baseWidth = (() => {
     const singleMax = Math.min(900, containerWidth || 900);
     const doubleMax = Math.max(200, Math.floor((containerWidth - 32) / 2));
     const widthMax = pagesPerView === 2 ? doubleMax : singleMax;
@@ -278,9 +326,25 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
     return widthMax;
   })();
 
+  const finalWidth = baseWidth * zoom;
+
   return (
     <div className="library-viewer-block" ref={containerRef}>
       <div className="library-viewer-block__controls">
+        {(outline.length > 0 || numPages > 0) && (
+          <button
+            type="button"
+            onClick={() => setPanelOpen((p) => !p)}
+            className={
+              "library-viewer-block__btn" +
+              (panelOpen ? " library-viewer-block__btn--active" : "")
+            }
+            title="Панель навигации"
+          >
+            <Menu size={18} />
+          </button>
+        )}
+
         <button
           type="button"
           onClick={goPrev}
@@ -306,6 +370,32 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
         </button>
 
         <div className="library-viewer-block__spacer" />
+
+        {/* Кнопки масштаба */}
+        <button
+          type="button"
+          onClick={() => setZoom((z) => Math.max(0.5, z - 0.2))}
+          className="library-viewer-block__btn"
+          title="Уменьшить"
+        >
+          <ZoomOut size={16} />
+        </button>
+        <button
+          type="button"
+          onClick={() => setZoom(1)}
+          className="library-viewer-block__btn"
+          title="Сбросить масштаб"
+        >
+          100%
+        </button>
+        <button
+          type="button"
+          onClick={() => setZoom((z) => Math.min(3, z + 0.2))}
+          className="library-viewer-block__btn"
+          title="Увеличить"
+        >
+          <ZoomIn size={16} />
+        </button>
 
         <button
           type="button"
@@ -347,44 +437,106 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
         </button>
       </div>
 
-      <div className="library-viewer-block__scroll" ref={scrollRef}>
-        {loading && <StateBlock variant="loading" />}
-        {error && <StateBlock variant="error" />}
-
-        {!loading && !error && pdf && (
-          <>
-            {groups.map((group, gi) => (
-              <div
-                key={gi}
+      <div className="library-viewer-block__body">
+        {/* Выезжающая панель */}
+        {panelOpen && (
+          <div className="library-viewer-block__panel">
+            <div className="library-viewer-block__panel-tabs">
+              {outline.length > 0 && (
+                <button
+                  type="button"
+                  className={
+                    "library-viewer-block__panel-tab" +
+                    (panelTab === "outline"
+                      ? " library-viewer-block__panel-tab--active"
+                      : "")
+                  }
+                  onClick={() => setPanelTab("outline")}
+                  title="Оглавление"
+                >
+                  <List size={16} />
+                </button>
+              )}
+              <button
+                type="button"
                 className={
-                  "library-viewer-block__group" +
-                  (pagesPerView === 2
-                    ? " library-viewer-block__group--double"
+                  "library-viewer-block__panel-tab" +
+                  (panelTab === "thumbs"
+                    ? " library-viewer-block__panel-tab--active"
                     : "")
                 }
+                onClick={() => setPanelTab("thumbs")}
+                title="Миниатюры"
               >
-                {group.map((pageNum) => (
-                  <div
-                    key={pageNum}
-                    data-page={pageNum}
-                    ref={(el) => {
-                      if (el) pageRefs.current.set(pageNum, el);
-                      else pageRefs.current.delete(pageNum);
-                    }}
-                    className="library-viewer-block__page"
-                  >
-                    <PdfPageBlock
-                      pdf={pdf}
-                      pageNumber={pageNum}
-                      width={pageWidth}
-                      aspectRatio={aspectRatio}
-                    />
-                  </div>
-                ))}
-              </div>
-            ))}
-          </>
+                <ImageIcon size={16} />
+              </button>
+            </div>
+            <div className="library-viewer-block__panel-content">
+              {panelTab === "outline" && outline.length > 0 && (
+                <div className="library-outline-block">
+                  {outline.map((item, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      className="library-outline-block__item"
+                      onClick={() => handleOutlineClick(item.dest)}
+                    >
+                      {item.title}
+                    </button>
+                  ))}
+                </div>
+              )}
+              {panelTab === "thumbs" && pdf && (
+                <LibraryThumbsBlock
+                  pdf={pdf}
+                  numPages={numPages}
+                  currentPage={currentPage}
+                  onSelect={handleThumbClick}
+                />
+              )}
+            </div>
+          </div>
         )}
+
+        <div className="library-viewer-block__scroll" ref={scrollRef}>
+          {loading && <StateBlock variant="loading" />}
+          {error && <StateBlock variant="error" />}
+
+          {!loading && !error && pdf && (
+            <>
+              {groups.map((group, gi) => (
+                <div
+                  key={gi}
+                  className={
+                    "library-viewer-block__group" +
+                    (pagesPerView === 2
+                      ? " library-viewer-block__group--double"
+                      : "")
+                  }
+                >
+                  {group.map((pageNum) => (
+                    <div
+                      key={pageNum}
+                      data-page={pageNum}
+                      ref={(el) => {
+                        if (el) pageRefs.current.set(pageNum, el);
+                        else pageRefs.current.delete(pageNum);
+                      }}
+                      className="library-viewer-block__page"
+                    >
+                      <PdfPageBlock
+                        pdf={pdf}
+                        pageNumber={pageNum}
+                        width={finalWidth}
+                        aspectRatio={aspectRatio}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

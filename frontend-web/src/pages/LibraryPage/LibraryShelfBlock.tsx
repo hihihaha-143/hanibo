@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { LibraryView } from "./LibraryToolbarBlock";
 
 interface Shelf {
   top: number;
@@ -6,13 +7,22 @@ interface Shelf {
   width: number;
 }
 
-const SHELF_OVERFLOW = 16; // на сколько полка выходит за карточки слева/справа
+const SHELF_OVERFLOW = 16;
 
-export default function LibraryShelfBlock() {
+interface LibraryShelfBlockProps {
+  view: LibraryView;
+}
+
+export default function LibraryShelfBlock({ view }: LibraryShelfBlockProps) {
   const [shelves, setShelves] = useState<Shelf[]>([]);
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
+    if (view === "list") {
+      setShelves([]);
+      return;
+    }
+
     const wrap = document.querySelector<HTMLElement>(
       ".library-page__grid-wrap",
     );
@@ -78,9 +88,9 @@ export default function LibraryShelfBlock() {
       window.removeEventListener("resize", schedule);
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [view]);
 
-  if (shelves.length === 0) return null;
+  if (view === "list" || shelves.length === 0) return null;
 
   return (
     <div className="library-shelf-block" aria-hidden="true">

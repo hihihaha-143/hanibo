@@ -45,12 +45,7 @@
     padding: 1rem;
     @include flex(column, flex-end, stretch, 0.5rem);
     color: var(--color-on-accent);
-    background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.85) 0%,
-      rgba(0, 0, 0, 0.55) 50%,
-      rgba(0, 0, 0, 0) 100%
-    );
+    background: rgba(0, 0, 0, 0.8);
     opacity: 0;
     transition: opacity var(--transition-base);
     pointer-events: none;
