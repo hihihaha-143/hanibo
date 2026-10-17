@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { LibraryItem } from "../../types/library";
 
 interface LibraryCardBlockProps {
@@ -12,7 +13,7 @@ const LANGUAGE_LABELS: Record<string, string> = {
 
 export default function LibraryCardBlock({ item }: LibraryCardBlockProps) {
   return (
-    <article className="library-card-block">
+    <Link to={`/library/${item.id}`} className="library-card-block">
       <div className="library-card-block__cover">
         {item.cover_url ? (
           <img src={item.cover_url} alt={item.title} loading="lazy" />
@@ -42,6 +43,6 @@ export default function LibraryCardBlock({ item }: LibraryCardBlockProps) {
           )}
         </div>
       </div>
-    </article>
+    </Link>
   );
 }

@@ -1,5 +1,5 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import "./lib/pdf";
 import { ThemeProvider } from "./context/ThemeProvider";
 import { AuthProvider } from "./context/AuthProvider";
 import App from "./App";
@@ -9,11 +9,9 @@ import "@fontsource/noto-sans-kr/400.css";
 import "@fontsource/noto-sans-kr/700.css";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <ThemeProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </ThemeProvider>
-  </StrictMode>,
+  <ThemeProvider>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </ThemeProvider>,
 );

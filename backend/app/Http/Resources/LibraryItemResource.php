@@ -16,7 +16,9 @@ class LibraryItemResource extends JsonResource
             'type'        => $this->type,
             'description' => $this->description,
             'cover_url'   => $this->cover_path ? asset($this->cover_path) : null,
-            'file_url'    => $this->file_path  ? asset($this->file_path)  : null,
+            'file_url'    => $this->file_path
+                ? '/api/library/items/' . $this->id . '/file'
+                : null,
             'level'       => $this->level,
             'language'    => $this->language,
             'pages'       => $this->pages,

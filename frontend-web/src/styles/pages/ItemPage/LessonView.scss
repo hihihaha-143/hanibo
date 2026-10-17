@@ -4,6 +4,7 @@
 @use './PhraseBlock';
 @use './PhraseToken';
 @use './Test/Test';
+@use './item-page';
 
 .lesson-view {
   @include flex(column, flex-start, stretch, 1.5rem);

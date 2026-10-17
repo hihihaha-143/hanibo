@@ -9,6 +9,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\LibraryItemController;
 
 Route::get('/library/items', [LibraryItemController::class, 'index']);
+Route::get('/library/items/{libraryItem}', [LibraryItemController::class, 'show']);
+Route::get('/library/items/{libraryItem}/file', [LibraryItemController::class, 'file']);
+
+
 // --- Auth ---
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);

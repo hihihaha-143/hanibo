@@ -8,6 +8,11 @@ const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const CoursePage = lazy(() => import("./pages/CoursePage/CoursePage"));
 const ItemPage = lazy(() => import("./pages/ItemPage/ItemPage"));
 const LibraryPage = lazy(() => import("./pages/LibraryPage/LibraryPage"));
+const LibraryViewPage = lazy(
+  () => import("./pages/LibraryPage/LibraryViewPage"),
+);
+
+
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 
@@ -25,6 +30,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <LibraryPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/library/:id"
+              element={
+                <ProtectedRoute>
+                  <LibraryViewPage />
                 </ProtectedRoute>
               }
             />

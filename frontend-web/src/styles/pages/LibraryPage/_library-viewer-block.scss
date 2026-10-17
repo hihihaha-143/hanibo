@@ -1,0 +1,120 @@
+@use '../../abstracts' as *;
+
+.library-viewer-block {
+  @include flex(column, flex-start, stretch, 0);
+  width: 100%;
+  height: 100%;
+
+  &__controls {
+    @include flex(row, flex-start, center, 0.5rem);
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+    border-radius: 8px 8px 0 0;
+  }
+
+  &__spacer {
+    flex: 1;
+  }
+
+  &__btn {
+    @include flex(row, center, center, 0);
+    min-width: 2.25rem;
+    height: 2.25rem;
+    padding: 0 0.6rem;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 0.9rem;
+    transition: border-color var(--transition-fast),
+                background-color var(--transition-fast),
+                color var(--transition-fast);
+
+    &:hover:not(:disabled) {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    &--active {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      color: var(--color-on-accent);
+
+      &:hover:not(:disabled) {
+        color: var(--color-on-accent);
+      }
+    }
+  }
+
+  &__page-info {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    padding: 0 0.5rem;
+    min-width: 4rem;
+    text-align: center;
+  }
+
+  &__scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem;
+    background: var(--color-bg);
+    border-radius: 0 0 8px 8px;
+    @include flex(column, flex-start, center, 1rem);
+  }
+
+  &__group {
+    @include flex(row, center, flex-start, 1rem);
+    max-width: 100%;
+
+    &--double {
+      flex-wrap: nowrap;
+    }
+  }
+
+  &__page {
+    @include flex(row, center, center, 0);
+    max-width: 100%;
+
+    .react-pdf__Page {
+      max-width: 100%;
+    }
+
+    .react-pdf__Page__canvas {
+      max-width: 100%;
+      height: auto !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 4px;
+    }
+  }
+
+  @include down('md') {
+    &__scroll {
+      padding: 0.5rem;
+    }
+
+    &__group {
+      gap: 0.5rem;
+    }
+  }
+
+    &__page {
+    @include flex(row, center, center, 0);
+    max-width: 100%;
+  }
+
+  &__canvas {
+    max-width: 100%;
+    height: auto !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    display: block;
+  }
+}
