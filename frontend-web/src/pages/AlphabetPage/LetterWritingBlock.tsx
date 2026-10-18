@@ -122,16 +122,6 @@ export default function LetterWritingBlock({
           </div>
         )}
       </div>
-
-      <div className="letter-writing-block__footer">
-        {completed ? (
-          <span className="letter-writing-block__stat letter-writing-block__stat--done">
-            Готово! Ошибок: {mistakes}
-          </span>
-        ) : (
-          <span className="letter-writing-block__stat">Ошибок: {mistakes}</span>
-        )}
-      </div>
     </div>
   );
 }

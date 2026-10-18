@@ -107,10 +107,6 @@
     }
   }
 
-  &__footer {
-    @include flex(row, space-between, center, 0.75rem);
-  }
-
   &__stat {
     font-size: 0.8125rem;
     color: var(--color-text-secondary);
