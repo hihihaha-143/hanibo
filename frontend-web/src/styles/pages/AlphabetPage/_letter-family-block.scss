@@ -1,0 +1,52 @@
+.letter-family-block {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+
+  &__label {
+    display: block;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.6;
+    margin-bottom: 12px;
+  }
+
+  &__row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  &__item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 6px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+    transition: border-color 0.15s ease, background 0.15s ease;
+
+    &--current {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+  }
+
+  &__letter {
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  &__note {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    opacity: 0.75;
+  }
+}

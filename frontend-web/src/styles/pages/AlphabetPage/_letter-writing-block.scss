@@ -107,15 +107,6 @@
     }
   }
 
-  &__stat {
-    font-size: 0.8125rem;
-    color: var(--color-text-secondary);
-
-    &--done {
-      color: var(--color-success);
-      font-weight: 700;
-    }
-  }
 }
 
 @keyframes letter-feedback-pop {

@@ -4,6 +4,9 @@ import { X, ChevronLeft, ChevronRight, Volume2 } from "lucide-react";
 import { spring } from "../../lib/motion";
 import type { AlphabetLetter } from "../../api/alphabet";
 import LetterWritingBlock from "./LetterWritingBlock";
+import LetterSoundBlock from "./LetterSoundBlock";
+import LetterFamilyBlock from "./LetterFamilyBlock";
+import LetterConfusionBlock from "./LetterConfusionBlock";
 
 interface LetterModalBlockProps {
   letter: AlphabetLetter | null;
@@ -14,10 +17,11 @@ interface LetterModalBlockProps {
   hasNext: boolean;
 }
 
-function speak(text: string) {
+function speak(text: string, rate = 1) {
   if (!("speechSynthesis" in window)) return;
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "ko-KR";
+  utterance.rate = rate;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utterance);
 }
@@ -91,7 +95,7 @@ export default function LetterModalBlock({
                 <button
                   type="button"
                   className="letter-modal-block__symbol"
-                  onClick={() => speak(letter.symbol)}
+                  onClick={() => speak(letter.symbol, 1)}
                   aria-label="Озвучить букву"
                 >
                   {letter.symbol}
@@ -112,31 +116,70 @@ export default function LetterModalBlock({
               </button>
             </div>
 
-            <LetterWritingBlock symbol={letter.symbol} />
+            <div className="letter-modal-block__blocks">
+              <LetterSoundBlock
+                ipa={letter.sound_ipa}
+                note={letter.sound_note}
+                sampleSyllable={letter.sample_syllable}
+                sampleRomanization={letter.sample_romanization}
+                onSpeak={speak}
+              />
+
+              <LetterWritingBlock symbol={letter.symbol} />
+
+              <LetterFamilyBlock
+                symbols={letter.family_symbols}
+                note={letter.family_note}
+                currentSymbol={letter.symbol}
+              />
+
+              <LetterConfusionBlock items={letter.confusion} />
+            </div>
 
             <div className="letter-modal-block__examples">
               {letter.examples.map((example) => (
-                <button
-                  key={example.id}
-                  type="button"
-                  className="letter-modal-block__example"
-                  onClick={() => speak(example.word)}
-                >
-                  <div className="letter-modal-block__example-head">
+                <div key={example.id} className="letter-modal-block__example">
+                  <div className="letter-modal-block__example-main">
                     <span className="letter-modal-block__example-word">
                       {example.word}
                     </span>
-                    <Volume2 size={16} className="letter-modal-block__icon" />
-                  </div>
-                  {example.romanization && (
-                    <span className="letter-modal-block__example-romanization">
-                      {example.romanization}
+                    {example.romanization && (
+                      <span className="letter-modal-block__example-romanization">
+                        {example.romanization}
+                      </span>
+                    )}
+                    <span className="letter-modal-block__example-meaning">
+                      {example.meaning}
                     </span>
-                  )}
-                  <span className="letter-modal-block__example-meaning">
-                    {example.meaning}
-                  </span>
-                </button>
+                  </div>
+
+                  <div className="letter-modal-block__example-speak">
+                    <motion.button
+                      type="button"
+                      className="letter-modal-block__speak-button"
+                      onClick={() => speak(example.word, 0.5)}
+                      title="Медленно"
+                      whileHover={{ y: -1, scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={spring.bouncy}
+                    >
+                      <Volume2 size={16} />
+                      <span>0.5</span>
+                    </motion.button>
+                    <motion.button
+                      type="button"
+                      className="letter-modal-block__speak-button"
+                      onClick={() => speak(example.word, 1)}
+                      title="Обычно"
+                      whileHover={{ y: -1, scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={spring.bouncy}
+                    >
+                      <Volume2 size={16} />
+                      <span>1</span>
+                    </motion.button>
+                  </div>
+                </div>
               ))}
             </div>
           </motion.div>
