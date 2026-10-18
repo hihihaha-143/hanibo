@@ -1,3 +1,5 @@
+// frontend-web/src/pages/AlphabetPage/LetterGridBlock.tsx
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { spring } from "../../lib/motion";
@@ -72,6 +74,7 @@ export default function LetterGridBlock({ letters }: LetterGridBlockProps) {
 
       <LetterModalBlock
         letter={selectedLetter}
+        allLetters={letters}
         onClose={() => setSelectedIndex(null)}
         onPrev={handlePrev}
         onNext={handleNext}

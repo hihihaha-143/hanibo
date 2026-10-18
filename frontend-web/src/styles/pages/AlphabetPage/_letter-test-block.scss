@@ -1,0 +1,36 @@
+@use '../../abstracts' as *;
+
+.letter-test-block {
+  @include flex(column, flex-start, stretch, 16px);
+
+  &__head {
+    @include flex(row, flex-start, center, 16px);
+    padding-right: 32px;
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: var(--color-surface-alt);
+    color: var(--color-text);
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+
+    &:hover {
+      background: var(--color-accent);
+      color: var(--color-on-accent);
+    }
+  }
+
+  &__title {
+    font-family: "Noto Sans KR", system-ui, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1.2;
+  }
+}

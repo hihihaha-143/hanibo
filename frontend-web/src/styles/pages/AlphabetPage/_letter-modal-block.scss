@@ -158,4 +158,23 @@
       color: var(--color-text);
     }
   }
+
+  &__test-cta {
+    margin-top: 4px;
+  }
+
+  &__test-button {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 12px;
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-size: 15px;
+    font-weight: 600;
+    transition: background-color var(--transition-fast);
+
+    &:hover {
+      background: var(--color-accent-hover);
+    }
+  }
 }
