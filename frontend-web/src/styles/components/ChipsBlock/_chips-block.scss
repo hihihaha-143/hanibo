@@ -1,11 +1,11 @@
 @use '../../abstracts' as *;
 
-.practice-chips-block {
+.chips-block {
   position: relative;
   width: 100%;
 
-  &__scroller {
-    @include flex(row, flex-start, center, 12px);
+    &__scroller {
+    @include flex(row, safe center, center, 12px);
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;

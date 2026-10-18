@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\LibraryItemController;
 Route::get('/library/items', [LibraryItemController::class, 'index']);
 Route::get('/library/items/{libraryItem}', [LibraryItemController::class, 'show']);
 Route::get('/library/items/{libraryItem}/file', [LibraryItemController::class, 'file']);
-
+Route::get('/alphabet', [\App\Http\Controllers\Api\AlphabetController::class, 'index']);
 
 // --- Auth ---
 Route::post('/auth/register', [AuthController::class, 'register']);

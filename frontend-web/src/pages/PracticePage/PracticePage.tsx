@@ -1,9 +1,10 @@
 import { useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { spring } from "../../lib/motion";
-import PracticeChipsBlock from "./PracticeChipsBlock";
+import ChipsBlock from "../../components/ChipsBlock/ChipsBlock";
 import type { PracticeTabId } from "./practiceTabs";
 import { PRACTICE_TABS, DEFAULT_PRACTICE_TAB } from "./practiceTabs";
+import AlphabetPage from "../AlphabetPage/AlphabetPage";
 
 const STORAGE_KEY = "hanibo.practice.tab";
 
@@ -40,10 +41,11 @@ export default function PracticePage() {
 
   return (
     <div className="practice-page">
-      <PracticeChipsBlock
+      <ChipsBlock
         tabs={PRACTICE_TABS}
         activeTab={activeTab}
         onTabChange={handleTabChange}
+        layoutId="practice-chip-highlight"
       />
 
       <div className="practice-page__content">
@@ -56,7 +58,11 @@ export default function PracticePage() {
             exit={{ opacity: 0, y: -12 }}
             transition={spring.soft}
           >
-            <p className="practice-page__placeholder">Раздел в разработке</p>
+            {activeTab === "alphabet" ? (
+              <AlphabetPage />
+            ) : (
+              <p className="practice-page__placeholder">Раздел в разработке</p>
+            )}
           </motion.div>
         </AnimatePresence>
       </div>

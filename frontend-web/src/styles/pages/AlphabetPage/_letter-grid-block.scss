@@ -1,0 +1,44 @@
+@use '../../abstracts' as *;
+
+.letter-grid-block {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 12px;
+  width: 100%;
+
+  &__card {
+    @include flex(column, center, center, 6px);
+    aspect-ratio: 1;
+    padding: 12px;
+    border-radius: 16px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    transition:
+      background-color var(--transition-base),
+      border-color var(--transition-base),
+      transform var(--transition-fast);
+
+    &:hover {
+      background: var(--color-surface-alt);
+      border-color: var(--color-accent);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  &__symbol {
+    font-family: "Noto Sans KR", system-ui, sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  &__romanization {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    line-height: 1;
+  }
+}

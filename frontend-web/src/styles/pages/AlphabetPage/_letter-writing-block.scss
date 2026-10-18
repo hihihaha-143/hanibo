@@ -1,0 +1,138 @@
+@use "../../abstracts/mixins" as *;
+@use "../../abstracts/variables" as *;
+
+.letter-writing-block {
+  @include flex(column, flex-start, stretch, 0.75rem);
+  padding: 1rem;
+  border-radius: 16px;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  transition: background-color var(--transition-theme), border-color var(--transition-theme);
+
+  &__toolbar {
+    @include flex(row, flex-start, center, 0.375rem);
+    flex-wrap: wrap;
+  }
+
+  &__action {
+    @include flex(row, center, center, 0.375rem);
+    padding: 0.375rem 0.625rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    font-size: 0.8125rem;
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast),
+      border-color var(--transition-fast),
+      transform var(--transition-bounce);
+
+    &:hover {
+      background: var(--color-bg);
+      border-color: var(--color-accent);
+      transform: scale(1.02);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+
+    span {
+      white-space: nowrap;
+    }
+  }
+
+  &__toggle {
+    @include flex(row, center, center, 0.375rem);
+    padding: 0.375rem 0.625rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast),
+      border-color var(--transition-fast);
+
+    &:hover {
+      background: var(--color-bg);
+      border-color: var(--color-accent);
+    }
+
+    input {
+      cursor: pointer;
+      accent-color: var(--color-accent);
+    }
+
+    span {
+      white-space: nowrap;
+    }
+  }
+
+  &__canvas-wrap {
+    position: relative;
+    @include flex(row, center, center, 0);
+    padding: 0.5rem;
+    background: var(--color-surface);
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    transition: background-color var(--transition-theme), border-color var(--transition-theme);
+  }
+
+  &__canvas {
+    width: 280px;
+    height: 280px;
+    touch-action: none;
+  }
+
+  &__feedback {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    font-weight: 700;
+    pointer-events: none;
+    animation: letter-feedback-pop 0.3s var(--ease-bounce) both;
+
+    &--correct {
+      color: var(--color-success);
+    }
+
+    &--wrong {
+      color: var(--color-error);
+    }
+  }
+
+  &__footer {
+    @include flex(row, space-between, center, 0.75rem);
+  }
+
+  &__stat {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+
+    &--done {
+      color: var(--color-success);
+      font-weight: 700;
+    }
+  }
+}
+
+@keyframes letter-feedback-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
