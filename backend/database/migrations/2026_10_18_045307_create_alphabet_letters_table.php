@@ -14,6 +14,17 @@ return new class extends Migration
             $table->string('romanization');
             $table->enum('category', ['vowel', 'diphthong', 'consonant']);
             $table->text('description')->nullable();
+
+            $table->string('sound_ipa')->nullable();
+            $table->text('sound_note')->nullable();
+            $table->string('sample_syllable')->nullable();
+            $table->string('sample_romanization')->nullable();
+
+            $table->json('family_symbols')->nullable();
+            $table->text('family_note')->nullable();
+
+            $table->json('confusion')->nullable();
+
             $table->unsignedInteger('sort_order')->default(0);
             $table->timestamps();
 

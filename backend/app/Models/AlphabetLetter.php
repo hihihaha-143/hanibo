@@ -12,8 +12,23 @@ class AlphabetLetter extends Model
         'romanization',
         'category',
         'description',
+        'sound_ipa',
+        'sound_note',
+        'sample_syllable',
+        'sample_romanization',
+        'family_symbols',
+        'family_note',
+        'confusion',
         'sort_order',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'family_symbols' => 'array',
+            'confusion' => 'array',
+        ];
+    }
 
     public function examples(): HasMany
     {
