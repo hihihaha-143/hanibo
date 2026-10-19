@@ -10,7 +10,7 @@
     height: 48px;
     padding: 0 0.75rem;
     border-radius: 8px;
-    color: var(--color-neutral-light);
+    color: var(--color-on-primary);
     white-space: nowrap;
     transition:
       color var(--transition-fast),
@@ -37,9 +37,7 @@
   }
 
   &__label {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    @include truncate(1);
   }
 
   &__user {
@@ -72,7 +70,7 @@
 
   &__user-nickname {
     @include truncate(1);
-    color: var(--color-neutral-light);
+    color: var(--color-on-primary);
     font-weight: 700;
     font-size: 0.9375rem;
   }
@@ -83,11 +81,8 @@
     width: 32px;
     height: 32px;
     padding: 0;
-    border: none;
     border-radius: 8px;
-    background: transparent;
     color: var(--color-text-secondary);
-    cursor: pointer;
     transition:
       color var(--transition-fast),
       background-color var(--transition-fast);

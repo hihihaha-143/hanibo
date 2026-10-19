@@ -7,14 +7,13 @@
   top: 1rem;
   left: 1rem;
   width: 64px;
-  // От верха 1rem до низа 1rem (top + bottom)
   height: calc(100vh - 2rem);
-
+  height: calc(100dvh - 2rem);
   @include flex(column, space-between);
 
   background-color: var(--color-primary);
   padding: 1rem 0;
   border-radius: 1rem;
   overflow: hidden;
-  z-index: 100;
+  z-index: var(--z-sidebar);
 }

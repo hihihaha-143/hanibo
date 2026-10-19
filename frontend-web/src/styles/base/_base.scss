@@ -1,6 +1,5 @@
 html, body {
-  overflow-x: hidden;
-  max-width: 100%;
+  overflow-x: clip;  
 }
 
 #root {

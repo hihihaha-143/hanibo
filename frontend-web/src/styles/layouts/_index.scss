@@ -1,3 +1,7 @@
 @use './main-layout';
+
+
+@use './_sidebar/_sidebar';
+
 @use './mobile-nav/mobile-nav';
 @use './Banner/banner';

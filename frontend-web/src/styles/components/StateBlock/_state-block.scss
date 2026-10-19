@@ -34,9 +34,7 @@
     font-size: 0.9rem;
     color: var(--color-on-primary);
     background-color: var(--color-primary);
-    border: none;
     border-radius: 0.5rem;
-    cursor: pointer;
     transition: background-color var(--transition-fast);
 
     &:hover {

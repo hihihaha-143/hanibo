@@ -1,17 +1,15 @@
 @use '../abstracts' as *;
-@use './_sidebar/_sidebar';
 
 .main-layout {
   min-height: 100vh;
 
   &__content {
     min-width: 0;
-
     padding: 1rem;
     padding-left: calc(64px + 2rem);
     transition: padding-left var(--transition-theme);
 
-    @media (max-width: 767px) {
+    @include down("md") {
       padding-left: 1rem;
     }
   }
@@ -19,7 +17,7 @@
   &:has(.sidebar--expanded) .main-layout__content {
     padding-left: calc(220px + 2rem);
 
-    @media (max-width: 767px) {
+    @include down("md") {
       padding-left: 1rem;
     }
   }

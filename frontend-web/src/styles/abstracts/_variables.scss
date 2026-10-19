@@ -2,6 +2,19 @@
 // Тёмная тема переопределяет эти же токены ниже.
 
 :root {
+
+
+    // --- Z-index layers ---
+  --z-banner:      100;
+  --z-sidebar:     100;
+  --z-overlay:     200;
+  --z-sheet:       210;
+  --z-mobile-bar:  220;
+  --z-modal:      1000;
+  --z-tooltip:    1100;
+
+
+  
   // --- Background / Surface ---
   --color-bg:            #F3EBDD;
   --color-surface:       #FAF4EA;
@@ -41,16 +54,15 @@
 
   // --- Progress (использует --color-yellow) ---
   --color-progress-partial:  var(--color-yellow);
-  --color-progress-complete: #E8C24F;
+  --color-progress-complete: var(--color-yellow);
 
   // --- On-colored (текст на цветных фонах) ---
   --color-on-primary: #F3EBDD;
   --color-on-accent:  #FFFFFF;
 
-
-    // --- Glow (свечение для complete) ---
-  --glow-color:        rgba(230, 150, 30, 0.6);
-  --glow-color-bright: rgba(230, 150, 30, 0.85);
+  // --- Glow (свечение для complete) ---
+  --glow-color:        color-mix(in srgb, var(--color-yellow) 60%, transparent);
+  --glow-color-bright: color-mix(in srgb, var(--color-yellow) 85%, transparent);
   --glow-white:        rgba(255, 255, 255, 0.85);
 }
 
@@ -86,9 +98,6 @@
   --color-yellow:         #F0C765;
   --color-yellow-hover:   #E0B050;
 
-  // --- Neutral ---
-  --color-neutral-light: #F3EBDD;
-
   // --- Semantic ---
   --color-success:       #6BB17D;
   --color-success-bg:    rgba(107, 177, 125, 0.15);
@@ -98,14 +107,14 @@
 
   // --- Progress ---
   --color-progress-partial:  var(--color-yellow);
-  --color-progress-complete: #F0D77A;
+  --color-progress-complete: var(--color-yellow);
 
   // --- On-colored ---
   --color-on-primary: #F3EBDD;
   --color-on-accent:  #FFFFFF;
 
-    --glow-color:        rgba(255, 235, 120, 0.7);
-  --glow-color-bright: rgba(255, 245, 150, 0.95);
+  // --- Glow (наследует переопределённый --color-yellow через color-mix) ---
+  --glow-color:        color-mix(in srgb, var(--color-yellow) 70%, transparent);
+  --glow-color-bright: color-mix(in srgb, var(--color-yellow) 95%, transparent);
   --glow-white:        rgba(255, 255, 255, 0.9);
 }
-

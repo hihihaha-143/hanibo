@@ -4,12 +4,12 @@
   position: relative;
   width: 100%;
 
-    &__scroller {
-    @include flex(row, safe center, center, 12px);
+  &__scroller {
+    @include flex(row, safe center, center, 0.75rem);
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
-    padding-block: 4px;
+    padding-block: 0.25rem;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
 
@@ -31,7 +31,7 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 40px;
+    width: 2.5rem;
     pointer-events: none;
     z-index: 2;
     opacity: 0;
@@ -40,20 +40,12 @@
 
   &::before {
     left: 0;
-    background: linear-gradient(
-      to right,
-      var(--color-bg),
-      transparent
-    );
+    background: linear-gradient(to right, var(--color-bg), transparent);
   }
 
   &::after {
     right: 0;
-    background: linear-gradient(
-      to left,
-      var(--color-bg),
-      transparent
-    );
+    background: linear-gradient(to left, var(--color-bg), transparent);
   }
 
   &--fade-left::before {
@@ -67,11 +59,10 @@
   &__chip {
     position: relative;
     flex-shrink: 0;
-    padding: 10px 20px;
+    padding: 0.625rem 1.25rem;
     border-radius: 999px;
     background: var(--color-surface-alt);
     color: var(--color-text-secondary);
-    font-size: 16px;
     line-height: 1;
     transition:
       color var(--transition-base),

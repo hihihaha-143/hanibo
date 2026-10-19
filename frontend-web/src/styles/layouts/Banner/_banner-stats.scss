@@ -1,4 +1,4 @@
-@use '../../abstracts/' as *;
+@use '../../abstracts' as *;
 
 .banner-stats {
   position: absolute;
@@ -7,6 +7,8 @@
   z-index: 2;
   @include flex(row, flex-end, center, 1.5rem);
   padding: 0.6rem 1.2rem;
+  // fallback для браузеров без color-mix (иначе фон пропадёт)
+  background-color: rgba(29, 34, 63, 0.7);
   background-color: color-mix(in srgb, var(--color-primary) 70%, transparent);
   color: var(--color-on-primary);
   border-radius: 999px;
@@ -14,7 +16,7 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
-  @media (max-width: 767px) {
+  @include down("md") {
     bottom: 0.5rem;
     left: 0.5rem;
     right: 0.5rem;
@@ -58,7 +60,6 @@
       height: 30px;
       color: var(--color-yellow);
     }
-
   }
 
   &__value {
@@ -66,7 +67,7 @@
     font-weight: 700;
     color: var(--color-on-primary);
 
-    @media (max-width: 767px) {
+    @include down("md") {
       font-size: 1rem;
     }
   }
