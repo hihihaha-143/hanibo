@@ -1,3 +1,6 @@
+// frontend-web/src/pages/AlphabetPage/AlphabetPage.tsx
+
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { spring } from "../../lib/motion";
@@ -30,6 +33,7 @@ function readStoredTab(): AlphabetTabId {
 export default function AlphabetPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { letters, loading, error } = useAlphabet();
+  const [showProgress, setShowProgress] = useState(false);
 
   const rawSub = searchParams.get("sub");
   const activeTab: AlphabetTabId = isAlphabetTabId(rawSub)
@@ -61,11 +65,15 @@ export default function AlphabetPage() {
 
     switch (activeTab) {
       case "vowels":
-        return <VowelsBlock letters={letters} />;
+        return <VowelsBlock letters={letters} showProgress={showProgress} />;
       case "consonants":
-        return <ConsonantsBlock letters={letters} />;
+        return (
+          <ConsonantsBlock letters={letters} showProgress={showProgress} />
+        );
       case "diphthongs":
-        return <DiphthongsBlock letters={letters} />;
+        return (
+          <DiphthongsBlock letters={letters} showProgress={showProgress} />
+        );
       case "assimilation":
         return <AssimilationBlock />;
       case "stats":
@@ -73,14 +81,36 @@ export default function AlphabetPage() {
     }
   };
 
+  const isLetterTab =
+    activeTab === "vowels" ||
+    activeTab === "consonants" ||
+    activeTab === "diphthongs";
+
   return (
     <div className="alphabet-page">
-      <ChipsBlock
-        tabs={ALPHABET_TABS}
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-        layoutId="alphabet-chip-highlight"
-      />
+      <div className="alphabet-page__top">
+        <ChipsBlock
+          tabs={ALPHABET_TABS}
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+          layoutId="alphabet-chip-highlight"
+        />
+
+        {isLetterTab && (
+          <motion.button
+            type="button"
+            className={`alphabet-page__progress-toggle${
+              showProgress ? " alphabet-page__progress-toggle--active" : ""
+            }`}
+            onClick={() => setShowProgress((v) => !v)}
+            whileHover={{ y: -1, scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            transition={spring.bouncy}
+          >
+            {showProgress ? "Скрыть прогресс" : "Показать прогресс"}
+          </motion.button>
+        )}
+      </div>
 
       <div className="alphabet-page__content">
         <AnimatePresence mode="wait" initial={false}>

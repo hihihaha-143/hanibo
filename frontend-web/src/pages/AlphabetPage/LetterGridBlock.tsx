@@ -8,6 +8,7 @@ import LetterModalBlock from "./LetterModalBlock";
 
 interface LetterGridBlockProps {
   letters: AlphabetLetter[];
+  showProgress?: boolean;
 }
 
 const containerVariants = {
@@ -29,7 +30,10 @@ const cardVariants = {
   },
 };
 
-export default function LetterGridBlock({ letters }: LetterGridBlockProps) {
+export default function LetterGridBlock({
+  letters,
+  showProgress = false,
+}: LetterGridBlockProps) {
   const [lettersState, setLettersState] = useState<AlphabetLetter[]>(letters);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
@@ -100,6 +104,11 @@ export default function LetterGridBlock({ letters }: LetterGridBlockProps) {
                 <span className="letter-grid-block__romanization">
                   {letter.romanization}
                 </span>
+                {showProgress && (
+                  <span className="letter-grid-block__progress-text">
+                    {letter.progress.score} / {letter.progress.max_score}
+                  </span>
+                )}
               </span>
               {isMastered && (
                 <span className="letter-grid-block__shine" aria-hidden />

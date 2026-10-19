@@ -1,6 +1,7 @@
 @use '../../abstracts' as *;
 
 .letter-test-block {
+  position: relative;
   @include flex(column, flex-start, stretch, 16px);
 
   &__head {
@@ -32,5 +33,23 @@
     font-weight: 700;
     color: var(--color-text);
     line-height: 1.2;
+  }
+}.letter-test-block {
+  position: relative;
+  // ... (существующее)
+
+  &__body {
+    position: relative;
+  }
+
+  &__result-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--color-surface);
+    border-radius: 12px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

@@ -1,31 +1,48 @@
 // frontend-web/src/pages/AlphabetPage/LetterTestBlock.tsx
 
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { spring } from "../../lib/motion";
 import type { AlphabetLetter, AlphabetProgress } from "../../api/alphabet";
 import { submitAlphabetProgress } from "../../api/alphabet";
 import { generateLetterTest } from "../../utils/letterTestGenerator";
 import Test from "../ItemPage/LessonView/Test/Test";
+import LetterTestResult from "./LetterTestResult";
+import LetterScoreToast from "./LetterScoreToast";
 
 interface LetterTestBlockProps {
   letter: AlphabetLetter;
   allLetters: AlphabetLetter[];
   onBack: () => void;
+  onClose: () => void;
   onProgressUpdated?: (letterId: number, progress: AlphabetProgress) => void;
+}
+
+interface FinishResult {
+  correct: number;
+  total: number;
+  percent: number;
+  passed: boolean;
+}
+
+interface ToastState {
+  scoreAdded: number;
+  letterSymbol: string;
 }
 
 export default function LetterTestBlock({
   letter,
   allLetters,
   onBack,
+  onClose,
   onProgressUpdated,
 }: LetterTestBlockProps) {
   const [round, setRound] = useState(0);
+  const [finished, setFinished] = useState<FinishResult | null>(null);
+  const [toast, setToast] = useState<ToastState | null>(null);
 
   const questions = useMemo(
     () => generateLetterTest(letter, allLetters),
-    // round в зависимостях — чтобы при "Повторить" генерились новые дистракторы
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [letter.id, allLetters, round],
   );
@@ -33,8 +50,11 @@ export default function LetterTestBlock({
   const handleFinish = async (
     correct: number,
     total: number,
-    _passed: boolean,
+    passed: boolean,
   ) => {
+    const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
+    setFinished({ correct, total, percent, passed });
+
     try {
       const result = await submitAlphabetProgress(letter.id, correct, total);
       onProgressUpdated?.(letter.id, {
@@ -42,12 +62,20 @@ export default function LetterTestBlock({
         attempts: result.attempts,
         max_score: result.max_score,
       });
+      if (result.score_added > 0) {
+        setToast({
+          scoreAdded: result.score_added,
+          letterSymbol: letter.symbol,
+        });
+      }
     } catch {
-      // гость или ошибка сети — тест всё равно отработал, прогресс не сохраняем
+      // гость или ошибка сети
     }
   };
 
   const handleRepeat = () => {
+    setFinished(null);
+    setToast(null);
     setRound((r) => r + 1);
   };
 
@@ -69,14 +97,39 @@ export default function LetterTestBlock({
         </span>
       </div>
 
-      <Test
-        key={round}
-        questions={questions}
-        onFinish={handleFinish}
-        onRepeat={handleRepeat}
-        onBack={onBack}
-        backLabel="К букве"
-      />
+      <div className="letter-test-block__body">
+        {finished ? (
+          <LetterTestResult
+            correct={finished.correct}
+            total={finished.total}
+            percent={finished.percent}
+            passed={finished.passed}
+            onRepeat={handleRepeat}
+            onBack={onBack}
+            onClose={onClose}
+          />
+        ) : (
+          <Test
+            key={round}
+            questions={questions}
+            onFinish={handleFinish}
+            onRepeat={handleRepeat}
+            onBack={onBack}
+            backLabel="К букве"
+          />
+        )}
+      </div>
+
+      <AnimatePresence>
+        {toast && (
+          <LetterScoreToast
+            key="score-toast"
+            scoreAdded={toast.scoreAdded}
+            letterSymbol={toast.letterSymbol}
+            onClose={() => setToast(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

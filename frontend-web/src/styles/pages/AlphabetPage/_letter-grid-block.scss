@@ -109,6 +109,13 @@
       animation: letter-grid-block-shine 3.2s ease-in-out infinite;
     }
   }
+}.letter-grid-block__progress-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  line-height: 1;
+  margin-top: 2px;
+  letter-spacing: 0.02em;
 }
 
 @keyframes letter-grid-block-glow {
