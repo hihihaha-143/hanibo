@@ -1,9 +1,9 @@
 // frontend-web/src/pages/AlphabetPage/LetterGridBlock.tsx
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { spring } from "../../lib/motion";
-import type { AlphabetLetter } from "../../api/alphabet";
+import type { AlphabetLetter, AlphabetProgress } from "../../api/alphabet";
 import LetterModalBlock from "./LetterModalBlock";
 
 interface LetterGridBlockProps {
@@ -30,10 +30,15 @@ const cardVariants = {
 };
 
 export default function LetterGridBlock({ letters }: LetterGridBlockProps) {
+  const [lettersState, setLettersState] = useState<AlphabetLetter[]>(letters);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
+  useEffect(() => {
+    setLettersState(letters);
+  }, [letters]);
+
   const selectedLetter =
-    selectedIndex !== null ? (letters[selectedIndex] ?? null) : null;
+    selectedIndex !== null ? (lettersState[selectedIndex] ?? null) : null;
 
   const handlePrev = () => {
     setSelectedIndex((idx) => (idx !== null && idx > 0 ? idx - 1 : idx));
@@ -41,7 +46,18 @@ export default function LetterGridBlock({ letters }: LetterGridBlockProps) {
 
   const handleNext = () => {
     setSelectedIndex((idx) =>
-      idx !== null && idx < letters.length - 1 ? idx + 1 : idx,
+      idx !== null && idx < lettersState.length - 1 ? idx + 1 : idx,
+    );
+  };
+
+  const handleProgressUpdated = (
+    letterId: number,
+    progress: AlphabetProgress,
+  ) => {
+    setLettersState((prev) =>
+      prev.map((letter) =>
+        letter.id === letterId ? { ...letter, progress } : letter,
+      ),
     );
   };
 
@@ -53,33 +69,57 @@ export default function LetterGridBlock({ letters }: LetterGridBlockProps) {
         initial="hidden"
         animate="visible"
       >
-        {letters.map((letter, index) => (
-          <motion.button
-            key={letter.id}
-            type="button"
-            className="letter-grid-block__card"
-            variants={cardVariants}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={spring.base}
-            onClick={() => setSelectedIndex(index)}
-          >
-            <span className="letter-grid-block__symbol">{letter.symbol}</span>
-            <span className="letter-grid-block__romanization">
-              {letter.romanization}
-            </span>
-          </motion.button>
-        ))}
+        {lettersState.map((letter, index) => {
+          const percent =
+            letter.progress.max_score > 0
+              ? (letter.progress.score / letter.progress.max_score) * 100
+              : 0;
+          const isMastered = letter.progress.score >= letter.progress.max_score;
+
+          return (
+            <motion.button
+              key={letter.id}
+              type="button"
+              className={`letter-grid-block__card${
+                isMastered ? " letter-grid-block__card--mastered" : ""
+              }`}
+              variants={cardVariants}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={spring.base}
+              onClick={() => setSelectedIndex(index)}
+            >
+              <span
+                className="letter-grid-block__fill"
+                style={{ height: `${percent}%` }}
+              />
+              <span className="letter-grid-block__content">
+                <span className="letter-grid-block__symbol">
+                  {letter.symbol}
+                </span>
+                <span className="letter-grid-block__romanization">
+                  {letter.romanization}
+                </span>
+              </span>
+              {isMastered && (
+                <span className="letter-grid-block__shine" aria-hidden />
+              )}
+            </motion.button>
+          );
+        })}
       </motion.div>
 
       <LetterModalBlock
         letter={selectedLetter}
-        allLetters={letters}
+        allLetters={lettersState}
         onClose={() => setSelectedIndex(null)}
         onPrev={handlePrev}
         onNext={handleNext}
         hasPrev={selectedIndex !== null && selectedIndex > 0}
-        hasNext={selectedIndex !== null && selectedIndex < letters.length - 1}
+        hasNext={
+          selectedIndex !== null && selectedIndex < lettersState.length - 1
+        }
+        onProgressUpdated={handleProgressUpdated}
       />
     </>
   );

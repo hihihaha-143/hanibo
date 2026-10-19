@@ -7,17 +7,21 @@
   width: 100%;
 
   &__card {
-    @include flex(column, center, center, 6px);
+    position: relative;
+    @include flex(column, center, center, 0);
     aspect-ratio: 1;
     padding: 12px;
     border-radius: 16px;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     color: var(--color-text);
+    overflow: hidden;
+    isolation: isolate;
     transition:
       background-color var(--transition-base),
       border-color var(--transition-base),
-      transform var(--transition-fast);
+      transform var(--transition-fast),
+      box-shadow var(--transition-base);
 
     &:hover {
       background: var(--color-surface-alt);
@@ -27,6 +31,43 @@
     &:active {
       transform: scale(0.97);
     }
+
+    &--mastered {
+      border-color: #e6b422;
+      box-shadow:
+        0 0 0 1px rgba(230, 180, 34, 0.35),
+        0 0 20px rgba(230, 180, 34, 0.35);
+      animation: letter-grid-block-glow 2.4s ease-in-out infinite;
+
+      &:hover {
+        border-color: #e6b422;
+        box-shadow:
+          0 0 0 1px rgba(230, 180, 34, 0.55),
+          0 0 28px rgba(230, 180, 34, 0.55);
+      }
+    }
+  }
+
+  &__fill {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(230, 180, 34, 0.15) 0%,
+      rgba(230, 180, 34, 0.55) 60%,
+      rgba(230, 180, 34, 0.85) 100%
+    );
+    pointer-events: none;
+    transition: height var(--transition-base);
+    z-index: 0;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    @include flex(column, center, center, 6px);
   }
 
   &__symbol {
@@ -40,5 +81,58 @@
     font-size: 14px;
     color: var(--color-text-secondary);
     line-height: 1;
+  }
+
+  &__shine {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: inherit;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -75%;
+      width: 50%;
+      height: 200%;
+      background: linear-gradient(
+        115deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.55) 45%,
+        rgba(255, 255, 255, 0.55) 55%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(12deg);
+      animation: letter-grid-block-shine 3.2s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes letter-grid-block-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(230, 180, 34, 0.35),
+      0 0 16px rgba(230, 180, 34, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(230, 180, 34, 0.6),
+      0 0 26px rgba(230, 180, 34, 0.55);
+  }
+}
+
+@keyframes letter-grid-block-shine {
+  0% {
+    left: -75%;
+  }
+  60% {
+    left: 125%;
+  }
+  100% {
+    left: 125%;
   }
 }

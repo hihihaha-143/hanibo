@@ -35,4 +35,9 @@ class AlphabetLetter extends Model
         return $this->hasMany(AlphabetExample::class, 'letter_id')
             ->orderBy('sort_order');
     }
+
+    public function progress(): HasMany
+    {
+        return $this->hasMany(AlphabetProgress::class, 'letter_id');
+    }
 }

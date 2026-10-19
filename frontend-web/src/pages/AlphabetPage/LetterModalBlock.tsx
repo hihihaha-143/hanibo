@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Volume2 } from "lucide-react";
 import { spring } from "../../lib/motion";
-import type { AlphabetLetter } from "../../api/alphabet";
+import type { AlphabetLetter, AlphabetProgress } from "../../api/alphabet";
 import LetterWritingBlock from "./LetterWritingBlock";
 import LetterSoundBlock from "./LetterSoundBlock";
 import LetterFamilyBlock from "./LetterFamilyBlock";
@@ -19,6 +19,7 @@ interface LetterModalBlockProps {
   onNext: () => void;
   hasPrev: boolean;
   hasNext: boolean;
+  onProgressUpdated?: (letterId: number, progress: AlphabetProgress) => void;
 }
 
 function speak(text: string, rate = 1) {
@@ -38,10 +39,10 @@ export default function LetterModalBlock({
   onNext,
   hasPrev,
   hasNext,
+  onProgressUpdated,
 }: LetterModalBlockProps) {
   const [view, setView] = useState<"card" | "test">("card");
 
-  // при смене буквы или закрытии — возвращаемся к карточке
   useEffect(() => {
     setView("card");
   }, [letter?.id]);
@@ -51,7 +52,7 @@ export default function LetterModalBlock({
 
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (view === "test") return; // в тесте стрелки не листают буквы
+      if (view === "test") return;
       if (e.key === "ArrowLeft" && hasPrev) onPrev();
       if (e.key === "ArrowRight" && hasNext) onNext();
     };
@@ -98,6 +99,7 @@ export default function LetterModalBlock({
                 letter={letter}
                 allLetters={allLetters}
                 onBack={() => setView("card")}
+                onProgressUpdated={onProgressUpdated}
               />
             ) : (
               <>
@@ -124,6 +126,23 @@ export default function LetterModalBlock({
                     <span className="letter-modal-block__romanization">
                       {letter.romanization}
                     </span>
+                    <div className="letter-modal-block__progress">
+                      <div className="letter-modal-block__progress-bar">
+                        <div
+                          className="letter-modal-block__progress-fill"
+                          style={{
+                            width: `${
+                              (letter.progress.score /
+                                letter.progress.max_score) *
+                              100
+                            }%`,
+                          }}
+                        />
+                      </div>
+                      <span className="letter-modal-block__progress-text">
+                        {letter.progress.score} / {letter.progress.max_score}
+                      </span>
+                    </div>
                   </div>
 
                   <button

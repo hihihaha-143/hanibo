@@ -23,6 +23,15 @@ class AlphabetLetterResource extends JsonResource
             'family_note' => $this->family_note,
             'confusion' => $this->confusion ?? [],
             'examples' => AlphabetExampleResource::collection($this->whenLoaded('examples')),
+            'progress' => $this->whenLoaded('progress', function () {
+                $p = $this->progress->first();
+
+                return [
+                    'score' => $p?->score ?? 0,
+                    'attempts' => $p?->attempts ?? 0,
+                    'max_score' => 10,
+                ];
+            }),
         ];
     }
 }

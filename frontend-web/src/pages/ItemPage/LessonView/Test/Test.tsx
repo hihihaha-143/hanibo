@@ -84,7 +84,15 @@ export default function Test({
     if (answered) return;
     setSelectedIndex(index);
     setAnswered(true);
-    if ("correctIndices" in current && current.correctIndices.includes(index)) {
+
+    let isCorrect = false;
+    if (current.type === "correct-spelling") {
+      isCorrect = index === current.correctIndex;
+    } else if ("correctIndices" in current) {
+      isCorrect = current.correctIndices.includes(index);
+    }
+
+    if (isCorrect) {
       setCorrectCount((c) => c + 1);
     }
   };
@@ -200,9 +208,6 @@ export default function Test({
     onRepeat();
   };
 
-  // ---------- keyboard hotkeys ----------
-
-  // 1–4: выбор варианта для choose-подобных типов
   useHotkeys(
     "1,2,3,4",
     (e) => {
@@ -227,7 +232,6 @@ export default function Test({
     [current, answered],
   );
 
-  // 1,2: true-false
   useHotkeys(
     "1,2",
     (e) => {
@@ -238,7 +242,6 @@ export default function Test({
     [current, answered],
   );
 
-  // Enter: "Далее" когда ответ дан (кроме инпутов — там нативный Enter)
   useHotkeys(
     "enter",
     (e) => {

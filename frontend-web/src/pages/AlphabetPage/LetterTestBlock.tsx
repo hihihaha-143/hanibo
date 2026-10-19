@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { spring } from "../../lib/motion";
-import type { AlphabetLetter } from "../../api/alphabet";
+import type { AlphabetLetter, AlphabetProgress } from "../../api/alphabet";
+import { submitAlphabetProgress } from "../../api/alphabet";
 import { generateLetterTest } from "../../utils/letterTestGenerator";
 import Test from "../ItemPage/LessonView/Test/Test";
 
@@ -11,12 +12,14 @@ interface LetterTestBlockProps {
   letter: AlphabetLetter;
   allLetters: AlphabetLetter[];
   onBack: () => void;
+  onProgressUpdated?: (letterId: number, progress: AlphabetProgress) => void;
 }
 
 export default function LetterTestBlock({
   letter,
   allLetters,
   onBack,
+  onProgressUpdated,
 }: LetterTestBlockProps) {
   const [round, setRound] = useState(0);
 
@@ -27,8 +30,21 @@ export default function LetterTestBlock({
     [letter.id, allLetters, round],
   );
 
-  const handleFinish = (_correct: number, _total: number, _passed: boolean) => {
-    // результат показывается внутри TestResult; здесь ничего не делаем
+  const handleFinish = async (
+    correct: number,
+    total: number,
+    _passed: boolean,
+  ) => {
+    try {
+      const result = await submitAlphabetProgress(letter.id, correct, total);
+      onProgressUpdated?.(letter.id, {
+        score: result.score,
+        attempts: result.attempts,
+        max_score: result.max_score,
+      });
+    } catch {
+      // гость или ошибка сети — тест всё равно отработал, прогресс не сохраняем
+    }
   };
 
   const handleRepeat = () => {

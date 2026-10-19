@@ -14,6 +14,12 @@ export interface AlphabetConfusion {
   hint: string;
 }
 
+export interface AlphabetProgress {
+  score: number;
+  attempts: number;
+  max_score: number;
+}
+
 export interface AlphabetLetter {
   id: number;
   symbol: string;
@@ -28,6 +34,7 @@ export interface AlphabetLetter {
   family_note: string | null;
   confusion: AlphabetConfusion[];
   examples: AlphabetExample[];
+  progress: AlphabetProgress;
 }
 
 interface AlphabetResponse {
@@ -38,4 +45,28 @@ export async function getAlphabet(): Promise<AlphabetLetter[]> {
   const { data } = await apiClient.get<AlphabetResponse>("/alphabet");
   return data.data;
 }
-  
+
+export interface SubmitProgressResult {
+  passed: boolean;
+  percent: number;
+  score_added: number;
+  score: number;
+  attempts: number;
+  max_score: number;
+}
+
+interface SubmitProgressResponse {
+  data: SubmitProgressResult;
+}
+
+export async function submitAlphabetProgress(
+  letterId: number,
+  correct: number,
+  total: number,
+): Promise<SubmitProgressResult> {
+  const { data } = await apiClient.post<SubmitProgressResponse>(
+    `/alphabet/${letterId}/progress`,
+    { correct, total },
+  );
+  return data.data;
+}
