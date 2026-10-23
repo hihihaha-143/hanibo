@@ -29,6 +29,26 @@ class AlphabetProgressController extends Controller
         }
 
         $passed = $scoreAdded > 0;
+        
+        // --- Логика начисления опыта (exp) ---
+        $expEarned = 0;
+        if ($percent === 100) {
+            $expEarned = 20; // 100% тест буквы
+        } elseif ($percent > 0) {
+            $expEarned = 10; // просто прошел тест буквы (не 100%)
+        }
+
+        // --- Логика начисления черники ---
+        $blueberriesEarned = 0;
+        if ($passed) {
+            if ($percent >= 100) {
+                $blueberriesEarned = 3;
+            } elseif ($percent >= 80) {
+                $blueberriesEarned = 2;
+            } elseif ($percent >= 50) {
+                $blueberriesEarned = 1;
+            }
+        }
 
         $user = $request->user();
 
@@ -36,6 +56,24 @@ class AlphabetProgressController extends Controller
             'user_id' => $user->id,
             'letter_id' => $letter->id,
         ]);
+
+        $isFirstTime = !$progress->exists;
+        $isMaxed = ($progress->score ?? 0) >= self::MAX_SCORE;
+
+        // Начисляем награды
+        $actualBlueberries = 0;
+        if ($blueberriesEarned > 0 && (!$isMaxed || $isFirstTime)) {
+            $actualBlueberries = $blueberriesEarned;
+            $user->increment('blueberry', $actualBlueberries);
+        }
+
+        // Начисляем exp за прохождение (каждый раз)
+        if ($expEarned > 0) {
+            $user->increment('exp', $expEarned);
+        }
+        
+        // Обновляем объект пользователя, чтобы отдать актуальные данные
+        $user->refresh();
 
         $progress->attempts = ($progress->attempts ?? 0) + 1;
         $progress->score = min(
@@ -52,6 +90,10 @@ class AlphabetProgressController extends Controller
                 'score' => $progress->score,
                 'attempts' => $progress->attempts,
                 'max_score' => self::MAX_SCORE,
+                'blueberries_earned' => $actualBlueberries,
+                'total_blueberries' => $user->blueberry,
+                'exp_earned' => $expEarned, // <--- Отдаем на фронт
+                'total_exp' => $user->exp,  // <--- Отдаем на фронт
             ],
         ]);
     }
