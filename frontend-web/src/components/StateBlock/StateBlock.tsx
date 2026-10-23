@@ -26,7 +26,7 @@ export default function StateBlock({
       {variant === "error" && onRetry && (
         <motion.button
           type="button"
-          className="state-block__retry"
+          className="btn btn--primary btn--sm state-block__retry"
           onClick={onRetry}
           whileHover={{ y: -1, scale: 1.03 }}
           whileTap={{ scale: 0.96 }}

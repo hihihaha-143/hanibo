@@ -3,5 +3,6 @@
 .library-view-page {
   width: 100%;
   height: calc(95vh - 8rem);
+  height: calc(95dvh - 8rem);
   @include flex(column, flex-start, stretch, 0);
 }

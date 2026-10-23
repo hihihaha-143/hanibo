@@ -44,7 +44,7 @@ export default function PhraseBlock({ phrase }: PhraseBlockProps) {
             <motion.button
               key={rate}
               type="button"
-              className="phrase-block__speak-button"
+              className="btn btn--ghost phrase-block__speak-button"
               onClick={() => speak(phrase.hangul, rate)}
               title={title}
               whileHover={{ y: -1 }}

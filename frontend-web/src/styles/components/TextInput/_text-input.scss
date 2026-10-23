@@ -1,0 +1,29 @@
+@use '../../abstracts' as *;
+
+.text-input {
+  display: flex;
+  gap: 0.75rem;
+
+  &__field {
+    flex: 1;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 1rem;
+
+    &::placeholder {
+      color: var(--color-text-secondary);
+    }
+
+    &:focus {
+      border-color: var(--color-primary);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: default;
+    }
+  }
+}

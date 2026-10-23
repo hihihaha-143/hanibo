@@ -1,14 +1,6 @@
-// === Alphabet page top bar ===
-.alphabet-page__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
-}
-
 .alphabet-page__progress-toggle {
+
+  
   padding: 8px 14px;
   border-radius: 10px;
   background: var(--color-surface-alt);
@@ -16,7 +8,6 @@
   color: var(--color-text-secondary);
   font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
   white-space: nowrap;
   transition:
     background-color var(--transition-fast),
@@ -39,4 +30,10 @@
       color: var(--color-on-accent);
     }
   }
+}
+
+.alphabet-page__controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }

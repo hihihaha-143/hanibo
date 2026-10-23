@@ -1,12 +1,10 @@
 @use '../../abstracts' as *;
 
 .library-page {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  @include flex(column, flex-start, stretch, 1.5rem);
   width: 100%;
   min-width: 0;
-  overflow: hidden;
+  overflow: clip;
 
   &__grid-wrap {
     position: relative;

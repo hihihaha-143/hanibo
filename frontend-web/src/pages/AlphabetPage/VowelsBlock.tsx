@@ -1,17 +1,18 @@
 // frontend-web/src/pages/AlphabetPage/VowelsBlock.tsx
 
+import LetterGridBlock from "./Modal/LetterGridBlock"; // <--- исправленный путь
 import type { AlphabetLetter } from "../../api/alphabet";
-import LetterGridBlock from "./LetterGridBlock";
 
 interface VowelsBlockProps {
   letters: AlphabetLetter[];
-  showProgress?: boolean;
+  showProgress: boolean;
 }
 
 export default function VowelsBlock({
   letters,
-  showProgress = false,
+  showProgress,
 }: VowelsBlockProps) {
-  const vowels = letters.filter((letter) => letter.category === "vowel");
+  const vowels = letters.filter((l) => l.category === "vowel");
+
   return <LetterGridBlock letters={vowels} showProgress={showProgress} />;
 }

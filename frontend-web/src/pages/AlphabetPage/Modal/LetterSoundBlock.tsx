@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
-import { spring } from "../../lib/motion";
+import { spring } from "../../../lib/motion";
 
 interface LetterSoundBlockProps {
   ipa: string | null;
   note: string | null;
   sampleSyllable: string | null;
   sampleRomanization: string | null;
-  onSpeak: (text: string, rate: number) => void;
+  onSpeak: (text: string, rate?: number) => void;
 }
 
 export default function LetterSoundBlock({
@@ -17,17 +17,32 @@ export default function LetterSoundBlock({
   sampleRomanization,
   onSpeak,
 }: LetterSoundBlockProps) {
-  if (!ipa && !note) return null;
+  if (!ipa && !note && !sampleSyllable) return null;
 
   return (
     <div className="letter-sound-block">
       <div className="letter-sound-block__header">
-        <span className="letter-sound-block__label">Произношение</span>
-        {sampleSyllable && (
+        <span className="letter-sound-block__title">Звук</span>
+        {ipa && <span className="letter-sound-block__ipa">[{ipa}]</span>}
+      </div>
+
+      {note && <p className="letter-sound-block__note">{note}</p>}
+
+      {sampleSyllable && (
+        <div className="letter-sound-block__sample-row">
+          <span className="letter-sound-block__sample-syllable">
+            {sampleSyllable}
+          </span>
+          {sampleRomanization && (
+            <span className="letter-sound-block__sample-romanization">
+              {sampleRomanization}
+            </span>
+          )}
+
           <div className="letter-sound-block__speak">
             <motion.button
               type="button"
-              className="letter-sound-block__speak-button"
+              className="btn btn--ghost letter-sound-block__speak-button"
               onClick={() => onSpeak(sampleSyllable, 0.5)}
               title="Медленно"
               whileHover={{ y: -1, scale: 1.05 }}
@@ -39,7 +54,7 @@ export default function LetterSoundBlock({
             </motion.button>
             <motion.button
               type="button"
-              className="letter-sound-block__speak-button"
+              className="btn btn--ghost letter-sound-block__speak-button"
               onClick={() => onSpeak(sampleSyllable, 1)}
               title="Обычно"
               whileHover={{ y: -1, scale: 1.05 }}
@@ -50,27 +65,8 @@ export default function LetterSoundBlock({
               <span>1</span>
             </motion.button>
           </div>
-        )}
-      </div>
-
-      {(ipa || sampleSyllable) && (
-        <div className="letter-sound-block__sound">
-          {ipa && <span className="letter-sound-block__ipa">[{ipa}]</span>}
-          {sampleSyllable && (
-            <span className="letter-sound-block__sample">
-              {sampleSyllable}
-              {sampleRomanization && (
-                <span className="letter-sound-block__roman">
-                  {" "}
-                  {sampleRomanization}
-                </span>
-              )}
-            </span>
-          )}
         </div>
       )}
-
-      {note && <p className="letter-sound-block__note">{note}</p>}
     </div>
   );
 }

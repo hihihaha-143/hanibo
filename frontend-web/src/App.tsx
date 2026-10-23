@@ -11,6 +11,11 @@ const LibraryPage = lazy(() => import("./pages/LibraryPage/LibraryPage"));
 import LibraryViewPage from "./pages/LibraryPage/LibraryViewPage";
 const PracticePage = lazy(() => import("./pages/PracticePage/PracticePage"));
 
+const AlphabetPage = lazy(() => import("./pages/AlphabetPage/AlphabetPage"));
+const AlphabetTestPage = lazy(
+  () => import("./pages/AlphabetPage/Test/AlphabetTestPage"),
+);
+
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 
@@ -23,6 +28,17 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/course" element={<CoursePage />} />
             <Route path="/course/item/:id" element={<ItemPage />} />
+
+            <Route path="/alphabet" element={<AlphabetPage />} />
+            <Route
+              path="/alphabet/test/:category"
+              element={
+                <ProtectedRoute>
+                  <AlphabetTestPage />
+                </ProtectedRoute>
+              }
+            />
+
             <Route
               path="/library"
               element={

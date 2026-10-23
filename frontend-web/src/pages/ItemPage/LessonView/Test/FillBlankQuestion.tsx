@@ -77,7 +77,7 @@ export default function FillBlankQuestion({
         <div className="choose-question__speak">
           <motion.button
             type="button"
-            className="choose-question__speak-button"
+            className="btn btn--ghost choose-question__speak-button"
             onClick={() => speak(phraseHangul, 0.5)}
             title="Медленно"
             whileHover={{ y: -1, scale: 1.05 }}
@@ -89,7 +89,7 @@ export default function FillBlankQuestion({
           </motion.button>
           <motion.button
             type="button"
-            className="choose-question__speak-button"
+            className="btn btn--ghost choose-question__speak-button"
             onClick={() => speak(phraseHangul, 1)}
             title="Обычно"
             whileHover={{ y: -1, scale: 1.05 }}
@@ -150,7 +150,7 @@ export default function FillBlankQuestion({
           {!answered && (
             <motion.button
               type="button"
-              className="text-input__submit"
+              className="btn btn--accent btn--lg"
               onClick={handleSubmit}
               disabled={value.trim().length === 0}
               whileHover={{ y: -1, scale: 1.02 }}

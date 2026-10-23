@@ -103,7 +103,7 @@ export default function SyllableGapQuestion({
           {!answered && (
             <motion.button
               type="button"
-              className="text-input__submit"
+              className="btn btn--accent btn--lg"
               onClick={handleSubmit}
               disabled={value.trim().length === 0}
               whileHover={{ y: -1, scale: 1.02 }}

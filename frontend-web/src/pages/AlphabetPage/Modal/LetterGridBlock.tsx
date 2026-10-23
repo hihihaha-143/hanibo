@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { spring } from "../../lib/motion";
-import type { AlphabetLetter, AlphabetProgress } from "../../api/alphabet";
-import LetterModalBlock from "./LetterModalBlock";
+import { spring } from "../../../lib/motion";
+import type { AlphabetLetter, AlphabetProgress } from "../../../api/alphabet";
+import LetterModalBlock from "..//Modal/LetterModalBlock"; // <--- импорт из папки Modal
 
 interface LetterGridBlockProps {
   letters: AlphabetLetter[];
@@ -101,9 +101,7 @@ export default function LetterGridBlock({
                 <span className="letter-grid-block__symbol">
                   {letter.symbol}
                 </span>
-                <span className="letter-grid-block__romanization">
-                  {letter.romanization}
-                </span>
+
                 {showProgress && (
                   <span className="letter-grid-block__progress-text">
                     {letter.progress.score} / {letter.progress.max_score}

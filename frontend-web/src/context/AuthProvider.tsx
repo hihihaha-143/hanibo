@@ -59,6 +59,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
+  // <--- Добавили refreshUser
+  const refreshUser = useCallback(async () => {
+    try {
+      const u = await authApi.me();
+      setUser(u);
+    } catch {
+      // Если токен протух или сеть упала, можно разлогинить, но
+      // лучше просто проигнорировать, чтобы не выкидывать пользователя
+    }
+  }, []);
+
   const value = useMemo(
     () => ({
       user,
@@ -67,8 +78,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       login,
       register,
       logout,
+      refreshUser, // <--- Добавили в контекст
     }),
-    [user, isLoading, login, register, logout],
+    [user, isLoading, login, register, logout, refreshUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

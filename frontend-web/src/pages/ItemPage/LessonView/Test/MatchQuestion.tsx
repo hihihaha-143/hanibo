@@ -215,7 +215,7 @@ export default function MatchQuestion({
         <div className="match__footer">
           <motion.button
             type="button"
-            className="match__check"
+            className="btn btn--accent btn--lg match__check"
             disabled={!canCheck}
             onClick={handleCheck}
             whileHover={canCheck ? { y: -1, scale: 1.02 } : undefined}

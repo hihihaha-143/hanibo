@@ -12,10 +12,11 @@ export default function LibraryViewPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  console.log("LibraryViewPage загружен, id:", id);
-
   const load = useCallback(async () => {
-    if (!id) return;
+    if (!id) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError(false);
     try {
@@ -35,7 +36,6 @@ export default function LibraryViewPage() {
 
   useEffect(() => {
     if (item) {
-      console.log("Вызываю pushRecent для id:", item.id);
       pushRecent(item.id);
     }
   }, [item]);

@@ -71,7 +71,7 @@ export default function DictionaryTab({
       <div className="dictionary-tab__footer">
         <motion.button
           type="button"
-          className="dictionary-tab__test-button"
+          className="btn btn--primary dictionary-tab__test-button"
           onClick={startTest}
           whileHover={{ y: -1, scale: 1.02 }}
           whileTap={{ scale: 0.97 }}

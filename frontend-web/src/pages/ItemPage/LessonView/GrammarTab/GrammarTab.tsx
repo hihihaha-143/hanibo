@@ -95,7 +95,7 @@ export default function GrammarTab({
       <div className="grammar-tab__footer">
         <motion.button
           type="button"
-          className="grammar-tab__test-button"
+          className="btn btn--primary dictionary-tab__test-button"
           onClick={startTest}
           whileHover={{ y: -1, scale: 1.02 }}
           whileTap={{ scale: 0.97 }}

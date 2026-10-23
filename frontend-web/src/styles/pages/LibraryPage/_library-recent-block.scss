@@ -23,6 +23,7 @@
     flex: 0 0 auto;
     width: 108px;
     color: inherit;
+    text-decoration: none;
     @include flex(column, flex-start, stretch, 6px);
 
     &:hover .library-recent-block__cover {

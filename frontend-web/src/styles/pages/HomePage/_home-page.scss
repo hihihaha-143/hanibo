@@ -20,7 +20,7 @@
     }
   }
 
-  @include down('md') {
+  @include down('lg') {
     grid-template-columns: 1fr;
     gap: 1rem;
 

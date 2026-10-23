@@ -10,7 +10,6 @@
   text-align: left;
   font-size: 0.95rem;
   color: var(--color-text);
-  cursor: pointer;
   height: 48px;
   min-width: 48px;
   overflow: visible;
@@ -30,7 +29,6 @@
     }
   }
 
-  // обёртка внутренностей (иконка)
   &__inner {
     position: relative;
     z-index: 1;
@@ -81,152 +79,69 @@
       max-width var(--transition-base);
   }
 
-  // заливка (только у partial)
   &__fill {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
     height: var(--fill-percent, 0%);
-    background-color: var(--color-progress-partial);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-yellow) 15%, transparent) 0%,
+      color-mix(in srgb, var(--color-yellow) 55%, transparent) 60%,
+      color-mix(in srgb, var(--color-yellow) 85%, transparent) 100%
+    );
     border-bottom-left-radius: 0.75rem;
     border-bottom-right-radius: 0.75rem;
     z-index: 0;
     pointer-events: none;
-    animation: course-item-fill-sway 3s ease-in-out infinite;
+  }
+
+  &__shine {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: inherit;
 
     &::before {
       content: "";
       position: absolute;
-      left: 0;
-      right: 0;
-      top: -6px;
-      height: 10px;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M0,6 C10,3 20,3 30,6 C40,9 50,2 60,5 C70,8 80,4 90,6 C100,8 110,4 120,6 L120,10 L0,10 Z' fill='%23E8B04A'/%3E%3C/svg%3E");
-      background-repeat: repeat-x;
-      background-size: 120px 10px;
-      animation: course-item-wave 3s linear infinite;
+      top: -50%;
+      left: -75%;
+      width: 50%;
+      height: 200%;
+      background: linear-gradient(
+        115deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.55) 45%,
+        rgba(255, 255, 255, 0.55) 55%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(12deg);
+      animation: shine-sweep 3.2s ease-in-out infinite;
     }
   }
 
-  // 4 состояния
-
-  // 1. locked — серый ч-б
   &--locked {
     filter: grayscale(1);
     opacity: 0.6;
     cursor: not-allowed;
   }
 
-  // 2. active — цветной (по умолчанию)
-
-  // 3. partial — цветной + золотая заливка снизу
-
-  // 4. complete — 100% золотой + блеск звезды
   &--complete {
-    position: relative;
-    background-color: var(--color-progress-complete);
-    border-color: var(--color-progress-complete);
-    animation:
-      star-glow 3s ease-in-out infinite,
-      star-twinkle 2.5s ease-in-out infinite;
+    border-color: var(--color-yellow);
+     background-color: var(--color-yellow);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--color-yellow) 35%, transparent),
+      0 0 20px color-mix(in srgb, var(--color-yellow) 35%, transparent);
+    animation: glow-pulse 2.4s ease-in-out infinite;
 
     .course-item-block__number {
-      background-color: var(--color-text);
-      color: var(--color-progress-complete);
+      color: var(--color-yellow);
       position: relative;
       z-index: 3;
-    }
-
-    // Лучи вокруг
-    &::before {
-      content: "";
-      position: absolute;
-      inset: -8px;
-      border-radius: 1rem;
-      background: conic-gradient(
-        from 0deg,
-        transparent 0deg,
-    var(--glow-color) 20deg,
-        transparent 40deg,
-        transparent 90deg,
-       var(--glow-color)  110deg,
-        transparent 130deg,
-        transparent 180deg,
-     var(--glow-color) 200deg,
-        transparent 220deg,
-        transparent 270deg,
-        var(--glow-color)  290deg,
-        transparent 310deg,
-        transparent 360deg
-      );
-      opacity: 0.6;
-      pointer-events: none;
-      animation: star-rays 8s linear infinite;
-      z-index: 0;
-      filter: blur(4px);
-    }
-
-    // Вспышка в центре
-    &::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 0.75rem;
-     background: radial-gradient(
-  circle at 50% 50%,
-  var(--glow-white) 0%,
-  transparent 60%
-);
-      opacity: 0;
-      pointer-events: none;
-      animation: star-flash 3s ease-in-out infinite;
-      z-index: 2;
-    }
-  }
-
-  // искры (внутри --complete)
-  &__sparkle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5%;
-    height: 5px;
-    border-radius: 50%;
-    background: radial-gradient(
-      circle,
-      #ffffff 0%,
-     var(--glow-color-bright) 40%,
-      transparent 70%
-    );
-    pointer-events: none;
-    z-index: 3;
-    opacity: 0;
-    filter: blur(0.5px);
-
-    &:nth-child(1) {
-      --tx: 30px;
-      --ty: -30px;
-      animation: sparkle-fly 3s ease-out infinite;
-      animation-delay: 0s;
-    }
-    &:nth-child(2) {
-      --tx: -30px;
-      --ty: -25px;
-      animation: sparkle-fly 3s ease-out infinite;
-      animation-delay: 0.75s;
-    }
-    &:nth-child(3) {
-      --tx: 25px;
-      --ty: 30px;
-      animation: sparkle-fly 3s ease-out infinite;
-      animation-delay: 1.5s;
-    }
-    &:nth-child(4) {
-      --tx: -25px;
-      --ty: 30px;
-      animation: sparkle-fly 3s ease-out infinite;
-      animation-delay: 2.25s;
     }
   }
 }

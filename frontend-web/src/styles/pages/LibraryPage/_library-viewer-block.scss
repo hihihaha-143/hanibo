@@ -1,9 +1,10 @@
 @use '../../abstracts' as *;
 
 .library-viewer-block {
+  position: relative;              // ← для absolute-панели на мобилке
   @include flex(column, flex-start, stretch, 1rem);
   width: 100%;
-  height: calc(100vh - 120px); // подгони под свой лейаут
+  height: 100%;                    // ← было calc(100vh - 120px); теперь заполняет view-page
   min-height: 500px;
 
   &__controls {
@@ -12,35 +13,9 @@
     padding: 0.5rem;
     border-radius: 8px;
     border: 1px solid var(--color-border);
-    flex-wrap: wrap; /* <--- добавили это, чтобы кнопки переносились на новую строку */
+    flex-wrap: wrap;
   }
-  
-  &__btn {
-    @include flex(row, center, center, 0);
-    min-width: 2rem;
-    height: 2rem;
-    padding: 0 0.5rem;
-    border-radius: 6px;
-    color: var(--color-text-secondary);
-    font-size: 0.9rem;
-    transition: background-color var(--transition-fast);
 
-    &:hover:not(:disabled) {
-      background: var(--color-surface-alt);
-      color: var(--color-text);
-    }
-
-    &--active {
-      background: var(--color-accent);
-      color: var(--color-on-accent);
-      &:hover { background: var(--color-accent-hover); }
-    }
-    
-    &:disabled {
-      opacity: 0.3;
-      cursor: default;
-    }
-  }
 
   &__page-info {
     font-size: 0.9rem;
@@ -52,7 +27,6 @@
     flex: 1;
   }
 
-  // Контейнер для панели и скролла
   &__body {
     display: flex;
     flex: 1;
@@ -74,7 +48,7 @@
       position: absolute;
       z-index: 10;
       height: calc(100% - 120px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
   }
 
@@ -135,7 +109,7 @@
 .library-outline-block {
   display: flex;
   flex-direction: column;
-  
+
   &__item {
     text-align: left;
     padding: 0.4rem 0.5rem;
@@ -143,7 +117,7 @@
     font-size: 0.85rem;
     color: var(--color-text);
     line-height: 1.3;
-    
+
     &:hover {
       background: var(--color-surface-alt);
     }
@@ -165,13 +139,14 @@
     width: 130px;
     opacity: 0.7;
     transition: opacity var(--transition-fast);
-    
+
     &:hover {
       opacity: 1;
     }
-    
+
     &--active {
       opacity: 1;
+
       .library-thumbs-block__canvas-wrap {
         border-color: var(--color-accent);
       }

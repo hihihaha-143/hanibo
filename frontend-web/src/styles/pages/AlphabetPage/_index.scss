@@ -9,3 +9,7 @@
 @use "letter-test-block";
 @use "letter-test-result";
 @use "letter-score-toast";
+
+// Новые партиалы для теста по группе
+@use "alphabet-test-page";
+@use "letter-group-test-block";

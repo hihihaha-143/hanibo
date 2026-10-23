@@ -32,7 +32,7 @@ export default function ChooseQuestion({
           <div className="choose-question__speak">
             <button
               type="button"
-              className="choose-question__speak-button"
+              className="btn btn--ghost choose-question__speak-button"
               onClick={() => speak(question.promptAudio!, 0.5)}
               title="Медленно"
             >
@@ -41,7 +41,7 @@ export default function ChooseQuestion({
             </button>
             <button
               type="button"
-              className="choose-question__speak-button"
+              className="btn btn--ghost choose-question__speak-button"
               onClick={() => speak(question.promptAudio!, 1)}
               title="Обычно"
             >

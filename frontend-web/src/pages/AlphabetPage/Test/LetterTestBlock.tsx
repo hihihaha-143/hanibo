@@ -1,14 +1,13 @@
-// frontend-web/src/pages/AlphabetPage/LetterTestBlock.tsx
-
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { spring } from "../../lib/motion";
-import type { AlphabetLetter, AlphabetProgress } from "../../api/alphabet";
-import { submitAlphabetProgress } from "../../api/alphabet";
-import { generateLetterTest } from "../../utils/letterTestGenerator";
-import Test from "../ItemPage/LessonView/Test/Test";
+import { spring } from "../../../lib/motion";
+import type { AlphabetLetter, AlphabetProgress } from "../../../api/alphabet";
+import { submitAlphabetProgress } from "../../../api/alphabet";
+import { generateLetterTest } from "../../../utils/letterTestGenerator";
+import Test from "../../ItemPage/LessonView/Test/Test";
 import LetterTestResult from "./LetterTestResult";
 import LetterScoreToast from "./LetterScoreToast";
+import { useAuth } from "../../../context/useAuth";
 
 interface LetterTestBlockProps {
   letter: AlphabetLetter;
@@ -27,6 +26,8 @@ interface FinishResult {
 
 interface ToastState {
   scoreAdded: number;
+  blueberriesEarned: number;
+  expEarned: number;
   letterSymbol: string;
 }
 
@@ -37,6 +38,7 @@ export default function LetterTestBlock({
   onClose,
   onProgressUpdated,
 }: LetterTestBlockProps) {
+  const { refreshUser } = useAuth();
   const [round, setRound] = useState(0);
   const [finished, setFinished] = useState<FinishResult | null>(null);
   const [toast, setToast] = useState<ToastState | null>(null);
@@ -57,14 +59,25 @@ export default function LetterTestBlock({
 
     try {
       const result = await submitAlphabetProgress(letter.id, correct, total);
+
+      // Обновляем данные юзера (черника, опыт)
+      await refreshUser();
+
       onProgressUpdated?.(letter.id, {
         score: result.score,
         attempts: result.attempts,
         max_score: result.max_score,
       });
-      if (result.score_added > 0) {
+
+      if (
+        result.score_added > 0 ||
+        result.blueberries_earned > 0 ||
+        result.exp_earned > 0
+      ) {
         setToast({
           scoreAdded: result.score_added,
+          blueberriesEarned: result.blueberries_earned,
+          expEarned: result.exp_earned,
           letterSymbol: letter.symbol,
         });
       }
@@ -125,6 +138,8 @@ export default function LetterTestBlock({
           <LetterScoreToast
             key="score-toast"
             scoreAdded={toast.scoreAdded}
+            blueberriesEarned={toast.blueberriesEarned}
+            expEarned={toast.expEarned}
             letterSymbol={toast.letterSymbol}
             onClose={() => setToast(null)}
           />

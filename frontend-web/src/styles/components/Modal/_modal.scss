@@ -1,0 +1,43 @@
+@use '../../abstracts' as *;
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  background: rgba(0, 0, 0, 0.5);
+  @include flex(row, center, center, 0);
+  padding: 16px;
+
+  &__panel {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    max-height: 90dvh;
+    overflow-y: auto;
+    border-radius: 20px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 32px 20px 20px;
+    @include flex(column, flex-start, stretch, 20px);
+  }
+
+  &__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: var(--color-text-secondary);
+    @include flex(row, center, center, 0);
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast);
+
+    &:hover {
+      background: var(--color-surface-alt);
+      color: var(--color-text);
+    }
+  }
+}

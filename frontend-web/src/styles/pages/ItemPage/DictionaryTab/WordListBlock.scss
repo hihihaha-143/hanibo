@@ -1,4 +1,4 @@
-@use '../../../abstracts/' as *;
+@use '../../../abstracts' as *;
 
 .word-list-block {
   @include flex(column, flex-start, stretch, 0.75rem);

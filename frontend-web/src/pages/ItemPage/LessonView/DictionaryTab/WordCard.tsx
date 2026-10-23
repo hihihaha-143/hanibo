@@ -42,7 +42,7 @@ export default function WordCard({ word }: WordCardProps) {
             <motion.button
               key={rate}
               type="button"
-              className="word-card__speak-button"
+              className="btn btn--ghost word-card__speak-button"
               onClick={() => speak(word.hangul, rate)}
               title={title}
               whileHover={{ y: -1 }}

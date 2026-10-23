@@ -1,73 +1,68 @@
+@use '../../abstracts' as *;
+
 .letter-sound-block {
   background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
   border-radius: 12px;
   padding: 16px;
+  @include flex(column, flex-start, stretch, 12px);
 
   &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
+    @include flex(row, space-between, center, 12px);
   }
 
-  &__label {
+  &__title {
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     opacity: 0.6;
-  }
-
-  &__speak {
-    display: flex;
-    gap: 6px;
-  }
-
-  &__speak-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 8px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.06);
-    color: inherit;
-    border: none;
-    font-size: 12px;
-    cursor: pointer;
-    transition: background 0.15s ease;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.12);
-    }
-  }
-
-  &__sound {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 8px;
+    font-weight: 600;
   }
 
   &__ipa {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
-  }
-
-  &__sample {
-    font-size: 18px;
-    font-family: "Noto Sans KR", sans-serif;
-  }
-
-  &__roman {
-    font-size: 14px;
-    opacity: 0.65;
-    font-family: inherit;
+    color: var(--color-accent);
   }
 
   &__note {
-    margin: 0;
     font-size: 14px;
     line-height: 1.55;
     opacity: 0.85;
+    margin: 0;
+  }
+
+  &__sample-row {
+    @include flex(row, flex-start, center, 12px);
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    background: var(--color-surface-alt);
+    border-radius: 8px;
+  }
+
+  &__sample-syllable {
+    font-size: 18px;
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 700;
+  }
+
+  &__sample-romanization {
+    font-size: 14px;
+    opacity: 0.65;
+    flex: 1;
+  }
+
+  &__speak {
+    @include flex(row, flex-start, center, 6px);
+    flex-shrink: 0;
+  }
+
+  &__speak-button {
+    // Наследуем стили от .btn--ghost, но можем чуть скорректировать
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
 }

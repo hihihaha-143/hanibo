@@ -100,7 +100,7 @@ export default function FlashcardQuestion({
               <div className="choose-question__speak">
                 <motion.button
                   type="button"
-                  className="choose-question__speak-button"
+                  className="btn btn--ghost choose-question__speak-button"
                   onClick={() => speak(question.frontAudio!, 0.5)}
                   title="Медленно"
                   whileHover={{ y: -1, scale: 1.05 }}
@@ -112,7 +112,7 @@ export default function FlashcardQuestion({
                 </motion.button>
                 <motion.button
                   type="button"
-                  className="choose-question__speak-button"
+                  className="btn btn--ghost choose-question__speak-button"
                   onClick={() => speak(question.frontAudio!, 1)}
                   title="Обычно"
                   whileHover={{ y: -1, scale: 1.05 }}
@@ -133,7 +133,7 @@ export default function FlashcardQuestion({
               <div className="choose-question__speak">
                 <motion.button
                   type="button"
-                  className="choose-question__speak-button"
+                  className="btn btn--ghost choose-question__speak-button"
                   onClick={() => speak(question.backAudio!, 0.5)}
                   title="Медленно"
                   whileHover={{ y: -1, scale: 1.05 }}
@@ -145,7 +145,7 @@ export default function FlashcardQuestion({
                 </motion.button>
                 <motion.button
                   type="button"
-                  className="choose-question__speak-button"
+                  className="btn btn--ghost choose-question__speak-button"
                   onClick={() => speak(question.backAudio!, 1)}
                   title="Обычно"
                   whileHover={{ y: -1, scale: 1.05 }}
@@ -165,7 +165,7 @@ export default function FlashcardQuestion({
         <div className="flashcard__actions">
           <motion.button
             type="button"
-            className="flashcard__action flashcard__action--unknown"
+            className="btn btn--danger btn--lg flashcard__action"
             onClick={handleUnknown}
             whileHover={{ y: -1, scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
@@ -176,7 +176,7 @@ export default function FlashcardQuestion({
           </motion.button>
           <motion.button
             type="button"
-            className="flashcard__action flashcard__action--known"
+            className="btn btn--success btn--lg flashcard__action"
             onClick={handleKnown}
             whileHover={{ y: -1, scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
@@ -192,7 +192,7 @@ export default function FlashcardQuestion({
         <div className="flashcard__actions">
           <motion.button
             type="button"
-            className="flashcard__action flashcard__action--known"
+            className="btn btn--primary btn--lg"
             onClick={onAutoNext}
             whileHover={{ y: -1, scale: 1.02 }}
             whileTap={{ scale: 0.97 }}

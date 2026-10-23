@@ -61,3 +61,28 @@
   75%           { opacity: 1; }
   85%           { opacity: 0; }
 } 
+
+
+
+// =============================================================================
+// GLOW / SHINE — переиспользуемые (letter-grid, course)
+// =============================================================================
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--color-yellow) 35%, transparent),
+      0 0 16px color-mix(in srgb, var(--color-yellow) 30%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--color-yellow) 60%, transparent),
+      0 0 26px color-mix(in srgb, var(--color-yellow) 55%, transparent);
+  }
+}
+
+@keyframes shine-sweep {
+  0%   { left: -75%; }
+  60%  { left: 125%; }
+  100% { left: 125%; }
+}

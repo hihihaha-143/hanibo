@@ -74,24 +74,6 @@
     font-weight: 700;
     font-size: 0.9375rem;
   }
-
-  &__logout {
-    @include flex(row, center, center);
-    flex-shrink: 0;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border-radius: 8px;
-    color: var(--color-text-secondary);
-    transition:
-      color var(--transition-fast),
-      background-color var(--transition-fast);
-
-    &:hover {
-      color: var(--color-error);
-      background-color: var(--color-surface-alt);
-    }
-  }
 }
 
 .theme-switch {

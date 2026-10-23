@@ -5,11 +5,10 @@
 .mobile-nav-bar,
 .mobile-nav-sheet,
 .mobile-nav-overlay {
-  // По умолчанию — скрыты (десктоп)
   display: none;
 }
 
-@media (hover: none), (max-width: 767px) {
+@include mobile-nav {
   .mobile-nav-bar {
     display: flex;
   }
@@ -22,7 +21,6 @@
     display: block;
   }
 
-  // Прячем десктопный сайдбар на мобилке
   .sidebar {
     display: none;
   }

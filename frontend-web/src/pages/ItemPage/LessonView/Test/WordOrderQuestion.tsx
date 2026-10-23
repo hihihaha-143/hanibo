@@ -244,7 +244,7 @@ export default function WordOrderQuestion({
         <div className="word-order__footer">
           <motion.button
             type="button"
-            className="word-order__check"
+            className="btn btn--accent btn--lg word-order__check"
             disabled={!canCheck}
             onClick={handleCheck}
             whileHover={canCheck ? { y: -1, scale: 1.02 } : undefined}

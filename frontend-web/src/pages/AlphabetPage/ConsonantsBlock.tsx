@@ -1,19 +1,16 @@
-// frontend-web/src/pages/AlphabetPage/ConsonantsBlock.tsx
-
+import LetterGridBlock from "./Modal/LetterGridBlock";
 import type { AlphabetLetter } from "../../api/alphabet";
-import LetterGridBlock from "./LetterGridBlock";
 
 interface ConsonantsBlockProps {
   letters: AlphabetLetter[];
-  showProgress?: boolean;
+  showProgress: boolean;
 }
 
 export default function ConsonantsBlock({
   letters,
-  showProgress = false,
+  showProgress,
 }: ConsonantsBlockProps) {
-  const consonants = letters.filter(
-    (letter) => letter.category === "consonant",
-  );
+  const consonants = letters.filter((l) => l.category === "consonant");
+
   return <LetterGridBlock letters={consonants} showProgress={showProgress} />;
 }

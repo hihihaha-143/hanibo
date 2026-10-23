@@ -1,4 +1,4 @@
-@use '../../../abstracts/' as *;
+@use '../../../abstracts' as *;
 
 .grammar-rule-card {
   @include flex(column, flex-start, stretch, 1rem);

@@ -1,0 +1,17 @@
+@use '../../abstracts' as *;
+
+.alphabet-test-page {
+  @include flex(column, flex-start, stretch, 16px);
+  padding: 16px 0;
+
+  &__status {
+    padding: 24px;
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 16px;
+
+    &--error {
+      color: var(--color-danger);
+    }
+  }
+}

@@ -12,21 +12,10 @@
     margin: 0;
     font-size: 0.95rem;
     line-height: 1.5;
-    color: var(--color-neutral-light);
+    color: var(--color-on-primary);
   }
 
   &__button {
-    @include flex(row, center, center, 0.5rem);
-    padding: 0.625rem 1rem;
-    background-color: var(--color-accent);
-    color: var(--color-on-accent);
-    border-radius: 0.5rem;
-    font-weight: 600;
     margin-top: auto;
-    transition: background-color var(--transition-fast);
-
-    &:hover {
-      background-color: var(--color-accent-hover);
-    }
   }
 }

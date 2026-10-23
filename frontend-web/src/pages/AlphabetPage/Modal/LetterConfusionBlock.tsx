@@ -1,4 +1,4 @@
-import type { AlphabetConfusion } from "../../api/alphabet";
+import type { AlphabetConfusion } from "../../../api/alphabet";
 
 interface LetterConfusionBlockProps {
   items: AlphabetConfusion[];

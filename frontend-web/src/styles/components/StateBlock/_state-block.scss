@@ -28,17 +28,4 @@
       color: var(--color-error);
     }
   }
-
-  &__retry {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    color: var(--color-on-primary);
-    background-color: var(--color-primary);
-    border-radius: 0.5rem;
-    transition: background-color var(--transition-fast);
-
-    &:hover {
-      background-color: var(--color-primary-hover);
-    }
-  }
 }

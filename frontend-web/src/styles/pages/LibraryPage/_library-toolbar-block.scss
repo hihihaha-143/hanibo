@@ -16,9 +16,10 @@
     background: var(--color-surface);
     color: var(--color-text-secondary);
     font-size: 0.9rem;
-    transition: background-color var(--transition-fast),
-                color var(--transition-fast),
-                border-color var(--transition-fast);
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast),
+      border-color var(--transition-fast);
 
     &:hover {
       border-color: var(--color-accent);
@@ -77,7 +78,6 @@
     &:hover,
     &:focus {
       border-color: var(--color-accent);
-      outline: none;
     }
   }
 
@@ -94,8 +94,9 @@
     width: 2.2rem;
     height: 2.2rem;
     color: var(--color-text-secondary);
-    transition: background-color var(--transition-fast),
-                color var(--transition-fast);
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast);
 
     &:hover {
       color: var(--color-text);
@@ -115,8 +116,9 @@
     background: var(--color-surface);
     color: var(--color-text-secondary);
     font-size: 0.9rem;
-    transition: border-color var(--transition-fast),
-                color var(--transition-fast);
+    transition:
+      border-color var(--transition-fast),
+      color var(--transition-fast);
 
     &:hover {
       border-color: var(--color-accent);

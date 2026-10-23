@@ -47,7 +47,7 @@ export default function AudioChooseQuestion({
         <div className="audio-choose__speeds">
           <motion.button
             type="button"
-            className="choose-question__speak-button"
+            className="btn btn--ghost choose-question__speak-button"
             onClick={handleSpeakSlow}
             title="Медленно"
             whileHover={{ y: -1, scale: 1.05 }}
@@ -59,7 +59,7 @@ export default function AudioChooseQuestion({
           </motion.button>
           <motion.button
             type="button"
-            className="choose-question__speak-button"
+            className="btn btn--ghost choose-question__speak-button"
             onClick={handleSpeakNormal}
             title="Обычно"
             whileHover={{ y: -1, scale: 1.05 }}

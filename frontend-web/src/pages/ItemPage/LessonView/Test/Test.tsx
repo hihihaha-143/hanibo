@@ -276,9 +276,9 @@ export default function Test({
 
   return (
     <div className="test">
-      <div className="test__progress">
+      <div className="progress-bar">
         <motion.div
-          className="test__progress-bar"
+          className="progress-bar__fill"
           animate={{ width: `${progressPercent}%` }}
           transition={spring.bouncy}
         />
@@ -395,7 +395,7 @@ export default function Test({
         <div className="test__footer">
           <motion.button
             type="button"
-            className="test__next"
+            className="btn btn--accent btn--lg test__next"
             onClick={handleNext}
             whileHover={{ y: -1, scale: 1.02 }}
             whileTap={{ scale: 0.97 }}

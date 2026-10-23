@@ -20,6 +20,7 @@ export interface AuthContextValue {
   login: (payload: LoginPayload) => Promise<User>;
   register: (payload: RegisterPayload) => Promise<User>;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>; // <--- Добавили метод
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null);

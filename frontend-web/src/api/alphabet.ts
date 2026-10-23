@@ -53,6 +53,10 @@ export interface SubmitProgressResult {
   score: number;
   attempts: number;
   max_score: number;
+  blueberries_earned: number;
+  total_blueberries: number;
+  exp_earned: number; // <--- добавили
+  total_exp: number; // <--- добавили
 }
 
 interface SubmitProgressResponse {

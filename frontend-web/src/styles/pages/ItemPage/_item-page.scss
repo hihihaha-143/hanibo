@@ -1,4 +1,4 @@
-@use '../../abstracts/' as *;
+@use '../../abstracts' as *;
 
 .item-page {
   @include flex(column, flex-start, stretch, 1rem);

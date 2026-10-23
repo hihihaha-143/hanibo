@@ -1,15 +1,14 @@
-// frontend-web/src/pages/AlphabetPage/LetterModalBlock.tsx
-
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Volume2 } from "lucide-react";
-import { spring } from "../../lib/motion";
-import type { AlphabetLetter, AlphabetProgress } from "../../api/alphabet";
+import { spring } from "../../../lib/motion"; // <--- на уровень выше
+import type { AlphabetLetter, AlphabetProgress } from "../../../api/alphabet"; // <--- на уровень выше
 import LetterWritingBlock from "./LetterWritingBlock";
 import LetterSoundBlock from "./LetterSoundBlock";
 import LetterFamilyBlock from "./LetterFamilyBlock";
 import LetterConfusionBlock from "./LetterConfusionBlock";
-import LetterTestBlock from "./LetterTestBlock";
+import LetterTestBlock from "../Test/LetterTestBlock"; // <--- переехал в Test/
 
 interface LetterModalBlockProps {
   letter: AlphabetLetter | null;
@@ -66,11 +65,11 @@ export default function LetterModalBlock({
     };
   }, [letter, hasPrev, hasNext, onClose, onPrev, onNext, view]);
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {letter && (
         <motion.div
-          className="letter-modal-block"
+          className="modal letter-modal-block"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -78,7 +77,7 @@ export default function LetterModalBlock({
           onClick={onClose}
         >
           <motion.div
-            className="letter-modal-block__panel"
+            className="modal__panel"
             initial={{ opacity: 0, y: 24, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
@@ -87,7 +86,7 @@ export default function LetterModalBlock({
           >
             <button
               type="button"
-              className="letter-modal-block__close"
+              className="modal__close"
               onClick={onClose}
               aria-label="Закрыть"
             >
@@ -99,6 +98,7 @@ export default function LetterModalBlock({
                 letter={letter}
                 allLetters={allLetters}
                 onBack={() => setView("card")}
+                onClose={onClose}
                 onProgressUpdated={onProgressUpdated}
               />
             ) : (
@@ -127,9 +127,9 @@ export default function LetterModalBlock({
                       {letter.romanization}
                     </span>
                     <div className="letter-modal-block__progress">
-                      <div className="letter-modal-block__progress-bar">
+                      <div className="progress-bar">
                         <div
-                          className="letter-modal-block__progress-fill"
+                          className="progress-bar__fill"
                           style={{
                             width: `${
                               (letter.progress.score /
@@ -199,7 +199,7 @@ export default function LetterModalBlock({
                       <div className="letter-modal-block__example-speak">
                         <motion.button
                           type="button"
-                          className="letter-modal-block__speak-button"
+                          className="btn btn--ghost letter-modal-block__speak-button"
                           onClick={() => speak(example.word, 0.5)}
                           title="Медленно"
                           whileHover={{ y: -1, scale: 1.05 }}
@@ -211,7 +211,7 @@ export default function LetterModalBlock({
                         </motion.button>
                         <motion.button
                           type="button"
-                          className="letter-modal-block__speak-button"
+                          className="btn btn--ghost letter-modal-block__speak-button"
                           onClick={() => speak(example.word, 1)}
                           title="Обычно"
                           whileHover={{ y: -1, scale: 1.05 }}
@@ -229,7 +229,7 @@ export default function LetterModalBlock({
                 <div className="letter-modal-block__test-cta">
                   <motion.button
                     type="button"
-                    className="letter-modal-block__test-button"
+                    className="btn btn--accent letter-modal-block__test-button"
                     onClick={() => setView("test")}
                     whileHover={{ y: -1, scale: 1.02 }}
                     whileTap={{ scale: 0.97 }}
@@ -243,6 +243,7 @@ export default function LetterModalBlock({
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

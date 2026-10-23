@@ -1,4 +1,4 @@
-@use '../../abstracts/' as *;
+@use '../../abstracts' as *;
 
 .phrase-token {
   position: relative;
@@ -25,7 +25,9 @@
     color: var(--color-on-primary);
     border-radius: 0.5rem;
     font-size: 0.8125rem;
-    white-space: nowrap;
+    white-space: normal;
+    max-width: 240px;
+    width: max-content;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 

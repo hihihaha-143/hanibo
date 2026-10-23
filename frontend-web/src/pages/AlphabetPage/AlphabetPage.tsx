@@ -1,7 +1,7 @@
 // frontend-web/src/pages/AlphabetPage/AlphabetPage.tsx
 
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom"; // <--- добавили useNavigate
 import { AnimatePresence, motion } from "framer-motion";
 import { spring } from "../../lib/motion";
 import ChipsBlock from "../../components/ChipsBlock/ChipsBlock";
@@ -32,6 +32,7 @@ function readStoredTab(): AlphabetTabId {
 
 export default function AlphabetPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate(); // <--- добавили
   const { letters, loading, error } = useAlphabet();
   const [showProgress, setShowProgress] = useState(false);
 
@@ -86,6 +87,13 @@ export default function AlphabetPage() {
     activeTab === "consonants" ||
     activeTab === "diphthongs";
 
+  // маппинг табов в категории API
+  const categoryMap: Record<string, string> = {
+    vowels: "vowel",
+    consonants: "consonant",
+    diphthongs: "diphthong",
+  };
+
   return (
     <div className="alphabet-page">
       <div className="alphabet-page__top">
@@ -97,18 +105,34 @@ export default function AlphabetPage() {
         />
 
         {isLetterTab && (
-          <motion.button
-            type="button"
-            className={`alphabet-page__progress-toggle${
-              showProgress ? " alphabet-page__progress-toggle--active" : ""
-            }`}
-            onClick={() => setShowProgress((v) => !v)}
-            whileHover={{ y: -1, scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
-            transition={spring.bouncy}
-          >
-            {showProgress ? "Скрыть прогресс" : "Показать прогресс"}
-          </motion.button>
+          <div className="alphabet-page__controls">
+            {" "}
+            {/* <--- обертка для кнопок */}
+            <motion.button
+              type="button"
+              className="btn btn--accent" // <--- добавили кнопку теста
+              onClick={() =>
+                navigate(`/alphabet/test/${categoryMap[activeTab]}`)
+              }
+              whileHover={{ y: -1, scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              transition={spring.bouncy}
+            >
+              Пройти тест
+            </motion.button>
+            <motion.button
+              type="button"
+              className={`alphabet-page__progress-toggle${
+                showProgress ? " alphabet-page__progress-toggle--active" : ""
+              }`}
+              onClick={() => setShowProgress((v) => !v)}
+              whileHover={{ y: -1, scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              transition={spring.bouncy}
+            >
+              {showProgress ? "Скрыть прогресс" : "Показать прогресс"}
+            </motion.button>
+          </div>
         )}
       </div>
 

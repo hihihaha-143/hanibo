@@ -1,19 +1,16 @@
-// frontend-web/src/pages/AlphabetPage/DiphthongsBlock.tsx
-
+import LetterGridBlock from "./Modal/LetterGridBlock";
 import type { AlphabetLetter } from "../../api/alphabet";
-import LetterGridBlock from "./LetterGridBlock";
 
 interface DiphthongsBlockProps {
   letters: AlphabetLetter[];
-  showProgress?: boolean;
+  showProgress: boolean;
 }
 
 export default function DiphthongsBlock({
   letters,
-  showProgress = false,
+  showProgress,
 }: DiphthongsBlockProps) {
-  const diphthongs = letters.filter(
-    (letter) => letter.category === "diphthong",
-  );
+  const diphthongs = letters.filter((l) => l.category === "diphthong");
+
   return <LetterGridBlock letters={diphthongs} showProgress={showProgress} />;
 }

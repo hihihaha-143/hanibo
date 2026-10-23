@@ -33,17 +33,17 @@
     }
 
     &--mastered {
-      border-color: #e6b422;
+      border-color: var(--color-yellow);
       box-shadow:
-        0 0 0 1px rgba(230, 180, 34, 0.35),
-        0 0 20px rgba(230, 180, 34, 0.35);
-      animation: letter-grid-block-glow 2.4s ease-in-out infinite;
+        0 0 0 1px color-mix(in srgb, var(--color-yellow) 35%, transparent),
+        0 0 20px color-mix(in srgb, var(--color-yellow) 35%, transparent);
+      animation: glow-pulse 2.4s ease-in-out infinite;
 
       &:hover {
-        border-color: #e6b422;
+        border-color: var(--color-yellow);
         box-shadow:
-          0 0 0 1px rgba(230, 180, 34, 0.55),
-          0 0 28px rgba(230, 180, 34, 0.55);
+          0 0 0 1px color-mix(in srgb, var(--color-yellow) 55%, transparent),
+          0 0 28px color-mix(in srgb, var(--color-yellow) 55%, transparent);
       }
     }
   }
@@ -55,9 +55,9 @@
     bottom: 0;
     background: linear-gradient(
       180deg,
-      rgba(230, 180, 34, 0.15) 0%,
-      rgba(230, 180, 34, 0.55) 60%,
-      rgba(230, 180, 34, 0.85) 100%
+      color-mix(in srgb, var(--color-yellow) 15%, transparent) 0%,
+      color-mix(in srgb, var(--color-yellow) 55%, transparent) 60%,
+      color-mix(in srgb, var(--color-yellow) 85%, transparent) 100%
     );
     pointer-events: none;
     transition: height var(--transition-base);
@@ -77,6 +77,14 @@
     line-height: 1;
   }
 
+  &__progress-text {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    line-height: 1;
+    margin-top: 2px;
+    letter-spacing: 0.02em;
+  }
 
   &__shine {
     position: absolute;
@@ -101,40 +109,7 @@
         rgba(255, 255, 255, 0) 100%
       );
       transform: rotate(12deg);
-      animation: letter-grid-block-shine 3.2s ease-in-out infinite;
+      animation: shine-sweep 3.2s ease-in-out infinite;
     }
-  }
-}.letter-grid-block__progress-text {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--color-text-secondary);
-  line-height: 1;
-  margin-top: 2px;
-  letter-spacing: 0.02em;
-}
-
-@keyframes letter-grid-block-glow {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 1px rgba(230, 180, 34, 0.35),
-      0 0 16px rgba(230, 180, 34, 0.3);
-  }
-  50% {
-    box-shadow:
-      0 0 0 1px rgba(230, 180, 34, 0.6),
-      0 0 26px rgba(230, 180, 34, 0.55);
-  }
-}
-
-@keyframes letter-grid-block-shine {
-  0% {
-    left: -75%;
-  }
-  60% {
-    left: 125%;
-  }
-  100% {
-    left: 125%;
   }
 }

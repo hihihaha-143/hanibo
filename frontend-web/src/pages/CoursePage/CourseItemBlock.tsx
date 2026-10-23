@@ -66,6 +66,9 @@ export default function CourseItemBlock({
       {showFill && (
         <span className="course-item-block__fill" aria-hidden="true" />
       )}
+      {status === "complete" && (
+        <span className="course-item-block__shine" aria-hidden="true" />
+      )}
       <span className="course-item-block__inner">
         <span className="course-item-block__icon">{icon}</span>
       </span>
