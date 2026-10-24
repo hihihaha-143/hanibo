@@ -7,7 +7,7 @@ dns.setDefaultResultOrder("ipv4first");
 
 const proxyConfig = {
   "/api": {
-    target: "http://localhost",
+    target: "http://192.168.0.15",
     changeOrigin: true,
     secure: false,
   },

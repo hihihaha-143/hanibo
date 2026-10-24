@@ -29,7 +29,7 @@ class AlphabetProgressController extends Controller
         }
 
         $passed = $scoreAdded > 0;
-        
+
         // --- Логика начисления опыта (exp) ---
         $expEarned = 0;
         if ($percent === 100) {
@@ -71,7 +71,7 @@ class AlphabetProgressController extends Controller
         if ($expEarned > 0) {
             $user->increment('exp', $expEarned);
         }
-        
+
         // Обновляем объект пользователя, чтобы отдать актуальные данные
         $user->refresh();
 
@@ -92,8 +92,8 @@ class AlphabetProgressController extends Controller
                 'max_score' => self::MAX_SCORE,
                 'blueberries_earned' => $actualBlueberries,
                 'total_blueberries' => $user->blueberry,
-                'exp_earned' => $expEarned, // <--- Отдаем на фронт
-                'total_exp' => $user->exp,  // <--- Отдаем на фронт
+                'exp_earned' => $expEarned,
+                'total_exp' => $user->exp,
             ],
         ]);
     }

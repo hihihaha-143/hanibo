@@ -55,8 +55,8 @@ export interface SubmitProgressResult {
   max_score: number;
   blueberries_earned: number;
   total_blueberries: number;
-  exp_earned: number; // <--- добавили
-  total_exp: number; // <--- добавили
+  exp_earned: number;
+  total_exp: number;
 }
 
 interface SubmitProgressResponse {
@@ -71,6 +71,45 @@ export async function submitAlphabetProgress(
   const { data } = await apiClient.post<SubmitProgressResponse>(
     `/alphabet/${letterId}/progress`,
     { correct, total },
+  );
+  return data.data;
+}
+
+// ---------- групповой тест ----------
+
+export interface GroupLetterInput {
+  letter_id: number;
+  correct: number;
+  total: number;
+}
+
+export interface SubmitGroupProgressResult {
+  passed: boolean;
+  percent: number;
+  blueberries_earned: number;
+  total_blueberries: number;
+  exp_earned: number;
+  total_exp: number;
+  letters: Array<{
+    letter_id: number;
+    score_added: number;
+    score: number;
+    attempts: number;
+    max_score: number;
+  }>;
+}
+
+interface SubmitGroupProgressResponse {
+  data: SubmitGroupProgressResult;
+}
+
+export async function submitAlphabetGroupProgress(
+  category: AlphabetCategory,
+  letters: GroupLetterInput[],
+): Promise<SubmitGroupProgressResult> {
+  const { data } = await apiClient.post<SubmitGroupProgressResponse>(
+    "/alphabet/group/progress",
+    { category, letters },
   );
   return data.data;
 }

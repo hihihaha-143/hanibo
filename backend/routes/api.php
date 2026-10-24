@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\CourseItemGrammarController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\LibraryItemController;
 use App\Http\Controllers\AlphabetProgressController;
+use App\Http\Controllers\AlphabetGroupProgressController;
 
 Route::get('/library/items', [LibraryItemController::class, 'index']);
 Route::get('/library/items/{libraryItem}', [LibraryItemController::class, 'show']);
@@ -21,6 +22,9 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
+
+    // ВАЖНО: group/progress должен идти ВЫШЕ {letter}/progress
+    Route::post('/alphabet/group/progress', [AlphabetGroupProgressController::class, 'store']);
     Route::post('/alphabet/{letter}/progress', [AlphabetProgressController::class, 'store']);
 });
 

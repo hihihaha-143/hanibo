@@ -6,10 +6,12 @@ import type { Phrase, PhraseToken } from "../../api/course";
  * Базовый вопрос. Все типы вопросов наследуют его.
  * @field id — уникальный id вопроса (например, "word-12-ko-to-ru")
  * @field instruction — текст-инструкция («Выберите перевод»)
+ * @field letterId — id буквы алфавита, к которой относится вопрос (для групповых тестов алфавита)
  */
 export interface TestQuestionBase {
   id: string;
   instruction: string;
+  letterId?: number;
 }
 
 // ---------- 1. Одиночный выбор (слово) ----------
@@ -141,15 +143,13 @@ export interface TestQuestionWordOrder extends TestQuestionBase {
 
 export interface TestQuestionAudioChoose extends TestQuestionBase {
   type: "audio-choose";
-  audioText: string;              // что произносим (hangul слова)
+  audioText: string; // что произносим (hangul слова)
   mode: "translation" | "hangul"; // что показываем в вариантах
-  promptHangul: string;           // показываем после ответа
-  promptTranslation: string;      // показываем после ответа
+  promptHangul: string; // показываем после ответа
+  promptTranslation: string; // показываем после ответа
   variants: string[];
   correctIndices: number[];
 }
-
-
 
 // ---------- объединение ----------
 

@@ -25,6 +25,7 @@ interface TestProps {
   backLabel?: string;
   onNext?: () => void;
   nextLabel?: string;
+  onAnswer?: (question: TestQuestion, isCorrect: boolean) => void;
 }
 
 export default function Test({
@@ -35,6 +36,7 @@ export default function Test({
   backLabel,
   onNext,
   nextLabel,
+  onAnswer,
 }: TestProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answered, setAnswered] = useState(false);
@@ -95,14 +97,19 @@ export default function Test({
     if (isCorrect) {
       setCorrectCount((c) => c + 1);
     }
+    onAnswer?.(current, isCorrect);
   };
 
   const handleSelectBoolean = (value: boolean) => {
     if (answered) return;
     setSelectedValue(value);
     setAnswered(true);
-    if (current.type === "true-false" && value === current.correct) {
-      setCorrectCount((c) => c + 1);
+    if (current.type === "true-false") {
+      const isCorrect = value === current.correct;
+      if (isCorrect) {
+        setCorrectCount((c) => c + 1);
+      }
+      onAnswer?.(current, isCorrect);
     }
   };
 
@@ -113,12 +120,14 @@ export default function Test({
     setTextInputCorrect(correct);
     setAnswered(true);
     if (correct) setCorrectCount((c) => c + 1);
+    onAnswer?.(current, correct);
   };
 
   const handleMatchSubmit = (correct: boolean) => {
     if (answered) return;
     setAnswered(true);
     if (correct) setCorrectCount((c) => c + 1);
+    onAnswer?.(current, correct);
   };
 
   const handleFillBlankSelect = (index: number) => {
@@ -130,6 +139,7 @@ export default function Test({
     setFillBlankCorrect(correct);
     setAnswered(true);
     if (correct) setCorrectCount((c) => c + 1);
+    onAnswer?.(current, correct);
   };
 
   const handleFillBlankSubmit = (value: string) => {
@@ -140,6 +150,7 @@ export default function Test({
     setFillBlankCorrect(correct);
     setAnswered(true);
     if (correct) setCorrectCount((c) => c + 1);
+    onAnswer?.(current, correct);
   };
 
   const handleWordOrderSubmit = (correct: boolean) => {
@@ -147,6 +158,7 @@ export default function Test({
     setWordOrderCorrect(correct);
     setAnswered(true);
     if (correct) setCorrectCount((c) => c + 1);
+    onAnswer?.(current, correct);
   };
 
   const handleSyllableGapSelect = (index: number) => {
@@ -158,6 +170,7 @@ export default function Test({
     setSyllableGapCorrect(correct);
     setAnswered(true);
     if (correct) setCorrectCount((c) => c + 1);
+    onAnswer?.(current, correct);
   };
 
   const handleSyllableGapSubmit = (value: string) => {
@@ -168,6 +181,7 @@ export default function Test({
     setSyllableGapCorrect(correct);
     setAnswered(true);
     if (correct) setCorrectCount((c) => c + 1);
+    onAnswer?.(current, correct);
   };
 
   const handleFlashcardAnswer = (_known: boolean) => {

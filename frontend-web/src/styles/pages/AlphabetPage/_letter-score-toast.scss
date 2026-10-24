@@ -62,6 +62,29 @@
     }
   }
 
+  &__letters {
+    @include flex(row, flex-start, center, 10px);
+    flex-wrap: wrap;
+    padding-top: 4px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  &__letter {
+    @include flex(row, center, center, 4px);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+
+  &__letter-symbol {
+    font-size: 15px;
+    color: var(--color-text);
+  }
+
+  &__letter-score {
+    color: var(--color-accent);
+  }
+
   &__close {
     width: 28px;
     height: 28px;

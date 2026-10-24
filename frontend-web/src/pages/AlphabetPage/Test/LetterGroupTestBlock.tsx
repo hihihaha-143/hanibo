@@ -1,10 +1,18 @@
-import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { spring } from "../../../lib/motion";
-import type { AlphabetCategory, AlphabetLetter } from "../../../api/alphabet";
+import type {
+  AlphabetCategory,
+  AlphabetLetter,
+  GroupLetterInput,
+} from "../../../api/alphabet";
+import { submitAlphabetGroupProgress } from "../../../api/alphabet";
 import { generateLetterGroupTest } from "../../../utils/letterGroupTestGenerator";
+import type { TestQuestion } from "../../../utils/test";
 import Test from "../../ItemPage/LessonView/Test/Test";
 import TestResult from "../../ItemPage/LessonView/Test/TestResult";
+import LetterScoreToast, { type LetterScoreItem } from "./LetterScoreToast";
+import { useAuth } from "../../../context/useAuth";
 
 interface LetterGroupTestBlockProps {
   letters: AlphabetLetter[];
@@ -19,6 +27,14 @@ interface FinishResult {
   passed: boolean;
 }
 
+interface ToastState {
+  scoreAdded: number;
+  blueberriesEarned: number;
+  expEarned: number;
+  letterSymbol: string;
+  letterScores: LetterScoreItem[];
+}
+
 const CATEGORY_TITLE: Record<AlphabetCategory, string> = {
   vowel: "гласные",
   consonant: "согласные",
@@ -30,8 +46,14 @@ export default function LetterGroupTestBlock({
   category,
   onBack,
 }: LetterGroupTestBlockProps) {
+  const { refreshUser } = useAuth();
   const [round, setRound] = useState(0);
   const [finished, setFinished] = useState<FinishResult | null>(null);
+  const [toast, setToast] = useState<ToastState | null>(null);
+
+  const perLetterRef = useRef<Map<number, { correct: number; total: number }>>(
+    new Map(),
+  );
 
   const questions = useMemo(
     () => generateLetterGroupTest(letters, category),
@@ -39,13 +61,84 @@ export default function LetterGroupTestBlock({
     [letters, category, round],
   );
 
-  const handleFinish = (correct: number, total: number, passed: boolean) => {
+  const resetPerLetter = () => {
+    perLetterRef.current = new Map();
+  };
+
+  const handleAnswer = (question: TestQuestion, isCorrect: boolean) => {
+    const letterId = question.letterId;
+    if (!letterId) return;
+    if (question.type === "flashcard") return;
+
+    const current = perLetterRef.current.get(letterId) ?? {
+      correct: 0,
+      total: 0,
+    };
+    current.total += 1;
+    if (isCorrect) current.correct += 1;
+    perLetterRef.current.set(letterId, current);
+  };
+
+  const handleFinish = async (
+    correct: number,
+    total: number,
+    passed: boolean,
+  ) => {
     const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
     setFinished({ correct, total, percent, passed });
+
+    const lettersPayload: GroupLetterInput[] = [];
+    perLetterRef.current.forEach((value, letterId) => {
+      if (value.total > 0) {
+        lettersPayload.push({
+          letter_id: letterId,
+          correct: value.correct,
+          total: value.total,
+        });
+      }
+    });
+
+    if (lettersPayload.length === 0) return;
+
+    try {
+      const result = await submitAlphabetGroupProgress(
+        category,
+        lettersPayload,
+      );
+
+      await refreshUser();
+
+      if (
+        result.exp_earned > 0 ||
+        result.blueberries_earned > 0 ||
+        result.letters.some((l) => l.score_added > 0)
+      ) {
+        const symbolById = new Map(letters.map((l) => [l.id, l.symbol]));
+
+        const letterScores: LetterScoreItem[] = result.letters
+          .filter((l) => l.score_added > 0)
+          .map((l) => ({
+            symbol: symbolById.get(l.letter_id) ?? `#${l.letter_id}`,
+            scoreAdded: l.score_added,
+          }));
+
+        setToast({
+          scoreAdded: 0,
+          blueberriesEarned: result.blueberries_earned,
+          expEarned: result.exp_earned,
+          letterSymbol: `— ${CATEGORY_TITLE[category]}`,
+          letterScores,
+        });
+      }
+    } catch {
+      // гость или ошибка сети
+    }
   };
 
   const handleRepeat = () => {
     setFinished(null);
+    setToast(null);
+    resetPerLetter();
     setRound((r) => r + 1);
   };
 
@@ -86,9 +179,24 @@ export default function LetterGroupTestBlock({
             onRepeat={handleRepeat}
             onBack={onBack}
             backLabel="К алфавиту"
+            onAnswer={handleAnswer}
           />
         )}
       </div>
+
+      <AnimatePresence>
+        {toast && (
+          <LetterScoreToast
+            key="score-toast"
+            scoreAdded={toast.scoreAdded}
+            blueberriesEarned={toast.blueberriesEarned}
+            expEarned={toast.expEarned}
+            letterSymbol={toast.letterSymbol}
+            letterScores={toast.letterScores}
+            onClose={() => setToast(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
