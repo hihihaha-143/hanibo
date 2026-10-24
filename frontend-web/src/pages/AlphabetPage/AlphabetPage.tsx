@@ -78,7 +78,7 @@ export default function AlphabetPage() {
           <AssimilationBlock letters={letters} showProgress={showProgress} />
         );
       case "stats":
-        return <StatsBlock />;
+        return <StatsBlock letters={letters} />;
     }
   };
 

@@ -4,7 +4,8 @@ export type AlphabetCategory =
   | "vowel"
   | "diphthong"
   | "consonant"
-  | "assimilation";
+  | "assimilation"
+  | "all";
 
 export interface AlphabetExample {
   id: number;

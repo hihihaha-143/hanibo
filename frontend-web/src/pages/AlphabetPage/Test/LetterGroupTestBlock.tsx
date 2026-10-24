@@ -9,6 +9,7 @@ import type {
 import { submitAlphabetGroupProgress } from "../../../api/alphabet";
 import { generateLetterGroupTest } from "../../../utils/letterGroupTestGenerator";
 import { generateAssimilationTest } from "../../../utils/assimilationTestGenerator";
+import { generateMixedAlphabetTest } from "../../../utils/mixedAlphabetTestGenerator";
 import type { TestQuestion } from "../../../utils/test";
 import Test from "../../ItemPage/LessonView/Test/Test";
 import TestResult from "../../ItemPage/LessonView/Test/TestResult";
@@ -41,6 +42,7 @@ const CATEGORY_TITLE: Record<AlphabetCategory, string> = {
   consonant: "согласные",
   diphthong: "дифтонги",
   assimilation: "ассимиляция",
+  all: "всё",
 };
 
 export default function LetterGroupTestBlock({
@@ -57,14 +59,12 @@ export default function LetterGroupTestBlock({
     new Map(),
   );
 
-  const questions = useMemo(
-    () =>
-      category === "assimilation"
-        ? generateAssimilationTest(letters)
-        : generateLetterGroupTest(letters, category),
+  const questions = useMemo(() => {
+    if (category === "all") return generateMixedAlphabetTest(letters);
+    if (category === "assimilation") return generateAssimilationTest(letters);
+    return generateLetterGroupTest(letters, category);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [letters, category, round],
-  );
+  }, [letters, category, round]);
 
   const resetPerLetter = () => {
     perLetterRef.current = new Map();

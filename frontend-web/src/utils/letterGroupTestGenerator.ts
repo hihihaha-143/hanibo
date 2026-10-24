@@ -14,6 +14,8 @@ const CATEGORY_LABEL: Record<AlphabetCategory, string> = {
   vowel: "гласных",
   consonant: "согласных",
   diphthong: "дифтонгов",
+  assimilation: "ассимиляции",
+  all: "всех",
 };
 
 type LetterQuestionType =
@@ -199,13 +201,38 @@ function buildMatchQuestion(
 
 // ---------- основной генератор ----------
 
+export interface GenerateLetterGroupTestOptions {
+  /**
+   * Если задан — эта буква обязательно попадёт в выборку,
+   * остальные добираются случайно из пула.
+   */
+  forcedLetterId?: number;
+}
+
 export function generateLetterGroupTest(
   letters: AlphabetLetter[],
   category: AlphabetCategory,
+  options: GenerateLetterGroupTestOptions = {},
 ): TestQuestion[] {
   if (letters.length === 0) return [];
 
-  const selectedLetters = pickRandom(letters, SELECTED_LETTERS_COUNT);
+  const { forcedLetterId } = options;
+
+  let selectedLetters: AlphabetLetter[];
+
+  if (forcedLetterId != null) {
+    const forced = letters.find((l) => l.id === forcedLetterId);
+    if (forced) {
+      const rest = letters.filter((l) => l.id !== forcedLetterId);
+      const extra = pickRandom(rest, SELECTED_LETTERS_COUNT - 1);
+      selectedLetters = [forced, ...extra];
+    } else {
+      selectedLetters = pickRandom(letters, SELECTED_LETTERS_COUNT);
+    }
+  } else {
+    selectedLetters = pickRandom(letters, SELECTED_LETTERS_COUNT);
+  }
+
   const questions: TestQuestion[] = [];
 
   for (const letter of selectedLetters) {

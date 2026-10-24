@@ -8,6 +8,7 @@ const VALID_CATEGORIES: AlphabetCategory[] = [
   "consonant",
   "diphthong",
   "assimilation",
+  "all",
 ];
 
 function isCategory(value: string | undefined): value is AlphabetCategory {
@@ -43,7 +44,10 @@ export default function AlphabetTestPage() {
     );
   }
 
-  const groupLetters = letters.filter((l) => l.category === category);
+  const groupLetters =
+    category === "all"
+      ? letters
+      : letters.filter((l) => l.category === category);
 
   if (groupLetters.length === 0) {
     return (

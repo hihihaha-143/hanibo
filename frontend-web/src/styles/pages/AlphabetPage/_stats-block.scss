@@ -1,0 +1,44 @@
+@use '../../abstracts' as *;
+
+.stats-block {
+  @include flex(column, flex-start, stretch, 24px);
+  width: 100%;
+
+  &__summary {
+    @include flex(column, flex-start, stretch, 12px);
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+  }
+
+  &__row {
+    @include flex(column, flex-start, stretch, 6px);
+  }
+
+  &__label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  &__all-button {
+    align-self: flex-start;
+    margin-top: 4px;
+  }
+
+  &__group {
+    @include flex(column, flex-start, stretch, 12px);
+  }
+
+  &__group-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  &__empty {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+  }
+}
