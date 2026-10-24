@@ -58,7 +58,8 @@ class AlphabetProgressController extends Controller
         ]);
 
         $isFirstTime = !$progress->exists;
-        $isMaxed = ($progress->score ?? 0) >= self::MAX_SCORE;
+        $scoreBefore = $progress->score ?? 0;
+        $isMaxed = $scoreBefore >= self::MAX_SCORE;
 
         // Начисляем награды
         $actualBlueberries = 0;
@@ -82,6 +83,10 @@ class AlphabetProgressController extends Controller
         );
         $progress->save();
 
+        // достигли ли максимума впервые в этом запросе
+        $reachedMax = $scoreBefore < self::MAX_SCORE
+            && $progress->score >= self::MAX_SCORE;
+
         return response()->json([
             'data' => [
                 'passed' => $passed,
@@ -94,6 +99,7 @@ class AlphabetProgressController extends Controller
                 'total_blueberries' => $user->blueberry,
                 'exp_earned' => $expEarned,
                 'total_exp' => $user->exp,
+                'reached_max' => $reachedMax,
             ],
         ]);
     }

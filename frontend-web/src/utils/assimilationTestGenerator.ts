@@ -3,6 +3,7 @@
 import type { AlphabetLetter } from "../api/alphabet";
 import type { TestQuestion } from "./test";
 import { shuffle } from "./test";
+import { pickPrioritizedLetters } from "./letterGroupTestGenerator";
 
 const SELECTED_COUNT = 5;
 const MIN_QUESTIONS_PER_ITEM = 1;
@@ -55,14 +56,12 @@ export function generateAssimilationTest(
 ): TestQuestion[] {
   if (letters.length === 0) return [];
 
-  const selected = pickRandom(letters, SELECTED_COUNT);
+  const selected = pickPrioritizedLetters(letters, SELECTED_COUNT);
   const questions: TestQuestion[] = [];
 
   for (const item of selected) {
     const count = randomInt(MIN_QUESTIONS_PER_ITEM, MAX_QUESTIONS_PER_ITEM);
 
-    // на одну запись делаем count вопросов одного типа choose
-    // (все вопросы разные по id, но правильный ответ один и тот же)
     for (let i = 0; i < count; i++) {
       const q = buildChooseQuestion(item, letters);
       if (q) questions.push(q);

@@ -99,12 +99,17 @@ class AlphabetGroupProgressController extends Controller
                     'letter_id' => $letter->id,
                 ]);
 
+                $scoreBefore = $progress->score ?? 0;
+
                 $progress->attempts = ($progress->attempts ?? 0) + 1;
                 $progress->score = min(
                     self::MAX_SCORE,
-                    ($progress->score ?? 0) + $scoreAdded,
+                    $scoreBefore + $scoreAdded,
                 );
                 $progress->save();
+
+                $reachedMax = $scoreBefore < self::MAX_SCORE
+                    && $progress->score >= self::MAX_SCORE;
 
                 $lettersResult[] = [
                     'letter_id' => $letter->id,
@@ -112,11 +117,14 @@ class AlphabetGroupProgressController extends Controller
                     'score' => $progress->score,
                     'attempts' => $progress->attempts,
                     'max_score' => self::MAX_SCORE,
+                    'reached_max' => $reachedMax,
                 ];
             }
         });
 
         $user->refresh();
+
+        $anyReachedMax = collect($lettersResult)->contains('reached_max', true);
 
         return response()->json([
             'data' => [
@@ -127,6 +135,7 @@ class AlphabetGroupProgressController extends Controller
                 'exp_earned' => $expEarned,
                 'total_exp' => $user->exp,
                 'letters' => $lettersResult,
+                'any_reached_max' => $anyReachedMax,
             ],
         ]);
     }

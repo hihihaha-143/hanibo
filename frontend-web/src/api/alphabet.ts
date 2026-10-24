@@ -62,6 +62,7 @@ export interface SubmitProgressResult {
   total_blueberries: number;
   exp_earned: number;
   total_exp: number;
+  reached_max: boolean;
 }
 
 interface SubmitProgressResponse {
@@ -88,6 +89,15 @@ export interface GroupLetterInput {
   total: number;
 }
 
+export interface GroupLetterResult {
+  letter_id: number;
+  score_added: number;
+  score: number;
+  attempts: number;
+  max_score: number;
+  reached_max: boolean;
+}
+
 export interface SubmitGroupProgressResult {
   passed: boolean;
   percent: number;
@@ -95,13 +105,8 @@ export interface SubmitGroupProgressResult {
   total_blueberries: number;
   exp_earned: number;
   total_exp: number;
-  letters: Array<{
-    letter_id: number;
-    score_added: number;
-    score: number;
-    attempts: number;
-    max_score: number;
-  }>;
+  letters: GroupLetterResult[];
+  any_reached_max: boolean;
 }
 
 interface SubmitGroupProgressResponse {

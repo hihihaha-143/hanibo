@@ -53,6 +53,46 @@ function pickDistractors(
   return pickRandom(filtered, count);
 }
 
+/**
+ * Приоритетная выборка записей для теста:
+ * 1) «в процессе» (0 < score < max_score), отсортированы по score по убыванию
+ * 2) «не начато» (score = 0), случайно
+ * 3) «изучено» (score = max_score), случайно — только если не хватило
+ * Если все изучены — просто случайные.
+ */
+export function pickPrioritizedLetters(
+  letters: AlphabetLetter[],
+  count: number,
+): AlphabetLetter[] {
+  if (letters.length === 0) return [];
+
+  const inProgress = letters
+    .filter(
+      (l) => l.progress.score > 0 && l.progress.score < l.progress.max_score,
+    )
+    .sort((a, b) => b.progress.score - a.progress.score);
+
+  const notStarted = shuffle(letters.filter((l) => l.progress.score === 0));
+
+  const mastered = shuffle(
+    letters.filter((l) => l.progress.score >= l.progress.max_score),
+  );
+
+  const result: AlphabetLetter[] = [];
+
+  for (const item of [...inProgress, ...notStarted, ...mastered]) {
+    if (result.length >= count) break;
+    result.push(item);
+  }
+
+  // на случай, если во всех группах пусто (не должно случиться) — рандом
+  if (result.length === 0) {
+    return pickRandom(letters, count);
+  }
+
+  return result;
+}
+
 // ---------- генераторы одного вопроса по букве ----------
 
 function buildChooseSymbolToRoman(
@@ -204,7 +244,7 @@ function buildMatchQuestion(
 export interface GenerateLetterGroupTestOptions {
   /**
    * Если задан — эта буква обязательно попадёт в выборку,
-   * остальные добираются случайно из пула.
+   * остальные добираются по приоритету.
    */
   forcedLetterId?: number;
 }
@@ -224,13 +264,13 @@ export function generateLetterGroupTest(
     const forced = letters.find((l) => l.id === forcedLetterId);
     if (forced) {
       const rest = letters.filter((l) => l.id !== forcedLetterId);
-      const extra = pickRandom(rest, SELECTED_LETTERS_COUNT - 1);
+      const extra = pickPrioritizedLetters(rest, SELECTED_LETTERS_COUNT - 1);
       selectedLetters = [forced, ...extra];
     } else {
-      selectedLetters = pickRandom(letters, SELECTED_LETTERS_COUNT);
+      selectedLetters = pickPrioritizedLetters(letters, SELECTED_LETTERS_COUNT);
     }
   } else {
-    selectedLetters = pickRandom(letters, SELECTED_LETTERS_COUNT);
+    selectedLetters = pickPrioritizedLetters(letters, SELECTED_LETTERS_COUNT);
   }
 
   const questions: TestQuestion[] = [];

@@ -8,6 +8,7 @@ import Test from "../../ItemPage/LessonView/Test/Test";
 import LetterTestResult from "./LetterTestResult";
 import LetterScoreToast from "./LetterScoreToast";
 import { useAuth } from "../../../context/useAuth";
+import { fireConfetti } from "../../../lib/confetti";
 
 interface LetterTestBlockProps {
   letter: AlphabetLetter;
@@ -68,6 +69,10 @@ export default function LetterTestBlock({
         attempts: result.attempts,
         max_score: result.max_score,
       });
+
+      if (result.reached_max) {
+        fireConfetti();
+      }
 
       if (
         result.score_added > 0 ||

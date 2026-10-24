@@ -15,6 +15,7 @@ import Test from "../../ItemPage/LessonView/Test/Test";
 import TestResult from "../../ItemPage/LessonView/Test/TestResult";
 import LetterScoreToast, { type LetterScoreItem } from "./LetterScoreToast";
 import { useAuth } from "../../../context/useAuth";
+import { fireConfetti } from "../../../lib/confetti";
 
 interface LetterGroupTestBlockProps {
   letters: AlphabetLetter[];
@@ -112,6 +113,10 @@ export default function LetterGroupTestBlock({
       );
 
       await refreshUser();
+
+      if (result.any_reached_max) {
+        fireConfetti();
+      }
 
       if (
         result.exp_earned > 0 ||
