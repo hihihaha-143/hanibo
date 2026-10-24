@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Volume2 } from "lucide-react";
-import { spring } from "../../../lib/motion"; // <--- на уровень выше
-import type { AlphabetLetter, AlphabetProgress } from "../../../api/alphabet"; // <--- на уровень выше
+import { spring } from "../../../lib/motion";
+import type { AlphabetLetter, AlphabetProgress } from "../../../api/alphabet";
 import LetterWritingBlock from "./LetterWritingBlock";
 import LetterSoundBlock from "./LetterSoundBlock";
 import LetterFamilyBlock from "./LetterFamilyBlock";
 import LetterConfusionBlock from "./LetterConfusionBlock";
-import LetterTestBlock from "../Test/LetterTestBlock"; // <--- переехал в Test/
+import LetterTestBlock from "../Test/LetterTestBlock";
 
 interface LetterModalBlockProps {
   letter: AlphabetLetter | null;
@@ -64,6 +64,8 @@ export default function LetterModalBlock({
       document.body.style.overflow = "";
     };
   }, [letter, hasPrev, hasNext, onClose, onPrev, onNext, view]);
+
+  const isAssimilation = letter?.category === "assimilation";
 
   return createPortal(
     <AnimatePresence>
@@ -165,7 +167,9 @@ export default function LetterModalBlock({
                     onSpeak={speak}
                   />
 
-                  <LetterWritingBlock symbol={letter.symbol} />
+                  {!isAssimilation && (
+                    <LetterWritingBlock symbol={letter.symbol} />
+                  )}
 
                   <LetterFamilyBlock
                     symbols={letter.family_symbols}

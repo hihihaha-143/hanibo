@@ -8,6 +8,7 @@ import type {
 } from "../../../api/alphabet";
 import { submitAlphabetGroupProgress } from "../../../api/alphabet";
 import { generateLetterGroupTest } from "../../../utils/letterGroupTestGenerator";
+import { generateAssimilationTest } from "../../../utils/assimilationTestGenerator";
 import type { TestQuestion } from "../../../utils/test";
 import Test from "../../ItemPage/LessonView/Test/Test";
 import TestResult from "../../ItemPage/LessonView/Test/TestResult";
@@ -39,6 +40,7 @@ const CATEGORY_TITLE: Record<AlphabetCategory, string> = {
   vowel: "гласные",
   consonant: "согласные",
   diphthong: "дифтонги",
+  assimilation: "ассимиляция",
 };
 
 export default function LetterGroupTestBlock({
@@ -56,7 +58,10 @@ export default function LetterGroupTestBlock({
   );
 
   const questions = useMemo(
-    () => generateLetterGroupTest(letters, category),
+    () =>
+      category === "assimilation"
+        ? generateAssimilationTest(letters)
+        : generateLetterGroupTest(letters, category),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [letters, category, round],
   );

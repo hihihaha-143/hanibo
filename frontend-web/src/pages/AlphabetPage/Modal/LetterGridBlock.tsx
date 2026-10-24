@@ -1,10 +1,8 @@
-// frontend-web/src/pages/AlphabetPage/LetterGridBlock.tsx
-
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { spring } from "../../../lib/motion";
 import type { AlphabetLetter, AlphabetProgress } from "../../../api/alphabet";
-import LetterModalBlock from "..//Modal/LetterModalBlock"; // <--- импорт из папки Modal
+import LetterModalBlock from "../Modal/LetterModalBlock";
 
 interface LetterGridBlockProps {
   letters: AlphabetLetter[];
@@ -65,10 +63,15 @@ export default function LetterGridBlock({
     );
   };
 
+  const isAssimilation = letters.some((l) => l.category === "assimilation");
+  const gridClassName = `letter-grid-block${
+    isAssimilation ? " letter-grid-block--assimilation" : ""
+  }`;
+
   return (
     <>
       <motion.div
-        className="letter-grid-block"
+        className={gridClassName}
         variants={containerVariants}
         initial="hidden"
         animate="visible"

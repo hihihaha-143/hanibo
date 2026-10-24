@@ -1,7 +1,5 @@
-// frontend-web/src/pages/AlphabetPage/AlphabetPage.tsx
-
 import { useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom"; // <--- добавили useNavigate
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { spring } from "../../lib/motion";
 import ChipsBlock from "../../components/ChipsBlock/ChipsBlock";
@@ -32,7 +30,7 @@ function readStoredTab(): AlphabetTabId {
 
 export default function AlphabetPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate(); // <--- добавили
+  const navigate = useNavigate();
   const { letters, loading, error } = useAlphabet();
   const [showProgress, setShowProgress] = useState(false);
 
@@ -76,7 +74,9 @@ export default function AlphabetPage() {
           <DiphthongsBlock letters={letters} showProgress={showProgress} />
         );
       case "assimilation":
-        return <AssimilationBlock />;
+        return (
+          <AssimilationBlock letters={letters} showProgress={showProgress} />
+        );
       case "stats":
         return <StatsBlock />;
     }
@@ -85,13 +85,15 @@ export default function AlphabetPage() {
   const isLetterTab =
     activeTab === "vowels" ||
     activeTab === "consonants" ||
-    activeTab === "diphthongs";
+    activeTab === "diphthongs" ||
+    activeTab === "assimilation";
 
   // маппинг табов в категории API
   const categoryMap: Record<string, string> = {
     vowels: "vowel",
     consonants: "consonant",
     diphthongs: "diphthong",
+    assimilation: "assimilation",
   };
 
   return (
@@ -107,10 +109,9 @@ export default function AlphabetPage() {
         {isLetterTab && (
           <div className="alphabet-page__controls">
             {" "}
-            {/* <--- обертка для кнопок */}
             <motion.button
               type="button"
-              className="btn btn--accent" // <--- добавили кнопку теста
+              className="btn btn--accent"
               onClick={() =>
                 navigate(`/alphabet/test/${categoryMap[activeTab]}`)
               }

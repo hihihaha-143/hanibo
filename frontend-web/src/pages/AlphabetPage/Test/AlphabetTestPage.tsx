@@ -7,6 +7,7 @@ const VALID_CATEGORIES: AlphabetCategory[] = [
   "vowel",
   "consonant",
   "diphthong",
+  "assimilation",
 ];
 
 function isCategory(value: string | undefined): value is AlphabetCategory {

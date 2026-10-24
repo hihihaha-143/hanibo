@@ -1,6 +1,10 @@
 import { apiClient } from "./client";
 
-export type AlphabetCategory = "vowel" | "diphthong" | "consonant";
+export type AlphabetCategory =
+  | "vowel"
+  | "diphthong"
+  | "consonant"
+  | "assimilation";
 
 export interface AlphabetExample {
   id: number;

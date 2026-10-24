@@ -15,7 +15,7 @@ class AlphabetGroupProgressController extends Controller
     public function store(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'category' => ['required', 'string', 'in:vowel,consonant,diphthong'],
+            'category' => ['required', 'string', 'in:vowel,consonant,diphthong,assimilation'],
             'letters' => ['required', 'array', 'min:1'],
             'letters.*.letter_id' => ['required', 'integer', 'exists:alphabet_letters,id'],
             'letters.*.correct' => ['required', 'integer', 'min:0'],

@@ -42,7 +42,6 @@ export default function LetterScoreToast({
       transition={spring.bouncy}
     >
       <div className="letter-score-toast__content">
-        <span className="letter-score-toast__title">Буква {letterSymbol}</span>
         <div className="letter-score-toast__rewards">
           {scoreAdded > 0 && (
             <div className="letter-score-toast__reward">
