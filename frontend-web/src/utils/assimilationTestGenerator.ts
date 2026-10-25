@@ -10,6 +10,10 @@ const MIN_QUESTIONS_PER_ITEM = 1;
 const MAX_QUESTIONS_PER_ITEM = 3;
 const VARIANTS_COUNT = 4;
 
+type AssimilationQuestionKind = "choose" | "audio" | "true-false";
+
+const ALL_KINDS: AssimilationQuestionKind[] = ["choose", "audio", "true-false"];
+
 function pickRandom<T>(arr: T[], count: number): T[] {
   return shuffle(arr).slice(0, count);
 }
@@ -75,6 +79,39 @@ function buildAudioQuestion(
   };
 }
 
+function buildTrueFalseQuestion(item: AlphabetLetter): TestQuestion | null {
+  // если написание совпадает с чтением — «неверный» вариант невозможен
+  if (item.symbol === item.romanization) return null;
+
+  const isCorrectPair = Math.random() < 0.5;
+  const shown = isCorrectPair ? item.romanization : item.symbol;
+
+  return {
+    id: `assimilation-tf-${item.id}-${Date.now()}-${Math.random()}`,
+    instruction: "Верно или неверно?",
+    type: "true-false",
+    prompt: `${item.symbol} читается как ${shown}`,
+    promptAudio: item.symbol,
+    correct: isCorrectPair,
+    letterId: item.id,
+  };
+}
+
+function buildQuestion(
+  kind: AssimilationQuestionKind,
+  item: AlphabetLetter,
+  pool: AlphabetLetter[],
+): TestQuestion | null {
+  switch (kind) {
+    case "choose":
+      return buildChooseQuestion(item, pool);
+    case "audio":
+      return buildAudioQuestion(item, pool);
+    case "true-false":
+      return buildTrueFalseQuestion(item);
+  }
+}
+
 export function generateAssimilationTest(
   letters: AlphabetLetter[],
 ): TestQuestion[] {
@@ -85,13 +122,10 @@ export function generateAssimilationTest(
 
   for (const item of selected) {
     const count = randomInt(MIN_QUESTIONS_PER_ITEM, MAX_QUESTIONS_PER_ITEM);
+    const kinds = pickRandom(ALL_KINDS, count);
 
-    for (let i = 0; i < count; i++) {
-      // на каждый вопрос случайно: обычный выбор или аудио
-      const useAudio = Math.random() < 0.5;
-      const q = useAudio
-        ? buildAudioQuestion(item, letters)
-        : buildChooseQuestion(item, letters);
+    for (const kind of kinds) {
+      const q = buildQuestion(kind, item, letters);
       if (q) questions.push(q);
     }
   }
