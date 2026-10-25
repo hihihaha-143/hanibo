@@ -100,22 +100,38 @@ class AlphabetGroupProgressController extends Controller
                 ]);
 
                 $scoreBefore = $progress->score ?? 0;
+                $mistakesBefore = $progress->mistakes ?? 0;
 
                 $progress->attempts = ($progress->attempts ?? 0) + 1;
                 $progress->score = min(
                     self::MAX_SCORE,
                     $scoreBefore + $scoreAdded,
                 );
+
+                // --- Ошибки: накапливаем, затухают при идеальном ответе ---
+                if ($correct === $total) {
+                    $progress->mistakes = max(0, $mistakesBefore - 1);
+                } else {
+                    $progress->mistakes = $mistakesBefore + ($total - $correct);
+                }
+
                 $progress->save();
 
                 $reachedMax = $scoreBefore < self::MAX_SCORE
                     && $progress->score >= self::MAX_SCORE;
+
+                // при достижении максимума — сбрасываем ошибки
+                if ($reachedMax) {
+                    $progress->mistakes = 0;
+                    $progress->save();
+                }
 
                 $lettersResult[] = [
                     'letter_id' => $letter->id,
                     'score_added' => $scoreAdded,
                     'score' => $progress->score,
                     'attempts' => $progress->attempts,
+                    'mistakes' => $progress->mistakes,
                     'max_score' => self::MAX_SCORE,
                     'reached_max' => $reachedMax,
                 ];

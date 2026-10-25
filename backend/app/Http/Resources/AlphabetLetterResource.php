@@ -29,6 +29,7 @@ class AlphabetLetterResource extends JsonResource
                 return [
                     'score' => $p?->score ?? 0,
                     'attempts' => $p?->attempts ?? 0,
+                    'mistakes' => $p?->mistakes ?? 0,
                     'max_score' => 10,
                 ];
             }),

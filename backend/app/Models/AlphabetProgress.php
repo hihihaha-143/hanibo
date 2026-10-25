@@ -14,6 +14,7 @@ class AlphabetProgress extends Model
         'letter_id',
         'score',
         'attempts',
+        'mistakes',
     ];
 
     protected function casts(): array
@@ -21,6 +22,7 @@ class AlphabetProgress extends Model
         return [
             'score' => 'integer',
             'attempts' => 'integer',
+            'mistakes' => 'integer',
         ];
     }
 

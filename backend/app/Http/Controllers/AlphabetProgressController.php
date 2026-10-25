@@ -81,11 +81,29 @@ class AlphabetProgressController extends Controller
             self::MAX_SCORE,
             ($progress->score ?? 0) + $scoreAdded,
         );
+
+        // --- Ошибки: накапливаем, затухают при идеальном ответе ---
+        $mistakesBefore = $progress->mistakes ?? 0;
+
+        if ($correct === $data['total']) {
+            // идеальный ответ — затухание
+            $progress->mistakes = max(0, $mistakesBefore - 1);
+        } else {
+            // каждая ошибка добавляет 1
+            $progress->mistakes = $mistakesBefore + ($data['total'] - $correct);
+        }
+
         $progress->save();
 
         // достигли ли максимума впервые в этом запросе
         $reachedMax = $scoreBefore < self::MAX_SCORE
             && $progress->score >= self::MAX_SCORE;
+
+        // при достижении максимума — сбрасываем ошибки
+        if ($reachedMax) {
+            $progress->mistakes = 0;
+            $progress->save();
+        }
 
         return response()->json([
             'data' => [
@@ -94,6 +112,7 @@ class AlphabetProgressController extends Controller
                 'score_added' => $scoreAdded,
                 'score' => $progress->score,
                 'attempts' => $progress->attempts,
+                'mistakes' => $progress->mistakes,
                 'max_score' => self::MAX_SCORE,
                 'blueberries_earned' => $actualBlueberries,
                 'total_blueberries' => $user->blueberry,
