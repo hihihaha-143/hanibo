@@ -47,9 +47,16 @@ export default function SidebarBottom({ expanded }: SidebarBottomProps) {
                 {user.nickname.charAt(0).toUpperCase()}
               </span>
             )}
-            <span className="sidebar-bottom__user-nickname">
-              {user.nickname}
-            </span>
+            <div className="sidebar-bottom__user-text">
+              {user.selected_title && (
+                <span className="sidebar-bottom__user-title">
+                  {user.selected_title.title}
+                </span>
+              )}
+              <span className="sidebar-bottom__user-nickname">
+                {user.nickname}
+              </span>
+            </div>
           </div>
 
           <button

@@ -52,6 +52,26 @@ export async function getAlphabet(): Promise<AlphabetLetter[]> {
   return data.data;
 }
 
+export interface UnlockedAchievementTitle {
+  id: number;
+  code: string;
+  title: string;
+}
+
+export interface UnlockedAchievement {
+  id: number;
+  code: string;
+  title: string;
+  description: string | null;
+  icon: string | null;
+  image: string | null;
+  category_id: number;
+  is_hidden: boolean;
+  sort_order: number;
+  blueberry_reward: number;
+  bonus_title: UnlockedAchievementTitle | null;
+}
+
 export interface SubmitProgressResult {
   passed: boolean;
   percent: number;
@@ -65,6 +85,7 @@ export interface SubmitProgressResult {
   exp_earned: number;
   total_exp: number;
   reached_max: boolean;
+  unlocked_achievements: UnlockedAchievement[];
 }
 
 interface SubmitProgressResponse {
@@ -110,6 +131,7 @@ export interface SubmitGroupProgressResult {
   total_exp: number;
   letters: GroupLetterResult[];
   any_reached_max: boolean;
+  unlocked_achievements: UnlockedAchievement[];
 }
 
 interface SubmitGroupProgressResponse {

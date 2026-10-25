@@ -22,6 +22,13 @@ class UserResource extends JsonResource
             'streak_current' => $this->streak_current,
             'streak_best' => $this->streak_best,
             'streak_last_date' => $this->streak_last_date?->toIso8601String(),
+            'selected_title' => $this->selected_title_id
+                ? [
+                    'id' => $this->selectedTitle?->id,
+                    'code' => $this->selectedTitle?->code,
+                    'title' => $this->selectedTitle?->title,
+                ]
+                : null,
             'created_at' => $this->created_at?->toIso8601String(),
         ];
     }

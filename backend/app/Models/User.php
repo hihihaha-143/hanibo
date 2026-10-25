@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Achievement\Achievement;
+use App\Models\Achievement\Title;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -19,6 +23,7 @@ class User extends Authenticatable
         'role',
         'language_level',
         'avatar',
+        'selected_title_id',
         'strawberry',
         'blueberry',
         'exp',
@@ -49,5 +54,30 @@ class User extends Authenticatable
     public function alphabetProgress(): HasMany
     {
         return $this->hasMany(AlphabetProgress::class);
+    }
+
+    public function achievements(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Achievement::class,
+            'user_achievements',
+        )
+            ->withPivot('unlocked_at')
+            ->withTimestamps();
+    }
+
+    public function titles(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Title::class,
+            'user_titles',
+        )
+            ->withPivot('unlocked_at')
+            ->withTimestamps();
+    }
+
+    public function selectedTitle(): BelongsTo
+    {
+        return $this->belongsTo(Title::class, 'selected_title_id');
     }
 }

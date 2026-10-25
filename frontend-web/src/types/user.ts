@@ -2,6 +2,12 @@ export type UserRole = "user" | "admin";
 
 export type LanguageLevel = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
 
+export interface UserTitle {
+  id: number;
+  code: string;
+  title: string;
+}
+
 export interface User {
   id: number;
   nickname: string;
@@ -9,6 +15,7 @@ export interface User {
   role: UserRole;
   language_level: LanguageLevel | null;
   avatar: string | null;
+  selected_title: UserTitle | null;
   strawberry: number;
   blueberry: number;
   exp: number;

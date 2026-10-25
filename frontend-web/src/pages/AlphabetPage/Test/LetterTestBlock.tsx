@@ -1,12 +1,17 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { spring } from "../../../lib/motion";
-import type { AlphabetLetter, AlphabetProgress } from "../../../api/alphabet";
+import type {
+  AlphabetLetter,
+  AlphabetProgress,
+  UnlockedAchievement,
+} from "../../../api/alphabet";
 import { submitAlphabetProgress } from "../../../api/alphabet";
 import { generateLetterTest } from "../../../utils/letterTestGenerator";
 import Test from "../../ItemPage/LessonView/Test/Test";
 import LetterTestResult from "./LetterTestResult";
 import LetterScoreToast from "./LetterScoreToast";
+import AchievementUnlockModal from "../../../components/AchievementUnlockModal/AchievementUnlockModal";
 import { useAuth } from "../../../context/useAuth";
 import { fireConfetti } from "../../../lib/confetti";
 
@@ -42,6 +47,7 @@ export default function LetterTestBlock({
   const [round, setRound] = useState(0);
   const [finished, setFinished] = useState<FinishResult | null>(null);
   const [toast, setToast] = useState<ToastState | null>(null);
+  const [achievements, setAchievements] = useState<UnlockedAchievement[]>([]);
 
   const questions = useMemo(
     () => generateLetterTest(letter, allLetters),
@@ -60,7 +66,6 @@ export default function LetterTestBlock({
     try {
       const result = await submitAlphabetProgress(letter.id, correct, total);
 
-      // Обновляем данные юзера (черника, опыт)
       await refreshUser();
 
       onProgressUpdated?.(letter.id, {
@@ -72,6 +77,11 @@ export default function LetterTestBlock({
 
       if (result.reached_max) {
         fireConfetti();
+      }
+
+      if (result.unlocked_achievements.length > 0) {
+        fireConfetti();
+        setAchievements(result.unlocked_achievements);
       }
 
       if (
@@ -93,6 +103,7 @@ export default function LetterTestBlock({
   const handleRepeat = () => {
     setFinished(null);
     setToast(null);
+    setAchievements([]);
     setRound((r) => r + 1);
   };
 
@@ -148,6 +159,11 @@ export default function LetterTestBlock({
           />
         )}
       </AnimatePresence>
+
+      <AchievementUnlockModal
+        achievements={achievements}
+        onClose={() => setAchievements([])}
+      />
     </div>
   );
 }

@@ -68,11 +68,27 @@
     }
   }
 
+  &__user-text {
+    @include flex(column, center, flex-start, 0.1rem);
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__user-title {
+    @include truncate(1);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--color-accent);
+    text-transform: uppercase;
+  }
+
   &__user-nickname {
     @include truncate(1);
     color: var(--color-on-primary);
     font-weight: 700;
     font-size: 0.9375rem;
+    max-width: 100%;
   }
 }
 
@@ -120,7 +136,7 @@
 
     &::before {
       transform: translateX(1.4em);
-      background-color: var(--color-bg);
+      background-color: var(--bg);
     }
   }
 

@@ -26,6 +26,7 @@ class AuthController extends Controller
         ]);
 
         $user->refresh();
+        $user->load('selectedTitle');
 
         $token = $user->createToken('spa')->plainTextToken;
 
@@ -50,6 +51,7 @@ class AuthController extends Controller
 
         /** @var User $user */
         $user = Auth::user();
+        $user->load('selectedTitle');
         $token = $user->createToken('spa')->plainTextToken;
 
         return response()->json([
@@ -69,8 +71,11 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
+        $user = $request->user();
+        $user->load('selectedTitle');
+
         return response()->json([
-            'user' => new UserResource($request->user()),
+            'user' => new UserResource($user),
         ]);
     }
 }

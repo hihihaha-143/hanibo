@@ -5,6 +5,7 @@ import type {
   AlphabetCategory,
   AlphabetLetter,
   GroupLetterInput,
+  UnlockedAchievement,
 } from "../../../api/alphabet";
 import { submitAlphabetGroupProgress } from "../../../api/alphabet";
 import { generateLetterGroupTest } from "../../../utils/letterGroupTestGenerator";
@@ -14,6 +15,7 @@ import type { TestQuestion } from "../../../utils/test";
 import Test from "../../ItemPage/LessonView/Test/Test";
 import TestResult from "../../ItemPage/LessonView/Test/TestResult";
 import LetterScoreToast, { type LetterScoreItem } from "./LetterScoreToast";
+import AchievementUnlockModal from "../../../components/AchievementUnlockModal/AchievementUnlockModal";
 import { useAuth } from "../../../context/useAuth";
 import { fireConfetti } from "../../../lib/confetti";
 
@@ -54,6 +56,7 @@ export default function LetterGroupTestBlock({
   const [round, setRound] = useState(0);
   const [finished, setFinished] = useState<FinishResult | null>(null);
   const [toast, setToast] = useState<ToastState | null>(null);
+  const [achievements, setAchievements] = useState<UnlockedAchievement[]>([]);
 
   const perLetterRef = useRef<Map<number, { correct: number; total: number }>>(
     new Map(),
@@ -117,6 +120,11 @@ export default function LetterGroupTestBlock({
         fireConfetti();
       }
 
+      if (result.unlocked_achievements.length > 0) {
+        fireConfetti();
+        setAchievements(result.unlocked_achievements);
+      }
+
       if (
         result.exp_earned > 0 ||
         result.blueberries_earned > 0 ||
@@ -146,6 +154,7 @@ export default function LetterGroupTestBlock({
   const handleRepeat = () => {
     setFinished(null);
     setToast(null);
+    setAchievements([]);
     resetPerLetter();
     setRound((r) => r + 1);
   };
@@ -204,6 +213,11 @@ export default function LetterGroupTestBlock({
           />
         )}
       </AnimatePresence>
+
+      <AchievementUnlockModal
+        achievements={achievements}
+        onClose={() => setAchievements([])}
+      />
     </div>
   );
 }
