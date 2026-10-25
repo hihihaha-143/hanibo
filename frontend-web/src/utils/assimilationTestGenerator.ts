@@ -51,6 +51,30 @@ function buildChooseQuestion(
   };
 }
 
+function buildAudioQuestion(
+  item: AlphabetLetter,
+  pool: AlphabetLetter[],
+): TestQuestion | null {
+  const distractors = pickDistractors(pool, item, VARIANTS_COUNT - 1);
+  if (distractors.length < VARIANTS_COUNT - 1) return null;
+
+  const variants = shuffle([item.romanization, ...distractors]);
+  const correctIndex = variants.indexOf(item.romanization);
+
+  return {
+    id: `assimilation-audio-${item.id}-${Date.now()}-${Math.random()}`,
+    instruction: "Прослушайте и выберите правильное чтение",
+    type: "audio-choose",
+    audioText: item.romanization,
+    mode: "hangul",
+    promptHangul: item.symbol,
+    promptTranslation: item.romanization,
+    variants,
+    correctIndices: [correctIndex],
+    letterId: item.id,
+  };
+}
+
 export function generateAssimilationTest(
   letters: AlphabetLetter[],
 ): TestQuestion[] {
@@ -63,7 +87,11 @@ export function generateAssimilationTest(
     const count = randomInt(MIN_QUESTIONS_PER_ITEM, MAX_QUESTIONS_PER_ITEM);
 
     for (let i = 0; i < count; i++) {
-      const q = buildChooseQuestion(item, letters);
+      // на каждый вопрос случайно: обычный выбор или аудио
+      const useAudio = Math.random() < 0.5;
+      const q = useAudio
+        ? buildAudioQuestion(item, letters)
+        : buildChooseQuestion(item, letters);
       if (q) questions.push(q);
     }
   }
