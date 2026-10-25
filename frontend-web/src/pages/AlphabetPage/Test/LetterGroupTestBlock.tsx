@@ -34,7 +34,6 @@ interface ToastState {
   scoreAdded: number;
   blueberriesEarned: number;
   expEarned: number;
-  letterSymbol: string;
   letterScores: LetterScoreItem[];
 }
 
@@ -136,7 +135,6 @@ export default function LetterGroupTestBlock({
           scoreAdded: 0,
           blueberriesEarned: result.blueberries_earned,
           expEarned: result.exp_earned,
-          letterSymbol: `— ${CATEGORY_TITLE[category]}`,
           letterScores,
         });
       }
@@ -201,7 +199,6 @@ export default function LetterGroupTestBlock({
             scoreAdded={toast.scoreAdded}
             blueberriesEarned={toast.blueberriesEarned}
             expEarned={toast.expEarned}
-            letterSymbol={toast.letterSymbol}
             letterScores={toast.letterScores}
             onClose={() => setToast(null)}
           />

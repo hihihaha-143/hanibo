@@ -13,7 +13,6 @@ interface LetterScoreToastProps {
   scoreAdded: number;
   blueberriesEarned: number;
   expEarned: number;
-  letterSymbol: string;
   letterScores?: LetterScoreItem[];
   onClose: () => void;
 }
@@ -22,7 +21,6 @@ export default function LetterScoreToast({
   scoreAdded,
   blueberriesEarned,
   expEarned,
-  letterSymbol,
   letterScores,
   onClose,
 }: LetterScoreToastProps) {

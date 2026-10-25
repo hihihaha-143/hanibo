@@ -29,7 +29,6 @@ interface ToastState {
   scoreAdded: number;
   blueberriesEarned: number;
   expEarned: number;
-  letterSymbol: string;
 }
 
 export default function LetterTestBlock({
@@ -67,6 +66,7 @@ export default function LetterTestBlock({
       onProgressUpdated?.(letter.id, {
         score: result.score,
         attempts: result.attempts,
+        mistakes: result.mistakes,
         max_score: result.max_score,
       });
 
@@ -83,7 +83,6 @@ export default function LetterTestBlock({
           scoreAdded: result.score_added,
           blueberriesEarned: result.blueberries_earned,
           expEarned: result.exp_earned,
-          letterSymbol: letter.symbol,
         });
       }
     } catch {
@@ -145,7 +144,6 @@ export default function LetterTestBlock({
             scoreAdded={toast.scoreAdded}
             blueberriesEarned={toast.blueberriesEarned}
             expEarned={toast.expEarned}
-            letterSymbol={toast.letterSymbol}
             onClose={() => setToast(null)}
           />
         )}

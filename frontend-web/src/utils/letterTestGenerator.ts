@@ -16,6 +16,8 @@ const CATEGORY_LABEL: Record<AlphabetLetter["category"], string> = {
   vowel: "гласная",
   diphthong: "дифтонг",
   consonant: "согласная",
+  assimilation: "ассимиляция",
+  all: "все",
 };
 
 /**

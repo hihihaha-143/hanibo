@@ -154,7 +154,7 @@ export default function LibraryPage() {
       <LibraryRecentBlock items={recentItems} />
 
       <div className="library-page__grid-wrap">
-        <LibraryShelfBlock />
+        <LibraryShelfBlock view="grid" />
         <LibraryGridBlock
           items={sorted}
           loading={loading}

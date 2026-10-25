@@ -22,6 +22,7 @@ export interface AlphabetConfusion {
 export interface AlphabetProgress {
   score: number;
   attempts: number;
+  mistakes: number;
   max_score: number;
 }
 
@@ -57,6 +58,7 @@ export interface SubmitProgressResult {
   score_added: number;
   score: number;
   attempts: number;
+  mistakes: number;
   max_score: number;
   blueberries_earned: number;
   total_blueberries: number;
@@ -94,6 +96,7 @@ export interface GroupLetterResult {
   score_added: number;
   score: number;
   attempts: number;
+  mistakes: number;
   max_score: number;
   reached_max: boolean;
 }

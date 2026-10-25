@@ -90,7 +90,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
     task.promise
       .then(async (doc) => {
         if (cancelled) {
-          doc.destroy();
+          task.destroy();
           return;
         }
         setPdf(doc);

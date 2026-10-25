@@ -2,6 +2,7 @@ import { Search, RotateCcw } from "lucide-react";
 import type { LibraryItemType } from "../../types/library";
 
 export type LibrarySort = "newest" | "title" | "year";
+export type LibraryView = "grid" | "list";
 
 interface LibraryToolbarBlockProps {
   query: string;

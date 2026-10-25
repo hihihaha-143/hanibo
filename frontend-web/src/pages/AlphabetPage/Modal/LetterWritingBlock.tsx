@@ -14,8 +14,6 @@ export default function LetterWritingBlock({
   const containerRef = useRef<HTMLDivElement>(null);
   const writerRef = useRef<ReturnType<typeof HangulWriter.create> | null>(null);
   const [showOutline, setShowOutline] = useState(true);
-  const [mistakes, setMistakes] = useState(0);
-  const [completed, setCompleted] = useState(false);
   const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
   const [quizKey, setQuizKey] = useState(0);
 
@@ -42,23 +40,19 @@ export default function LetterWritingBlock({
       padding: 12,
       showOutline,
       showHintAfterMisses: 2,
-      highlightOnHover: false,
       drawingWidth: 28,
       drawingColor: accentColor,
       leniency: 1.4,
     });
 
     writerRef.current = writer;
-    setMistakes(0);
-    setCompleted(false);
     setFeedback(null);
 
     writer.quiz({
       onCorrectStroke: () => showFeedback("correct"),
       onMistake: () => showFeedback("wrong"),
-      onComplete: (summary) => {
-        setCompleted(true);
-        setMistakes(summary.totalMistakes);
+      onComplete: () => {
+        // Опционально: показать финальный фидбек можно тут же
       },
     });
 

@@ -10,6 +10,8 @@ const SELECTED_LETTERS_COUNT = 5;
 const MIN_QUESTIONS_PER_LETTER = 1;
 const MAX_QUESTIONS_PER_LETTER = 3;
 
+const MISTAKES_WEIGHT = 3;
+
 const CATEGORY_LABEL: Record<AlphabetCategory, string> = {
   vowel: "гласных",
   consonant: "согласных",
@@ -54,8 +56,21 @@ function pickDistractors(
 }
 
 /**
+ * Вес «сложности» записи для приоритета в тесте:
+ * больше ошибок и меньше прогресс — выше приоритет.
+ * Изученные (score >= max_score) получают вес 0.
+ */
+function priorityWeight(letter: AlphabetLetter): number {
+  const { score, max_score, attempts, mistakes } = letter.progress;
+
+  if (score >= max_score) return 0;
+
+  return attempts * (max_score - score) + mistakes * MISTAKES_WEIGHT;
+}
+
+/**
  * Приоритетная выборка записей для теста:
- * 1) «в процессе» (0 < score < max_score), отсортированы по score по убыванию
+ * 1) «в процессе» (0 < score < max_score), отсортированы по весу сложности (по убыванию)
  * 2) «не начато» (score = 0), случайно
  * 3) «изучено» (score = max_score), случайно — только если не хватило
  * Если все изучены — просто случайные.
@@ -70,7 +85,7 @@ export function pickPrioritizedLetters(
     .filter(
       (l) => l.progress.score > 0 && l.progress.score < l.progress.max_score,
     )
-    .sort((a, b) => b.progress.score - a.progress.score);
+    .sort((a, b) => priorityWeight(b) - priorityWeight(a));
 
   const notStarted = shuffle(letters.filter((l) => l.progress.score === 0));
 
