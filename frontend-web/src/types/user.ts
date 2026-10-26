@@ -16,11 +16,17 @@ export interface User {
   language_level: LanguageLevel | null;
   avatar: string | null;
   selected_title: UserTitle | null;
+  timezone: string;
+  daily_exp_goal: number;
+  exp_today: number;
+  exp_today_date: string | null;
+  goal_reached: boolean;
   strawberry: number;
   blueberry: number;
   exp: number;
   streak_current: number;
   streak_best: number;
   streak_last_date: string | null;
+  streak_freezes: number;
   created_at: string;
 }
