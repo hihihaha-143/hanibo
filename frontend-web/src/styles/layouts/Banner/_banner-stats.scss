@@ -45,6 +45,16 @@
         color: var(--color-yellow);
       }
     }
+
+    &--frozen {
+      .banner-stats__icon svg {
+        color: #6ec6ff;
+      }
+
+      .banner-stats__value {
+        color: #8fd6ff;
+      }
+    }
   }
 
   &__icon {
@@ -111,7 +121,7 @@
     line-height: 1.3;
   }
 
-    &__tooltip-sub--freeze {
+  &__tooltip-sub--freeze {
     display: inline-flex;
     align-items: center;
     justify-content: center;

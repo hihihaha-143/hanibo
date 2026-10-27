@@ -1,13 +1,21 @@
 import { apiClient } from "./client";
 import type { User } from "../types/user";
 
+export interface RefreshDailyResult {
+  freeze_used: boolean;
+  freezes_used: number;
+  streak_reset: boolean;
+}
+
 interface AuthResponse {
   user: User;
   token: string;
+  refresh_daily: RefreshDailyResult;
 }
 
 interface MeResponse {
   user: User;
+  refresh_daily: RefreshDailyResult;
 }
 
 export async function register(payload: {
@@ -35,7 +43,7 @@ export async function logout(): Promise<void> {
   await apiClient.post("/auth/logout");
 }
 
-export async function me(): Promise<User> {
+export async function me(): Promise<MeResponse> {
   const { data } = await apiClient.get<MeResponse>("/auth/me");
-  return data.user;
+  return data;
 }

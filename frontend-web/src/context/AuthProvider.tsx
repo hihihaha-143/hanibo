@@ -7,6 +7,7 @@ import {
   type RegisterPayload,
 } from "./AuthContext";
 import * as authApi from "../api/auth";
+import type { RefreshDailyResult } from "../api/auth";
 
 const TOKEN_KEY = "hanibo_token";
 
@@ -17,6 +18,9 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshDaily, setRefreshDaily] = useState<RefreshDailyResult | null>(
+    null,
+  );
 
   useEffect(() => {
     const token = localStorage.getItem(TOKEN_KEY);
@@ -28,7 +32,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     authApi
       .me()
-      .then((u) => setUser(u))
+      .then(({ user: u, refresh_daily }) => {
+        setUser(u);
+        setRefreshDaily(refresh_daily);
+      })
       .catch(() => {
         localStorage.removeItem(TOKEN_KEY);
         setUser(null);
@@ -37,16 +44,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   const login = useCallback(async (payload: LoginPayload) => {
-    const { user: u, token } = await authApi.login(payload);
+    const { user: u, token, refresh_daily } = await authApi.login(payload);
     localStorage.setItem(TOKEN_KEY, token);
     setUser(u);
+    setRefreshDaily(refresh_daily);
     return u;
   }, []);
 
   const register = useCallback(async (payload: RegisterPayload) => {
-    const { user: u, token } = await authApi.register(payload);
+    const { user: u, token, refresh_daily } = await authApi.register(payload);
     localStorage.setItem(TOKEN_KEY, token);
     setUser(u);
+    setRefreshDaily(refresh_daily);
     return u;
   }, []);
 
@@ -56,18 +65,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
     } finally {
       localStorage.removeItem(TOKEN_KEY);
       setUser(null);
+      setRefreshDaily(null);
     }
   }, []);
 
-  // <--- Добавили refreshUser
   const refreshUser = useCallback(async () => {
     try {
-      const u = await authApi.me();
+      const { user: u, refresh_daily } = await authApi.me();
       setUser(u);
+      if (refresh_daily.freeze_used || refresh_daily.streak_reset) {
+        setRefreshDaily(refresh_daily);
+      }
     } catch {
-      // Если токен протух или сеть упала, можно разлогинить, но
-      // лучше просто проигнорировать, чтобы не выкидывать пользователя
+      // ignore
     }
+  }, []);
+
+  const clearRefreshDaily = useCallback(() => {
+    setRefreshDaily(null);
   }, []);
 
   const value = useMemo(
@@ -78,9 +93,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
       login,
       register,
       logout,
-      refreshUser, // <--- Добавили в контекст
+      refreshUser,
+      refreshDaily,
+      clearRefreshDaily,
     }),
-    [user, isLoading, login, register, logout, refreshUser],
+    [
+      user,
+      isLoading,
+      login,
+      register,
+      logout,
+      refreshUser,
+      refreshDaily,
+      clearRefreshDaily,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

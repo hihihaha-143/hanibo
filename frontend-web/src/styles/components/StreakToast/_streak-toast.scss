@@ -1,0 +1,53 @@
+@use '../../abstracts' as *;
+
+.streak-toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  translate: -50% 0;
+  z-index: var(--z-toast, 1000);
+  @include flex(row, flex-start, center, 12px);
+  padding: 12px 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  min-width: 260px;
+  max-width: 360px;
+  cursor: pointer;
+
+  @media (max-width: 640px) {
+    top: 70px;
+    left: 16px;
+    right: 16px;
+    translate: 0 0;
+    min-width: auto;
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    @include flex(row, center, center, 0);
+    background: color-mix(in srgb, var(--color-yellow) 18%, transparent);
+    color: var(--color-yellow);
+  }
+
+  &__content {
+    @include flex(column, center, flex-start, 2px);
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  &__desc {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.35;
+  }
+}

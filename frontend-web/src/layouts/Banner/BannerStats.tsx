@@ -6,6 +6,8 @@ import { indicatorVariants, spring } from "../../lib/motion";
 import strawberryIcon from "../../assets/strawberry.png";
 import blueberryIcon from "../../assets/blueberry.png";
 
+type StreakState = "active" | "frozen" | "idle";
+
 export default function BannerStats() {
   const { user } = useAuth();
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
@@ -24,6 +26,12 @@ export default function BannerStats() {
   const expToday = user.exp_today ?? 0;
   const dailyGoal = user.daily_exp_goal ?? 0;
   const freezes = user.streak_freezes ?? 0;
+
+  const streakState: StreakState = user.streak_extended_today
+    ? "active"
+    : user.streak_frozen_today
+      ? "frozen"
+      : "idle";
 
   const stats = [
     {
@@ -67,14 +75,23 @@ export default function BannerStats() {
     },
     {
       key: "streak",
-      icon: <Flame size={24} />,
+      icon:
+        streakState === "frozen" ? (
+          <Snowflake size={24} />
+        ) : (
+          <Flame size={24} />
+        ),
       value: user.streak_current,
-      active: goalReached,
+      streakState,
       tooltip: (
         <>
           <span className="banner-stats__tooltip-title">Серия дней</span>
           <span className="banner-stats__tooltip-sub">
-            {goalReached ? "Цель достигнута" : "Набери норму опыта сегодня"}
+            {streakState === "active"
+              ? "Цель достигнута"
+              : streakState === "frozen"
+                ? "Стрик сохранён заморозкой"
+                : "Набери норму опыта сегодня"}
           </span>
           {freezes > 0 && (
             <span className="banner-stats__tooltip-sub banner-stats__tooltip-sub--freeze">
@@ -88,13 +105,22 @@ export default function BannerStats() {
 
   return (
     <div className="banner-stats">
-      {stats.map(({ key, icon, value, active, tooltip }) => {
+      {stats.map(({ key, icon, value, tooltip }) => {
         const isOpen = hoveredKey === key || tappedKey === key;
+        const isStreak = key === "streak";
+
+        let itemClass = "banner-stats__item";
+        if (isStreak && streakState === "active") {
+          itemClass += " banner-stats__item--active";
+        }
+        if (isStreak && streakState === "frozen") {
+          itemClass += " banner-stats__item--frozen";
+        }
 
         return (
           <motion.div
             key={key}
-            className={`banner-stats__item${active ? " banner-stats__item--active" : ""}`}
+            className={itemClass}
             onHoverStart={() => setHoveredKey(key)}
             onHoverEnd={() => setHoveredKey(null)}
             onTap={(event) => {
@@ -102,13 +128,12 @@ export default function BannerStats() {
               setTappedKey((prev) => (prev === key ? null : key));
             }}
           >
-            {key === "streak" ? (
+            {isStreak ? (
               <motion.span
                 className="banner-stats__icon"
                 animate={
-                  active
+                  streakState === "active"
                     ? {
-                        // «Живой» огонь: покачивание + пульсация + мерцание
                         rotate: [0, -6, 6, -4, 4, 0],
                         scale: [1, 1.08, 0.98, 1.05, 1],
                         opacity: [1, 0.85, 1, 0.9, 1],
@@ -120,22 +145,38 @@ export default function BannerStats() {
                           "drop-shadow(0 0 0px rgba(255, 180, 50, 0))",
                         ],
                       }
-                    : {
-                        rotate: 0,
-                        scale: 1,
-                        opacity: 1,
-                        filter: "drop-shadow(0 0 0px rgba(255, 180, 50, 0))",
-                      }
+                    : streakState === "frozen"
+                      ? {
+                          scale: [1, 1.06, 1],
+                          filter: [
+                            "drop-shadow(0 0 0px rgba(110, 198, 255, 0))",
+                            "drop-shadow(0 0 8px rgba(110, 198, 255, 0.8))",
+                            "drop-shadow(0 0 0px rgba(110, 198, 255, 0))",
+                          ],
+                        }
+                      : {
+                          rotate: 0,
+                          scale: 1,
+                          opacity: 1,
+                          filter: "drop-shadow(0 0 0px rgba(255, 180, 50, 0))",
+                        }
                 }
                 transition={
-                  active
+                  streakState === "active"
                     ? {
                         duration: 1.6,
                         repeat: Infinity,
                         repeatType: "mirror",
                         ease: "easeInOut",
                       }
-                    : { duration: 0.25 }
+                    : streakState === "frozen"
+                      ? {
+                          duration: 2.4,
+                          repeat: Infinity,
+                          repeatType: "mirror",
+                          ease: "easeInOut",
+                        }
+                      : { duration: 0.25 }
                 }
               >
                 {icon}

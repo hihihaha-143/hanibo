@@ -23,16 +23,19 @@ class AuthController extends Controller
             'nickname' => $data['nickname'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'streak_freezes' => 1,
         ]);
 
         $user->refresh();
         $user->load('selectedTitle');
+        $refreshDaily = $user->refreshDailyExp();
 
         $token = $user->createToken('spa')->plainTextToken;
 
         return response()->json([
             'user' => new UserResource($user),
             'token' => $token,
+            'refresh_daily' => $refreshDaily,
         ], 201);
     }
 
@@ -52,11 +55,13 @@ class AuthController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $user->load('selectedTitle');
+        $refreshDaily = $user->refreshDailyExp();
         $token = $user->createToken('spa')->plainTextToken;
 
         return response()->json([
             'user' => new UserResource($user),
             'token' => $token,
+            'refresh_daily' => $refreshDaily,
         ]);
     }
 
@@ -71,11 +76,14 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
+        /** @var User $user */
         $user = $request->user();
         $user->load('selectedTitle');
+        $refreshDaily = $user->refreshDailyExp();
 
         return response()->json([
             'user' => new UserResource($user),
+            'refresh_daily' => $refreshDaily,
         ]);
     }
 }

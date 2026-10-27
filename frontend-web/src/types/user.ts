@@ -27,6 +27,8 @@ export interface User {
   streak_current: number;
   streak_best: number;
   streak_last_date: string | null;
+  streak_extended_today: boolean;
+  streak_frozen_today: boolean;
   streak_freezes: number;
   created_at: string;
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AlphabetLetter;
 use App\Models\AlphabetProgress;
 use App\Services\Achievement\AlphabetAchievementService;
+use App\Services\Streak\StreakService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -31,7 +32,6 @@ class AlphabetProgressController extends Controller
 
         $passed = $scoreAdded > 0;
 
-        // --- Логика начисления опыта (exp) ---
         $expEarned = 0;
         if ($percent === 100) {
             $expEarned = 20;
@@ -39,7 +39,6 @@ class AlphabetProgressController extends Controller
             $expEarned = 10;
         }
 
-        // --- Логика начисления черники ---
         $blueberriesEarned = 0;
         if ($passed) {
             if ($percent >= 100) {
@@ -68,11 +67,7 @@ class AlphabetProgressController extends Controller
             $user->increment('blueberry', $actualBlueberries);
         }
 
-        if ($expEarned > 0) {
-            $user->increment('exp', $expEarned);
-        }
-
-        $user->refresh();
+        $streak = app(StreakService::class)->addExp($user, $expEarned);
 
         $progress->attempts = ($progress->attempts ?? 0) + 1;
         $progress->score = min(
@@ -127,6 +122,7 @@ class AlphabetProgressController extends Controller
                 'total_exp' => $user->exp,
                 'reached_max' => $reachedMax,
                 'unlocked_achievements' => $unlocked,
+                'streak' => $streak,
             ],
         ]);
     }

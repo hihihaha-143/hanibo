@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AlphabetLetter;
 use App\Models\AlphabetProgress;
 use App\Services\Achievement\AlphabetAchievementService;
+use App\Services\Streak\StreakService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -58,15 +59,10 @@ class AlphabetGroupProgressController extends Controller
         DB::transaction(function () use (
             $data,
             $user,
-            $expEarned,
             $blueberriesEarned,
             &$actualBlueberries,
             &$lettersResult
         ) {
-            if ($expEarned > 0) {
-                $user->increment('exp', $expEarned);
-            }
-
             if ($blueberriesEarned > 0) {
                 $actualBlueberries = $blueberriesEarned;
                 $user->increment('blueberry', $actualBlueberries);
@@ -129,7 +125,7 @@ class AlphabetGroupProgressController extends Controller
             }
         });
 
-        $user->refresh();
+        $streak = app(StreakService::class)->addExp($user, $expEarned);
 
         $anyReachedMax = collect($lettersResult)->contains('reached_max', true);
 
@@ -154,6 +150,7 @@ class AlphabetGroupProgressController extends Controller
                 'letters' => $lettersResult,
                 'any_reached_max' => $anyReachedMax,
                 'unlocked_achievements' => $unlocked,
+                'streak' => $streak,
             ],
         ]);
     }

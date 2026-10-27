@@ -9,8 +9,16 @@ class UserResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $expToday = (int) ($this->exp_today ?? 0);
-        $dailyGoal = (int) ($this->daily_exp_goal ?? 150);
+        $timezone = $this->timezone ?: 'UTC';
+        $today = now($timezone)->toDateString();
+
+        $streakExtendedToday = $this->streak_last_date
+            && $this->streak_last_date->toDateString() === $today;
+
+        $streakFrozenToday = $this->streak_frozen_date
+            && $this->streak_frozen_date->toDateString() === $today;
+
+        $goalReached = ($this->exp_today ?? 0) >= ($this->daily_exp_goal ?? 0);
 
         return [
             'id' => $this->id,
@@ -26,14 +34,16 @@ class UserResource extends JsonResource
                     'title' => $this->selectedTitle?->title,
                 ]
                 : null,
-            'timezone' => $this->timezone,
-            'daily_exp_goal' => $dailyGoal,
-            'exp_today' => $expToday,
+            'timezone' => $timezone,
+            'daily_exp_goal' => $this->daily_exp_goal,
+            'exp_today' => $this->exp_today,
             'exp_today_date' => $this->exp_today_date?->toDateString(),
-            'goal_reached' => $dailyGoal > 0 && $expToday >= $dailyGoal,
+            'goal_reached' => $goalReached,
             'streak_current' => $this->streak_current,
             'streak_best' => $this->streak_best,
             'streak_last_date' => $this->streak_last_date?->toIso8601String(),
+            'streak_extended_today' => $streakExtendedToday,
+            'streak_frozen_today' => $streakFrozenToday,
             'streak_freezes' => $this->streak_freezes,
             'strawberry' => $this->strawberry,
             'blueberry' => $this->blueberry,

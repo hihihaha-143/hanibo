@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import type { User } from "../types/user";
+import type { RefreshDailyResult } from "../api/auth";
 
 export interface RegisterPayload {
   nickname: string;
@@ -20,7 +21,9 @@ export interface AuthContextValue {
   login: (payload: LoginPayload) => Promise<User>;
   register: (payload: RegisterPayload) => Promise<User>;
   logout: () => Promise<void>;
-  refreshUser: () => Promise<void>; // <--- Добавили метод
+  refreshUser: () => Promise<void>;
+  refreshDaily: RefreshDailyResult | null;
+  clearRefreshDaily: () => void;
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null);

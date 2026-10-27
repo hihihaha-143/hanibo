@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import GuestOnlyRoute from "./components/GuestOnlyRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
+import StreakToast from "./components/StreakToast/StreakToast";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const CoursePage = lazy(() => import("./pages/CoursePage/CoursePage"));
@@ -81,6 +82,7 @@ function App() {
             }
           />
         </Routes>
+        <StreakToast />
       </Suspense>
     </BrowserRouter>
   );
