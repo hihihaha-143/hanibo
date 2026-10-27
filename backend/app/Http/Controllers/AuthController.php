@@ -86,4 +86,27 @@ class AuthController extends Controller
             'refresh_daily' => $refreshDaily,
         ]);
     }
+
+    public function updateTimezone(Request $request)
+    {
+        $data = $request->validate([
+            'timezone' => ['required', 'string', 'timezone'],
+        ]);
+
+        /** @var User $user */
+        $user = $request->user();
+
+        if ($user->timezone !== $data['timezone']) {
+            $user->timezone = $data['timezone'];
+            $user->save();
+        }
+
+        $user->load('selectedTitle');
+        $refreshDaily = $user->refreshDailyExp();
+
+        return response()->json([
+            'user' => new UserResource($user),
+            'refresh_daily' => $refreshDaily,
+        ]);
+    }
 }

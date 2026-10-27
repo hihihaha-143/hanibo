@@ -11,6 +11,15 @@ import type { RefreshDailyResult } from "../api/auth";
 
 const TOKEN_KEY = "hanibo_token";
 
+function getBrowserTimezone(): string | null {
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return tz || null;
+  } catch {
+    return null;
+  }
+}
+
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -22,6 +31,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
     null,
   );
 
+  const syncTimezone = useCallback(async (u: User) => {
+    const browserTz = getBrowserTimezone();
+    if (!browserTz) return u;
+    if (u.timezone === browserTz) return u;
+
+    try {
+      const { user: updated, refresh_daily } =
+        await authApi.updateTimezone(browserTz);
+      setRefreshDaily(refresh_daily);
+      return updated;
+    } catch {
+      return u;
+    }
+  }, []);
+
   useEffect(() => {
     const token = localStorage.getItem(TOKEN_KEY);
 
@@ -32,8 +56,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     authApi
       .me()
-      .then(({ user: u, refresh_daily }) => {
-        setUser(u);
+      .then(async ({ user: u, refresh_daily }) => {
+        const synced = await syncTimezone(u);
+        setUser(synced);
         setRefreshDaily(refresh_daily);
       })
       .catch(() => {
@@ -41,23 +66,31 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser(null);
       })
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [syncTimezone]);
 
-  const login = useCallback(async (payload: LoginPayload) => {
-    const { user: u, token, refresh_daily } = await authApi.login(payload);
-    localStorage.setItem(TOKEN_KEY, token);
-    setUser(u);
-    setRefreshDaily(refresh_daily);
-    return u;
-  }, []);
+  const login = useCallback(
+    async (payload: LoginPayload) => {
+      const { user: u, token, refresh_daily } = await authApi.login(payload);
+      localStorage.setItem(TOKEN_KEY, token);
+      const synced = await syncTimezone(u);
+      setUser(synced);
+      setRefreshDaily(refresh_daily);
+      return synced;
+    },
+    [syncTimezone],
+  );
 
-  const register = useCallback(async (payload: RegisterPayload) => {
-    const { user: u, token, refresh_daily } = await authApi.register(payload);
-    localStorage.setItem(TOKEN_KEY, token);
-    setUser(u);
-    setRefreshDaily(refresh_daily);
-    return u;
-  }, []);
+  const register = useCallback(
+    async (payload: RegisterPayload) => {
+      const { user: u, token, refresh_daily } = await authApi.register(payload);
+      localStorage.setItem(TOKEN_KEY, token);
+      const synced = await syncTimezone(u);
+      setUser(synced);
+      setRefreshDaily(refresh_daily);
+      return synced;
+    },
+    [syncTimezone],
+  );
 
   const logout = useCallback(async () => {
     try {
@@ -72,14 +105,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const refreshUser = useCallback(async () => {
     try {
       const { user: u, refresh_daily } = await authApi.me();
-      setUser(u);
+      const synced = await syncTimezone(u);
+      setUser(synced);
       if (refresh_daily.freeze_used || refresh_daily.streak_reset) {
         setRefreshDaily(refresh_daily);
       }
     } catch {
       // ignore
     }
-  }, []);
+  }, [syncTimezone]);
 
   const clearRefreshDaily = useCallback(() => {
     setRefreshDaily(null);

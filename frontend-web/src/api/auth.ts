@@ -18,6 +18,11 @@ interface MeResponse {
   refresh_daily: RefreshDailyResult;
 }
 
+interface TimezoneResponse {
+  user: User;
+  refresh_daily: RefreshDailyResult;
+}
+
 export async function register(payload: {
   nickname: string;
   email: string;
@@ -45,5 +50,14 @@ export async function logout(): Promise<void> {
 
 export async function me(): Promise<MeResponse> {
   const { data } = await apiClient.get<MeResponse>("/auth/me");
+  return data;
+}
+
+export async function updateTimezone(
+  timezone: string,
+): Promise<TimezoneResponse> {
+  const { data } = await apiClient.post<TimezoneResponse>("/auth/timezone", {
+    timezone,
+  });
   return data;
 }
