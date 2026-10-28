@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\Achievement\Achievement;
 use App\Models\Achievement\Title;
+use App\Models\Shop\ShopItem;
+use App\Models\Shop\UserItem;
 use App\Services\Streak\StreakService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,6 +28,14 @@ class User extends Authenticatable
         'language_level',
         'avatar',
         'selected_title_id',
+        'selected_status_id',
+        'selected_avatar_id',
+        'selected_frame_id',
+        'selected_banner_id',
+        'selected_nickname_color_id',
+        'selected_medal_id',
+        'selected_icon_ids',
+        'exp_boost_until',
         'timezone',
         'daily_exp_goal',
         'exp_today',
@@ -63,6 +73,8 @@ class User extends Authenticatable
             'streak_rewards_claimed' => 'integer',
             'daily_exp_goal' => 'integer',
             'exp_today' => 'integer',
+            'selected_icon_ids' => 'array',
+            'exp_boost_until' => 'datetime',
         ];
     }
 
@@ -94,6 +106,56 @@ class User extends Authenticatable
     public function selectedTitle(): BelongsTo
     {
         return $this->belongsTo(Title::class, 'selected_title_id');
+    }
+
+    public function userItems(): HasMany
+    {
+        return $this->hasMany(UserItem::class);
+    }
+
+    public function selectedStatus(): BelongsTo
+    {
+        return $this->belongsTo(ShopItem::class, 'selected_status_id');
+    }
+
+    public function selectedAvatar(): BelongsTo
+    {
+        return $this->belongsTo(ShopItem::class, 'selected_avatar_id');
+    }
+
+    public function selectedFrame(): BelongsTo
+    {
+        return $this->belongsTo(ShopItem::class, 'selected_frame_id');
+    }
+
+    public function selectedBanner(): BelongsTo
+    {
+        return $this->belongsTo(ShopItem::class, 'selected_banner_id');
+    }
+
+    public function selectedNicknameColor(): BelongsTo
+    {
+        return $this->belongsTo(ShopItem::class, 'selected_nickname_color_id');
+    }
+
+    public function selectedMedal(): BelongsTo
+    {
+        return $this->belongsTo(ShopItem::class, 'selected_medal_id');
+    }
+
+    public function selectedIcons(): HasMany
+    {
+        return $this->hasMany(ShopItem::class, 'id', 'selected_icon_ids');
+    }
+
+    public function hasActiveExpBoost(): bool
+    {
+        return $this->exp_boost_until !== null && $this->exp_boost_until->isFuture();
+    }
+
+    public function ownsShopItem(int $shopItemId): bool
+    {
+        return $this->userItems()->where('shop_item_id', $shopItemId)->exists();
     }
 
     public function refreshDailyExp(): array

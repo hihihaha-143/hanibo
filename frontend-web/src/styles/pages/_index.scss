@@ -1,9 +1,9 @@
-@use "./AlphabetPage/index";
+@use "./AlphabetPage/index" as alphabet;
 @use './AuthPage';
 @use './CoursePage/course-page';
 @use './ExtraPage/extra-page';
 @use './HomePage/home-page';
 @use './ItemPage/LessonView';
-
 @use './LibraryPage';
 @use './PracticePage';
+@use './ShopPage/index' as shop;

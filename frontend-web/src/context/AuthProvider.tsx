@@ -115,6 +115,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [syncTimezone]);
 
+  const updateUser = useCallback((u: User) => {
+    setUser(u);
+  }, []);
+
   const clearRefreshDaily = useCallback(() => {
     setRefreshDaily(null);
   }, []);
@@ -128,6 +132,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       register,
       logout,
       refreshUser,
+      updateUser,
       refreshDaily,
       clearRefreshDaily,
     }),
@@ -138,6 +143,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       register,
       logout,
       refreshUser,
+      updateUser,
       refreshDaily,
       clearRefreshDaily,
     ],

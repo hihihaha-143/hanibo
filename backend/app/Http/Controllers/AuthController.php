@@ -11,6 +11,16 @@ use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
+    private const USER_RELATIONS = [
+        'selectedTitle',
+        'selectedStatus',
+        'selectedAvatar',
+        'selectedFrame',
+        'selectedBanner',
+        'selectedNicknameColor',
+        'selectedMedal',
+    ];
+
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -27,7 +37,7 @@ class AuthController extends Controller
         ]);
 
         $user->refresh();
-        $user->load('selectedTitle');
+        $user->load(self::USER_RELATIONS);
         $refreshDaily = $user->refreshDailyExp();
 
         $token = $user->createToken('spa')->plainTextToken;
@@ -54,7 +64,7 @@ class AuthController extends Controller
 
         /** @var User $user */
         $user = Auth::user();
-        $user->load('selectedTitle');
+        $user->load(self::USER_RELATIONS);
         $refreshDaily = $user->refreshDailyExp();
         $token = $user->createToken('spa')->plainTextToken;
 
@@ -78,7 +88,7 @@ class AuthController extends Controller
     {
         /** @var User $user */
         $user = $request->user();
-        $user->load('selectedTitle');
+        $user->load(self::USER_RELATIONS);
         $refreshDaily = $user->refreshDailyExp();
 
         return response()->json([
@@ -101,7 +111,7 @@ class AuthController extends Controller
             $user->save();
         }
 
-        $user->load('selectedTitle');
+        $user->load(self::USER_RELATIONS);
         $refreshDaily = $user->refreshDailyExp();
 
         return response()->json([

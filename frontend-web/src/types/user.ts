@@ -1,3 +1,5 @@
+import type { ShopItem } from "./shop";
+
 export type UserRole = "user" | "admin";
 
 export type LanguageLevel = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
@@ -16,6 +18,15 @@ export interface User {
   language_level: LanguageLevel | null;
   avatar: string | null;
   selected_title: UserTitle | null;
+  selected_status: ShopItem | null;
+  selected_avatar: ShopItem | null;
+  selected_frame: ShopItem | null;
+  selected_banner: ShopItem | null;
+  selected_nickname_color: ShopItem | null;
+  selected_medal: ShopItem | null;
+  selected_icons: ShopItem[];
+  exp_boost_until: string | null;
+  has_exp_boost: boolean;
   timezone: string;
   daily_exp_goal: number;
   exp_today: number;

@@ -18,6 +18,7 @@ class StreakService
         }
 
         if ($amount > 0) {
+            $amount = $this->applyExpBoost($user, $amount);
             $user->exp += $amount;
             $user->exp_today += $amount;
         }
@@ -108,6 +109,15 @@ class StreakService
         }
 
         return $result;
+    }
+
+    private function applyExpBoost(User $user, int $amount): int
+    {
+        if ($user->exp_boost_until !== null && $user->exp_boost_until->isFuture()) {
+            return $amount * 2;
+        }
+
+        return $amount;
     }
 
     private function extendStreak(

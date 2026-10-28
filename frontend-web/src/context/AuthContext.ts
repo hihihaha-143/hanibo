@@ -22,6 +22,7 @@ export interface AuthContextValue {
   register: (payload: RegisterPayload) => Promise<User>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  updateUser: (user: User) => void;
   refreshDaily: RefreshDailyResult | null;
   clearRefreshDaily: () => void;
 }

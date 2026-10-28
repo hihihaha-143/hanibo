@@ -1,0 +1,145 @@
+import { useCallback, useEffect, useState } from "react";
+import {
+  activateShopItem,
+  buyShopItem,
+  equipShopItem,
+  fetchShopItems,
+  unequipShopItem,
+} from "../../api/shop";
+import type { ShopItem } from "../../types/shop";
+import { useAuth } from "../../context/useAuth";
+
+type PendingAction = "buy" | "equip" | "unequip" | "activate";
+
+interface UseShopResult {
+  items: ShopItem[];
+  loading: boolean;
+  error: string | null;
+  actionPendingId: number | null;
+  actionPendingType: PendingAction | null;
+  reload: () => Promise<void>;
+  buy: (item: ShopItem) => Promise<void>;
+  equip: (item: ShopItem) => Promise<void>;
+  unequip: (item: ShopItem) => Promise<void>;
+  activate: (item: ShopItem) => Promise<void>;
+}
+
+export function useShop(): UseShopResult {
+  const { user, updateUser } = useAuth();
+
+  const [items, setItems] = useState<ShopItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [actionPendingId, setActionPendingId] = useState<number | null>(null);
+  const [actionPendingType, setActionPendingType] =
+    useState<PendingAction | null>(null);
+
+  const reload = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await fetchShopItems();
+      setItems(data);
+    } catch (e) {
+      setError("Не удалось загрузить магазин.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void reload();
+  }, [reload]);
+
+  const applyUser = useCallback(
+    (updated: typeof user) => {
+      if (updated) {
+        updateUser(updated);
+      }
+    },
+    [updateUser],
+  );
+
+  const buy = useCallback(
+    async (item: ShopItem) => {
+      setActionPendingId(item.id);
+      setActionPendingType("buy");
+
+      try {
+        const result = await buyShopItem(item.id);
+        applyUser(result.user);
+        await reload();
+      } finally {
+        setActionPendingId(null);
+        setActionPendingType(null);
+      }
+    },
+    [applyUser, reload],
+  );
+
+  const equip = useCallback(
+    async (item: ShopItem) => {
+      setActionPendingId(item.id);
+      setActionPendingType("equip");
+
+      try {
+        const updatedUser = await equipShopItem(item.id);
+        applyUser(updatedUser);
+        await reload();
+      } finally {
+        setActionPendingId(null);
+        setActionPendingType(null);
+      }
+    },
+    [applyUser, reload],
+  );
+
+  const unequip = useCallback(
+    async (item: ShopItem) => {
+      setActionPendingId(item.id);
+      setActionPendingType("unequip");
+
+      try {
+        const updatedUser = await unequipShopItem(item.id);
+        applyUser(updatedUser);
+        await reload();
+      } finally {
+        setActionPendingId(null);
+        setActionPendingType(null);
+      }
+    },
+    [applyUser, reload],
+  );
+
+  const activate = useCallback(
+    async (item: ShopItem) => {
+      setActionPendingId(item.id);
+      setActionPendingType("activate");
+
+      try {
+        const result = await activateShopItem(item.id);
+        applyUser(result.user);
+        await reload();
+      } finally {
+        setActionPendingId(null);
+        setActionPendingType(null);
+      }
+    },
+    [applyUser, reload],
+  );
+
+  return {
+    items,
+    loading,
+    error,
+    actionPendingId,
+    actionPendingType,
+    reload,
+    buy,
+    equip,
+    unequip,
+    activate,
+  };
+}

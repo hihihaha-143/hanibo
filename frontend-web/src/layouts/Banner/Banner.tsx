@@ -3,11 +3,14 @@ import { useAuth } from "../../context/useAuth";
 import BannerStats from "./BannerStats";
 
 export default function Banner() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+
+  const activeBanner = user?.selected_banner ?? null;
+  const imageSrc = activeBanner?.image ?? bannerImage;
 
   return (
     <div className="banner">
-      <img className="banner__image" src={bannerImage} alt="hanibo" />
+      <img className="banner__image" src={imageSrc} alt="hanibo" />
       {isAuthenticated && <BannerStats />}
     </div>
   );

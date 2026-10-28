@@ -1,0 +1,47 @@
+@use '../../abstracts' as *;
+
+.activate-confirm-modal {
+  &__panel {
+    align-items: center;
+    text-align: center;
+  }
+
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  &__description {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+  }
+
+  &__actions {
+    width: 100%;
+    @include flex(column, stretch, stretch, 0.5rem);
+  }
+
+  &__button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.625rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast),
+      border-color var(--transition-fast),
+      opacity var(--transition-fast);
+
+    &--cancel {
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      background: transparent;
+
+      &:hover {
+        border-color: var(--color-text);
+      }
+    }
+  }
+}

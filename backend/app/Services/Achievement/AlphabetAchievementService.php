@@ -8,6 +8,8 @@ use App\Models\Achievement\UserAchievement;
 use App\Models\Achievement\UserTitle;
 use App\Models\AlphabetLetter;
 use App\Models\AlphabetProgress;
+use App\Models\Shop\ShopItem;
+use App\Models\Shop\UserItem;
 use App\Models\User;
 
 class AlphabetAchievementService
@@ -170,7 +172,9 @@ class AlphabetAchievementService
         $codes = array_unique(array_filter($codes));
         if (empty($codes)) return [];
 
-        $achievements = Achievement::whereIn('code', $codes)->get();
+        $achievements = Achievement::whereIn('code', $codes)
+            ->with('rewardShopItem')
+            ->get();
 
         $alreadyUnlocked = UserAchievement::where('user_id', $user->id)
             ->whereIn('achievement_id', $achievements->pluck('id'))
@@ -198,6 +202,8 @@ class AlphabetAchievementService
                 $bonusTitle = $this->grantTitle($user, 'know_alphabet');
             }
 
+            $rewardShopItem = $this->grantShopItem($user, $achievement);
+
             $newlyUnlocked[] = [
                 'id' => $achievement->id,
                 'code' => $achievement->code,
@@ -210,12 +216,49 @@ class AlphabetAchievementService
                 'sort_order' => $achievement->sort_order,
                 'blueberry_reward' => $achievement->blueberry_reward,
                 'bonus_title' => $bonusTitle,
+                'reward_shop_item' => $rewardShopItem,
             ];
         }
 
         $user->refresh();
 
         return $newlyUnlocked;
+    }
+
+    /**
+     * @return array{id:int, code:string, type:string, title:string}|null
+     */
+    private function grantShopItem(User $user, Achievement $achievement): ?array
+    {
+        if (!$achievement->reward_shop_item_id) return null;
+
+        $shopItem = $achievement->rewardShopItem
+            ?? ShopItem::find($achievement->reward_shop_item_id);
+
+        if (!$shopItem) return null;
+
+        $existing = UserItem::where('user_id', $user->id)
+            ->where('shop_item_id', $shopItem->id)
+            ->first();
+
+        if (!$existing) {
+            UserItem::create([
+                'user_id' => $user->id,
+                'shop_item_id' => $shopItem->id,
+                'quantity' => $shopItem->isConsumable() ? 1 : 1,
+                'purchased_at' => now(),
+            ]);
+        } elseif ($shopItem->isConsumable()) {
+            $existing->quantity += 1;
+            $existing->save();
+        }
+
+        return [
+            'id' => $shopItem->id,
+            'code' => $shopItem->code,
+            'type' => $shopItem->type,
+            'title' => $shopItem->title,
+        ];
     }
 
     /**

@@ -11,6 +11,7 @@ const ItemPage = lazy(() => import("./pages/ItemPage/ItemPage"));
 const LibraryPage = lazy(() => import("./pages/LibraryPage/LibraryPage"));
 import LibraryViewPage from "./pages/LibraryPage/LibraryViewPage";
 const PracticePage = lazy(() => import("./pages/PracticePage/PracticePage"));
+const ShopPage = lazy(() => import("./pages/ShopPage/ShopPage"));
 
 const AlphabetPage = lazy(() => import("./pages/AlphabetPage/AlphabetPage"));
 const AlphabetTestPage = lazy(
@@ -61,6 +62,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <PracticePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/shop"
+              element={
+                <ProtectedRoute>
+                  <ShopPage />
                 </ProtectedRoute>
               }
             />

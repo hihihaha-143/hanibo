@@ -1,0 +1,196 @@
+@use '../../abstracts' as *;
+
+.shop-card {
+  position: relative;
+  @include flex(column, flex-start, stretch, 0);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition:
+    box-shadow var(--transition-base),
+    border-color var(--transition-base),
+    transform var(--transition-base);
+
+  &:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+
+  &--active {
+    border-color: var(--color-accent);
+  }
+
+  &--owned {
+    background: var(--color-surface-alt);
+  }
+
+  &__preview-wrap {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: var(--color-surface-alt);
+    @include flex(row, center, center, 0);
+    overflow: hidden;
+  }
+
+  &__preview {
+    width: 100%;
+    height: 100%;
+    @include flex(row, center, center, 0);
+
+    &--image {
+      img {
+        max-width: 80%;
+        max-height: 80%;
+        object-fit: contain;
+      }
+    }
+
+    &--nickname {
+      font-size: 1.25rem;
+      font-weight: 700;
+      padding: 0 0.5rem;
+      text-align: center;
+      @include truncate(1);
+    }
+
+    &--title,
+    &--status {
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 0 0.75rem;
+      color: var(--color-text);
+      @include truncate(2);
+    }
+
+    &--buff {
+      color: var(--color-accent);
+    }
+
+    &--icon {
+      gap: 0.5rem;
+
+      img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+    }
+
+    &--frame {
+      padding: 1rem;
+    }
+  }
+
+  &__nickname-sample {
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  &__avatar-sample {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background-color: var(--color-surface);
+    background-size: cover;
+    background-position: center;
+    border: 3px solid var(--color-accent);
+    @include flex(row, center, center, 0);
+    overflow: hidden;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__body {
+    @include flex(column, flex-start, stretch, 0.5rem);
+    padding: 0.75rem;
+  }
+
+  &__title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    @include truncate(1);
+  }
+
+  &__description {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    line-height: 1.35;
+    @include truncate(2);
+  }
+
+  &__price {
+    @include flex(row, flex-start, center, 0.35rem);
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
+  }
+
+  &__quantity {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+  }
+
+  &__button {
+    margin-top: auto;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    @include flex(row, center, center, 0.25rem);
+    transition:
+      background-color var(--transition-fast),
+      opacity var(--transition-fast);
+
+    &:hover:not(:disabled) {
+      background: var(--color-primary-hover);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: default;
+      background: var(--color-surface-alt);
+      color: var(--color-text-secondary);
+    }
+
+    &--equip {
+      background: var(--color-accent);
+      color: var(--color-on-accent);
+
+      &:hover:not(:disabled) {
+        opacity: 0.85;
+        background: var(--color-accent);
+      }
+    }
+
+    &--owned {
+      background: var(--color-success-bg);
+      color: var(--color-success);
+      border: 1px solid var(--color-success);
+    }
+
+    &--activate {
+      background: var(--color-accent);
+      color: var(--color-on-accent);
+
+      &:hover:not(:disabled) {
+        opacity: 0.85;
+        background: var(--color-accent);
+      }
+    }
+  }
+}

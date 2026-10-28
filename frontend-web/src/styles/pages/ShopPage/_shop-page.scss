@@ -1,0 +1,55 @@
+@use '../../abstracts' as *;
+
+.shop-page {
+  width: 100%;
+  @include flex(column, flex-start, stretch, 1.5rem);
+
+  &__header {
+    @include flex(column, flex-start, stretch, 0.5rem);
+  }
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+
+  &__subtitle {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+  }
+
+  &__top {
+    width: 100%;
+  }
+
+  &__content {
+    width: 100%;
+    min-height: 200px;
+  }
+
+  &__panel {
+    width: 100%;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.25rem;
+
+    @include down('sm') {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+  }
+
+  &__state {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+
+    &--error {
+      color: var(--color-error);
+    }
+  }
+}

@@ -22,7 +22,6 @@ export default function BannerStats() {
 
   if (!user) return null;
 
-  const goalReached = user.goal_reached;
   const expToday = user.exp_today ?? 0;
   const dailyGoal = user.daily_exp_goal ?? 0;
   const freezes = user.streak_freezes ?? 0;

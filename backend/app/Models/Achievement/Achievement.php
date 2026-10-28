@@ -2,6 +2,7 @@
 
 namespace App\Models\Achievement;
 
+use App\Models\Shop\ShopItem;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,7 @@ class Achievement extends Model
         'category_id',
         'is_hidden',
         'blueberry_reward',
+        'reward_shop_item_id',
         'sort_order',
     ];
 
@@ -26,6 +28,7 @@ class Achievement extends Model
         return [
             'is_hidden' => 'boolean',
             'blueberry_reward' => 'integer',
+            'reward_shop_item_id' => 'integer',
             'sort_order' => 'integer',
         ];
     }
@@ -33,6 +36,11 @@ class Achievement extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(AchievementCategory::class, 'category_id');
+    }
+
+    public function rewardShopItem(): BelongsTo
+    {
+        return $this->belongsTo(ShopItem::class, 'reward_shop_item_id');
     }
 
     public function users(): BelongsToMany

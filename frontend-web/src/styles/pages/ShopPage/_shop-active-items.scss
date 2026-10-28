@@ -1,0 +1,52 @@
+@use '../../abstracts' as *;
+
+// Применение активных предметов магазина (SidebarBottom и др.)
+
+.sidebar-bottom__user-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  @include flex(row, center, center, 0);
+
+  &--framed {
+    padding: 3px;
+  }
+}
+
+.sidebar-bottom__user-nickname-row {
+  @include flex(row, flex-start, center, 0.35rem);
+  min-width: 0;
+}
+
+.sidebar-bottom__user-icons {
+  @include flex(row, flex-start, center, 0.2rem);
+  flex-shrink: 0;
+}
+
+.sidebar-bottom__user-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+
+  &--fallback {
+    @include flex(row, center, center, 0);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-surface-alt);
+    color: var(--color-text-secondary);
+    font-size: 0.6rem;
+    font-weight: 700;
+  }
+}
+
+.sidebar-bottom__user-status {
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+  line-height: 1.2;
+  @include truncate(1);
+}

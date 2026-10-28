@@ -22,6 +22,11 @@ export default function SidebarBottom({ expanded }: SidebarBottomProps) {
     navigate("/");
   };
 
+  const nicknameColor = user?.selected_nickname_color?.color ?? undefined;
+  const frame = user?.selected_frame ?? null;
+  const icons = user?.selected_icons ?? [];
+  const status = user?.selected_status ?? null;
+
   return (
     <motion.div
       className="sidebar-bottom"
@@ -36,26 +41,72 @@ export default function SidebarBottom({ expanded }: SidebarBottomProps) {
       {isAuthenticated && user ? (
         <div className="sidebar-bottom__user">
           <div className="sidebar-bottom__user-info">
-            {user.avatar ? (
-              <img
-                className="sidebar-bottom__user-avatar"
-                src={user.avatar}
-                alt={user.nickname}
-              />
-            ) : (
-              <span className="sidebar-bottom__user-avatar sidebar-bottom__user-avatar--placeholder">
-                {user.nickname.charAt(0).toUpperCase()}
-              </span>
-            )}
+            <span
+              className={`sidebar-bottom__user-avatar-wrap${
+                frame ? " sidebar-bottom__user-avatar-wrap--framed" : ""
+              }`}
+              style={
+                frame?.image
+                  ? { backgroundImage: `url(${frame.image})` }
+                  : undefined
+              }
+            >
+              {user.avatar ? (
+                <img
+                  className="sidebar-bottom__user-avatar"
+                  src={user.avatar}
+                  alt={user.nickname}
+                />
+              ) : (
+                <span className="sidebar-bottom__user-avatar sidebar-bottom__user-avatar--placeholder">
+                  {user.nickname.charAt(0).toUpperCase()}
+                </span>
+              )}
+            </span>
+
             <div className="sidebar-bottom__user-text">
               {user.selected_title && (
                 <span className="sidebar-bottom__user-title">
                   {user.selected_title.title}
                 </span>
               )}
-              <span className="sidebar-bottom__user-nickname">
-                {user.nickname}
+
+              <span className="sidebar-bottom__user-nickname-row">
+                <span
+                  className="sidebar-bottom__user-nickname"
+                  style={nicknameColor ? { color: nicknameColor } : undefined}
+                >
+                  {user.nickname}
+                </span>
+
+                {icons.length > 0 && (
+                  <span className="sidebar-bottom__user-icons">
+                    {icons.map((icon) =>
+                      icon.image ? (
+                        <img
+                          key={icon.id}
+                          src={icon.image}
+                          alt={icon.title}
+                          className="sidebar-bottom__user-icon"
+                        />
+                      ) : (
+                        <span
+                          key={icon.id}
+                          className="sidebar-bottom__user-icon sidebar-bottom__user-icon--fallback"
+                        >
+                          {icon.title.charAt(0).toUpperCase()}
+                        </span>
+                      ),
+                    )}
+                  </span>
+                )}
               </span>
+
+              {status && (
+                <span className="sidebar-bottom__user-status">
+                  {status.text || status.title}
+                </span>
+              )}
             </div>
           </div>
 
