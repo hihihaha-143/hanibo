@@ -126,6 +126,7 @@ class AlphabetGroupProgressController extends Controller
         });
 
         $streak = app(StreakService::class)->addExp($user, $expEarned);
+        $actualExp = $streak['exp_added'] ?? 0;
 
         $anyReachedMax = collect($lettersResult)->contains('reached_max', true);
 
@@ -145,7 +146,7 @@ class AlphabetGroupProgressController extends Controller
                 'percent' => $percent,
                 'blueberries_earned' => $actualBlueberries,
                 'total_blueberries' => $user->blueberry,
-                'exp_earned' => $expEarned,
+                'exp_earned' => $actualExp,
                 'total_exp' => $user->exp,
                 'letters' => $lettersResult,
                 'any_reached_max' => $anyReachedMax,

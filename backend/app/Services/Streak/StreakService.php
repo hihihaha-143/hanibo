@@ -17,10 +17,12 @@ class StreakService
             $user->exp_today_date = $today;
         }
 
+        $expAdded = 0;
+
         if ($amount > 0) {
-            $amount = $this->applyExpBoost($user, $amount);
-            $user->exp += $amount;
-            $user->exp_today += $amount;
+            $expAdded = $this->applyExpBoost($user, $amount);
+            $user->exp += $expAdded;
+            $user->exp_today += $expAdded;
         }
 
         $goalReached = $user->exp_today >= $user->daily_exp_goal;
@@ -52,7 +54,7 @@ class StreakService
             $user->save();
         }
 
-        return $this->snapshot($user, $freezeUsed, $freezesUsed, $streakReset);
+        return $this->snapshot($user, $freezeUsed, $freezesUsed, $streakReset, $expAdded);
     }
 
     public function refreshStreak(User $user): array
@@ -214,6 +216,7 @@ class StreakService
         bool $freezeUsed = false,
         int $freezesUsed = 0,
         bool $streakReset = false,
+        int $expAdded = 0,
     ): array {
         $tz = $user->timezone ?: 'UTC';
         $today = Carbon::now($tz)->toDateString();
@@ -232,6 +235,7 @@ class StreakService
             'freeze_used' => $freezeUsed,
             'freezes_used' => $freezesUsed,
             'streak_reset' => $streakReset,
+            'exp_added' => $expAdded,
         ];
     }
 }

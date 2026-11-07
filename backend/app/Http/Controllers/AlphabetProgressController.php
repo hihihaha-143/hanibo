@@ -68,6 +68,7 @@ class AlphabetProgressController extends Controller
         }
 
         $streak = app(StreakService::class)->addExp($user, $expEarned);
+        $actualExp = $streak['exp_added'] ?? 0;
 
         $progress->attempts = ($progress->attempts ?? 0) + 1;
         $progress->score = min(
@@ -118,7 +119,7 @@ class AlphabetProgressController extends Controller
                 'max_score' => self::MAX_SCORE,
                 'blueberries_earned' => $actualBlueberries,
                 'total_blueberries' => $user->blueberry,
-                'exp_earned' => $expEarned,
+                'exp_earned' => $actualExp,
                 'total_exp' => $user->exp,
                 'reached_max' => $reachedMax,
                 'unlocked_achievements' => $unlocked,
