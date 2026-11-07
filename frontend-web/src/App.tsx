@@ -4,6 +4,7 @@ import MainLayout from "./layouts/MainLayout";
 import GuestOnlyRoute from "./components/GuestOnlyRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 import StreakToast from "./components/StreakToast/StreakToast";
+import ExpBoostBadge from "./components/ExpBoostBadge/ExpBoostBadge";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const CoursePage = lazy(() => import("./pages/CoursePage/CoursePage"));
@@ -92,6 +93,7 @@ function App() {
           />
         </Routes>
         <StreakToast />
+        <ExpBoostBadge />
       </Suspense>
     </BrowserRouter>
   );

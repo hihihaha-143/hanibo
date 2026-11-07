@@ -1,0 +1,33 @@
+@use '../../abstracts' as *;
+
+.exp-boost-badge {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: var(--z-toast, 1000);
+  @include flex(row, center, center, 0.5rem);
+  padding: 0.5rem 0.875rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+
+  &__icon {
+    @include flex(row, center, center, 0);
+  }
+
+  &__text {
+    @include flex(column, flex-start, flex-start, 0.05rem);
+    line-height: 1.1;
+  }
+
+  &__title {
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  &__time {
+    font-size: 0.7rem;
+    opacity: 0.9;
+  }
+}
