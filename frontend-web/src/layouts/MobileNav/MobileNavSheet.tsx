@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
-import { LogOut } from "lucide-react";
+import { LogOut, Award } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/useTheme";
 import { useAuth } from "../../context/useAuth";
 import { spring } from "../../lib/motion";
+import { resolveShopImage, getUserAvatarUrl } from "../../lib/shopImages";
 
 interface MobileNavSheetProps {
   onClose: () => void;
@@ -20,6 +21,15 @@ export default function MobileNavSheet({ onClose }: MobileNavSheetProps) {
     onClose();
     navigate("/");
   };
+
+  const avatarUrl = getUserAvatarUrl(user);
+  const nicknameColor = user?.selected_nickname_color?.color ?? undefined;
+  const frame = user?.selected_frame ?? null;
+  const frameUrl = resolveShopImage(frame?.image);
+  const icons = user?.selected_icons ?? [];
+  const status = user?.selected_status ?? null;
+  const medal = user?.selected_medal ?? null;
+  const medalUrl = resolveShopImage(medal?.image);
 
   return (
     <>
@@ -51,30 +61,98 @@ export default function MobileNavSheet({ onClose }: MobileNavSheetProps) {
         {isAuthenticated && user && (
           <div className="mobile-nav-sheet__user">
             <div className="mobile-nav-sheet__user-info">
-              {user.avatar ? (
-                <img
-                  className="mobile-nav-sheet__user-avatar"
-                  src={user.avatar}
-                  alt={user.nickname}
-                />
-              ) : (
-                <span className="mobile-nav-sheet__user-avatar mobile-nav-sheet__user-avatar--placeholder">
-                  {user.nickname.charAt(0).toUpperCase()}
-                </span>
-              )}
-              <span className="mobile-nav-sheet__user-nickname">
-                {user.nickname}
+              <span
+                className={`mobile-nav-sheet__user-avatar-wrap${
+                  frame ? " mobile-nav-sheet__user-avatar-wrap--framed" : ""
+                }`}
+              >
+                {avatarUrl ? (
+                  <img
+                    className="mobile-nav-sheet__user-avatar"
+                    src={avatarUrl}
+                    alt={user.nickname}
+                  />
+                ) : (
+                  <span className="mobile-nav-sheet__user-avatar mobile-nav-sheet__user-avatar--placeholder">
+                    {user.nickname.charAt(0).toUpperCase()}
+                  </span>
+                )}
+
+                {frameUrl && (
+                  <img
+                    src={frameUrl}
+                    alt={frame?.title || "Рамка"}
+                    className="mobile-nav-sheet__user-frame"
+                  />
+                )}
               </span>
+
+              <div className="mobile-nav-sheet__user-text">
+                {user.selected_title && (
+                  <span className="mobile-nav-sheet__user-title">
+                    {user.selected_title.title}
+                  </span>
+                )}
+                <span className="mobile-nav-sheet__user-nickname-row">
+                  <span
+                    className="mobile-nav-sheet__user-nickname"
+                    style={nicknameColor ? { color: nicknameColor } : undefined}
+                  >
+                    {user.nickname}
+                  </span>
+                  {icons.length > 0 && (
+                    <span className="mobile-nav-sheet__user-icons">
+                      {icons.map((icon) => {
+                        const iconUrl = resolveShopImage(icon.image);
+                        return iconUrl ? (
+                          <img
+                            key={icon.id}
+                            src={iconUrl}
+                            alt={icon.title}
+                            className="mobile-nav-sheet__user-icon"
+                          />
+                        ) : (
+                          <span
+                            key={icon.id}
+                            className="mobile-nav-sheet__user-icon mobile-nav-sheet__user-icon--fallback"
+                          >
+                            {icon.title.charAt(0).toUpperCase()}
+                          </span>
+                        );
+                      })}
+                    </span>
+                  )}
+                </span>
+                {status && (
+                  <span className="mobile-nav-sheet__user-status">
+                    {status.text || status.title}
+                  </span>
+                )}
+              </div>
             </div>
 
-            <button
-              type="button"
-              className="mobile-nav-sheet__logout"
-              onClick={handleLogout}
-              aria-label="Выйти"
-            >
-              <LogOut size={20} />
-            </button>
+            <div className="mobile-nav-sheet__user-actions">
+              {medal && (
+                <span
+                  className="mobile-nav-sheet__user-medal"
+                  title={medal.title}
+                >
+                  {medalUrl ? (
+                    <img src={medalUrl} alt={medal.title} />
+                  ) : (
+                    <Award size={16} />
+                  )}
+                </span>
+              )}
+              <button
+                type="button"
+                className="mobile-nav-sheet__logout"
+                onClick={handleLogout}
+                aria-label="Выйти"
+              >
+                <LogOut size={20} />
+              </button>
+            </div>
           </div>
         )}
       </motion.div>

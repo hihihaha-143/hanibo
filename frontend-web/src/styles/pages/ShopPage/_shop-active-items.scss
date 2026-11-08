@@ -1,22 +1,58 @@
 @use '../../abstracts' as *;
 
-// Применение активных предметов магазина (SidebarBottom и др.)
-
 .sidebar-bottom__user-avatar-wrap {
   position: relative;
   flex-shrink: 0;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  background-size: cover;
-  background-position: center;
   @include flex(row, center, center, 0);
-
+  
+  // Если надета фигурная рамка
   &--framed {
-    padding: 3px;
+    width: 48px;
+    height: 54px; // Чуть выше, чтобы влезли бантики/верхушки
+    
+    .sidebar-bottom__user-avatar {
+      // Аватарка уменьшается и центрируется
+      width: 32px;
+      height: 32px;
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: none; // Убираем обводку, чтобы не мешала рамке
+    }
   }
 }
 
+.sidebar-bottom__user-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  @include flex(row, center, center, 0);
+}
+
+.sidebar-bottom__user-avatar--placeholder {
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+// Сама картинка рамки — накладывается поверх
+.sidebar-bottom__user-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; // Не сплющивает картинку
+  pointer-events: none; // Чтобы клики проходили сквозь рамку
+}
+
+// ... остальные стили (ник, иконки, медаль) без изменений ...
 .sidebar-bottom__user-nickname-row {
   @include flex(row, flex-start, center, 0.35rem);
   min-width: 0;
@@ -49,4 +85,21 @@
   color: var(--color-text-secondary);
   line-height: 1.2;
   @include truncate(1);
+}
+
+.sidebar-bottom__user-actions {
+  @include flex(row, center, center, 0.25rem);
+  flex-shrink: 0;
+}
+
+.sidebar-bottom__user-medal {
+  @include flex(row, center, center, 0);
+  width: 24px;
+  height: 24px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }

@@ -1,7 +1,7 @@
-import type { CSSProperties } from "react";
 import { Snowflake, Zap, Check } from "lucide-react";
 import type { ShopItem } from "../../types/shop";
 import type { User } from "../../types/user";
+import { resolveShopImage, getUserAvatarUrl } from "../../lib/shopImages";
 import blueberryIcon from "../../assets/blueberry.png";
 import strawberryIcon from "../../assets/strawberry.png";
 
@@ -40,6 +40,8 @@ export function ShopItemCard({
   const isOwned = item.owned;
 
   const nickname = user?.nickname ?? "Ник";
+  const imageSrc = resolveShopImage(item.image);
+  const userAvatarUrl = getUserAvatarUrl(user);
 
   const renderPreview = () => {
     switch (item.type) {
@@ -82,41 +84,65 @@ export function ShopItemCard({
         return (
           <div className="shop-card__preview shop-card__preview--icon">
             <span className="shop-card__nickname-sample">{nickname}</span>
-            {item.image && <img src={item.image} alt={item.title} />}
+            {imageSrc && <img src={imageSrc} alt={item.title} />}
           </div>
         );
 
       case "frame":
         return (
           <div className="shop-card__preview shop-card__preview--frame">
-            <div
-              className="shop-card__avatar-sample"
-              style={
-                item.image
-                  ? ({
-                      backgroundImage: `url(${item.image})`,
-                    } as CSSProperties)
-                  : undefined
-              }
-            >
-              {!item.image &&
-                (user?.avatar ? (
-                  <img src={user.avatar} alt={nickname} />
-                ) : (
-                  <span>{nickname.charAt(0).toUpperCase()}</span>
-                ))}
+            <div className="shop-card__frame-sample">
+              {userAvatarUrl ? (
+                <img
+                  className="shop-card__frame-avatar"
+                  src={userAvatarUrl}
+                  alt={nickname}
+                />
+              ) : (
+                <span className="shop-card__frame-avatar shop-card__frame-avatar--placeholder">
+                  {nickname.charAt(0).toUpperCase()}
+                </span>
+              )}
+
+              {imageSrc && (
+                <img
+                  src={imageSrc}
+                  alt={item.title}
+                  className="shop-card__frame-overlay"
+                />
+              )}
             </div>
           </div>
         );
 
       case "avatar":
+        return (
+          <div className="shop-card__preview shop-card__preview--image">
+            {imageSrc ? (
+              <img src={imageSrc} alt={item.title} />
+            ) : (
+              <span>{item.title}</span>
+            )}
+          </div>
+        );
+
       case "banner":
+        return (
+          <div className="shop-card__preview shop-card__preview--image shop-card__preview--banner">
+            {imageSrc ? (
+              <img src={imageSrc} alt={item.title} />
+            ) : (
+              <span>{item.title}</span>
+            )}
+          </div>
+        );
+
       case "medal":
       default:
         return (
           <div className="shop-card__preview shop-card__preview--image">
-            {item.image ? (
-              <img src={item.image} alt={item.title} />
+            {imageSrc ? (
+              <img src={imageSrc} alt={item.title} />
             ) : (
               <span>{item.title}</span>
             )}

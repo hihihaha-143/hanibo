@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LogIn, LogOut, UserPlus } from "lucide-react";
+import { LogIn, LogOut, UserPlus, Award } from "lucide-react";
 import { useTheme } from "../../context/useTheme";
 import { useAuth } from "../../context/useAuth";
 import { spring } from "../../lib/motion";
+import { resolveShopImage, getUserAvatarUrl } from "../../lib/shopImages";
 
 interface SidebarBottomProps {
   expanded: boolean;
@@ -22,10 +23,14 @@ export default function SidebarBottom({ expanded }: SidebarBottomProps) {
     navigate("/");
   };
 
+  const avatarUrl = getUserAvatarUrl(user);
   const nicknameColor = user?.selected_nickname_color?.color ?? undefined;
   const frame = user?.selected_frame ?? null;
+  const frameUrl = resolveShopImage(frame?.image);
   const icons = user?.selected_icons ?? [];
   const status = user?.selected_status ?? null;
+  const medal = user?.selected_medal ?? null;
+  const medalUrl = resolveShopImage(medal?.image);
 
   return (
     <motion.div
@@ -45,22 +50,26 @@ export default function SidebarBottom({ expanded }: SidebarBottomProps) {
               className={`sidebar-bottom__user-avatar-wrap${
                 frame ? " sidebar-bottom__user-avatar-wrap--framed" : ""
               }`}
-              style={
-                frame?.image
-                  ? { backgroundImage: `url(${frame.image})` }
-                  : undefined
-              }
             >
-              {user.avatar ? (
+              {avatarUrl ? (
                 <img
                   className="sidebar-bottom__user-avatar"
-                  src={user.avatar}
+                  src={avatarUrl}
                   alt={user.nickname}
                 />
               ) : (
                 <span className="sidebar-bottom__user-avatar sidebar-bottom__user-avatar--placeholder">
                   {user.nickname.charAt(0).toUpperCase()}
                 </span>
+              )}
+
+              {/* Накладываем рамку ПОВЕРХ аватарки */}
+              {frameUrl && (
+                <img
+                  src={frameUrl}
+                  alt={frame?.title || "Рамка"}
+                  className="sidebar-bottom__user-frame"
+                />
               )}
             </span>
 
@@ -81,11 +90,12 @@ export default function SidebarBottom({ expanded }: SidebarBottomProps) {
 
                 {icons.length > 0 && (
                   <span className="sidebar-bottom__user-icons">
-                    {icons.map((icon) =>
-                      icon.image ? (
+                    {icons.map((icon) => {
+                      const iconUrl = resolveShopImage(icon.image);
+                      return iconUrl ? (
                         <img
                           key={icon.id}
-                          src={icon.image}
+                          src={iconUrl}
                           alt={icon.title}
                           className="sidebar-bottom__user-icon"
                         />
@@ -96,8 +106,8 @@ export default function SidebarBottom({ expanded }: SidebarBottomProps) {
                         >
                           {icon.title.charAt(0).toUpperCase()}
                         </span>
-                      ),
-                    )}
+                      );
+                    })}
                   </span>
                 )}
               </span>
@@ -110,14 +120,25 @@ export default function SidebarBottom({ expanded }: SidebarBottomProps) {
             </div>
           </div>
 
-          <button
-            type="button"
-            className="sidebar-bottom__logout"
-            onClick={handleLogout}
-            aria-label="Выйти"
-          >
-            <LogOut size={20} />
-          </button>
+          <div className="sidebar-bottom__user-actions">
+            {medal && (
+              <span className="sidebar-bottom__user-medal" title={medal.title}>
+                {medalUrl ? (
+                  <img src={medalUrl} alt={medal.title} />
+                ) : (
+                  <Award size={16} />
+                )}
+              </span>
+            )}
+            <button
+              type="button"
+              className="sidebar-bottom__logout"
+              onClick={handleLogout}
+              aria-label="Выйти"
+            >
+              <LogOut size={20} />
+            </button>
+          </div>
         </div>
       ) : (
         <>
