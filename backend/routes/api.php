@@ -5,6 +5,9 @@ use App\Models\Tip;
 use App\Http\Controllers\Api\CourseItemController;
 use App\Http\Controllers\Api\CourseItemWordController;
 use App\Http\Controllers\Api\CourseItemGrammarController;
+use App\Http\Controllers\Api\DictionaryController;
+use App\Http\Controllers\Api\TopicController;
+use App\Http\Controllers\Api\UserWordController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\LibraryItemController;
 use App\Http\Controllers\AlphabetProgressController;
@@ -36,6 +39,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/shop/items/{item}/equip', [ShopController::class, 'equip']);
     Route::post('/shop/items/{item}/unequip', [ShopController::class, 'unequip']);
     Route::post('/shop/items/{item}/activate', [ShopController::class, 'activate']);
+
+    // --- Dictionary ---
+    Route::get('/dictionary', [DictionaryController::class, 'index']);
+    Route::get('/topics', [TopicController::class, 'index']);
+
+    // --- UserWord (SRS-прогресс слов) ---
+    Route::post('/user-words/start', [UserWordController::class, 'start']);
+    Route::post('/user-words/progress', [UserWordController::class, 'progress']);
+    Route::delete('/user-words/{wordId}', [UserWordController::class, 'destroy']);
 });
 
 Route::get('/course-items/{courseItem}/grammar', [CourseItemGrammarController::class, 'index']);

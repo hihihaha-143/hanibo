@@ -1,0 +1,25 @@
+@use '../../abstracts' as *;
+
+.dictionary-tab {
+  @include flex(column, flex-start, stretch, 1.25rem);
+  width: 100%;
+  min-width: 0;
+
+  &__head {
+    @include flex(row, space-between, baseline, 0.75rem);
+    flex-wrap: wrap;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+
+    @include up(md) {
+      font-size: 1.75rem;
+    }
+  }
+
+  &__count {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+  }
+}

@@ -17,6 +17,19 @@ class WordResource extends JsonResource
             'level' => new LevelResource($this->whenLoaded('level')),
             'topics' => TopicResource::collection($this->whenLoaded('topics')),
             'phrases' => PhraseResource::collection($this->whenLoaded('phrases')),
+            'progress' => $this->whenLoaded('progress', function () {
+                $progress = $this->progress->first();
+
+                if (!$progress) {
+                    return null;
+                }
+
+                return [
+                    'interval_days' => $progress->interval_days,
+                    'next_review_at' => $progress->next_review_at?->toIso8601String(),
+                    'is_learned' => $progress->interval_days > 0,
+                ];
+            }),
         ];
     }
 }

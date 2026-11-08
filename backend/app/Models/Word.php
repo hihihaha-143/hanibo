@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Word extends Model
 {
@@ -40,5 +41,10 @@ class Word extends Model
         return $this->belongsToMany(CourseItem::class, 'lesson_word')
             ->withPivot('order')
             ->withTimestamps(false);
+    }
+
+    public function progress(): HasMany
+    {
+        return $this->hasMany(UserWord::class);
     }
 }

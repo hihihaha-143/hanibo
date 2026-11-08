@@ -1,0 +1,133 @@
+@use '../../abstracts' as *;
+
+.dictionary-card {
+  @include flex(column, flex-start, stretch, 0.75rem);
+  padding: 1rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  transition:
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+
+  &:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  &__header {
+    @include flex(row, space-between, flex-start, 0.75rem);
+    min-width: 0;
+  }
+
+  &__main {
+    @include flex(column, flex-start, flex-start, 0.125rem);
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  &__hangul {
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.2;
+    font-family: "Noto Sans KR", "Nunito", sans-serif;
+    color: var(--color-text);
+    word-break: break-word;
+  }
+
+  &__translation {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--color-text-secondary);
+    word-break: break-word;
+  }
+
+  &__status {
+    flex-shrink: 0;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-radius: 0.5rem;
+    white-space: nowrap;
+
+    &--new {
+      background-color: var(--color-surface-alt);
+      color: var(--color-text-secondary);
+    }
+
+    &--progress {
+      background-color: var(--color-warning);
+      color: #FFFFFF;
+    }
+
+    &--review {
+      background-color: var(--color-error-bg);
+      color: var(--color-error);
+    }
+
+    &--learned {
+      background-color: var(--color-success-bg);
+      color: var(--color-success);
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    height: 1.5rem;
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: 0.5rem;
+    white-space: nowrap;
+
+    &--pos {
+      background-color: var(--color-surface-alt);
+      color: var(--color-text);
+    }
+
+    &--level {
+      background-color: var(--color-secondary);
+      color: var(--color-on-primary);
+    }
+
+    &--topic {
+      background-color: transparent;
+      border: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+    }
+  }
+
+  &__example {
+    @include flex(column, flex-start, stretch, 0.125rem);
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  &__example-hangul {
+    font-size: 0.875rem;
+    font-family: "Noto Sans KR", "Nunito", sans-serif;
+    color: var(--color-text);
+    word-break: break-word;
+  }
+
+  &__example-translation {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    word-break: break-word;
+  }
+
+  &__action {
+    align-self: flex-start;
+  }
+}
