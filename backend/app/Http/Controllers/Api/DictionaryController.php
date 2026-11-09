@@ -33,7 +33,12 @@ class DictionaryController extends Controller
 
         $tab = $request->input('tab', 'all');
 
-        if ($tab === 'learned') {
+        if ($tab === 'progress') {
+            $query->whereHas('progress', function ($q) use ($userId) {
+                $q->where('user_id', $userId)
+                    ->where('interval_days', 0);
+            });
+        } elseif ($tab === 'learned') {
             $query->whereHas('progress', function ($q) use ($userId) {
                 $q->where('user_id', $userId)
                     ->where('interval_days', '>', 0);

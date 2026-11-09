@@ -34,6 +34,8 @@ export interface User {
   goal_reached: boolean;
   strawberry: number;
   blueberry: number;
+  words_learning: number;
+  words_learned: number;
   exp: number;
   streak_current: number;
   streak_best: number;

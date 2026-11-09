@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Star, Flame, Snowflake } from "lucide-react";
+import { Star, Flame, Snowflake, BookOpen, GraduationCap } from "lucide-react";
 import { useAuth } from "../../context/useAuth";
 import { indicatorVariants, spring } from "../../lib/motion";
 import strawberryIcon from "../../assets/strawberry.png";
@@ -55,6 +55,32 @@ export default function BannerStats() {
           <span className="banner-stats__tooltip-title">Черника</span>
           <span className="banner-stats__tooltip-sub">
             Проходи тесты, чтобы получать
+          </span>
+        </>
+      ),
+    },
+    {
+      key: "words_learning",
+      icon: <BookOpen size={24} />,
+      value: user.words_learning,
+      tooltip: (
+        <>
+          <span className="banner-stats__tooltip-title">Изучается</span>
+          <span className="banner-stats__tooltip-sub">
+            Слова, которые сейчас в процессе
+          </span>
+        </>
+      ),
+    },
+    {
+      key: "words_learned",
+      icon: <GraduationCap size={24} />,
+      value: user.words_learned,
+      tooltip: (
+        <>
+          <span className="banner-stats__tooltip-title">Изучено</span>
+          <span className="banner-stats__tooltip-sub">
+            Слова, доведённые до уверенного уровня
           </span>
         </>
       ),

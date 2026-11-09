@@ -5,6 +5,7 @@ import {
   type DictionaryWord,
   type WordProgress,
 } from "../../api/dictionary";
+import { useAuth } from "../../context/useAuth";
 
 interface DictionaryCardBlockProps {
   word: DictionaryWord;
@@ -54,6 +55,7 @@ export function DictionaryCardBlock({
   word,
   onProgressChange,
 }: DictionaryCardBlockProps) {
+  const { refreshUser } = useAuth();
   const [pending, setPending] = useState(false);
 
   const status = getProgressLabel(word);
@@ -76,6 +78,7 @@ export function DictionaryCardBlock({
           is_learned: false,
         });
       }
+      await refreshUser();
     } catch {
       // молча: пользователь увидит, что ничего не изменилось
     } finally {

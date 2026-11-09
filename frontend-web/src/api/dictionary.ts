@@ -44,7 +44,7 @@ export interface Paginated<T> {
 
 // ---------- фильтры ----------
 
-export type DictionaryTab = "all" | "learned" | "review";
+export type DictionaryTab = "all" | "progress" | "learned" | "review";
 
 export interface DictionaryFilters {
   search?: string;

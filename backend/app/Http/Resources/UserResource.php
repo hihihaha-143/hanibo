@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Shop\ShopItem;
+use App\Models\UserWord;
 use App\Http\Resources\Shop\ShopItemResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -31,6 +32,15 @@ class UserResource extends JsonResource
                 ->sortBy(fn ($i) => array_search($i->id, $selectedIconIds, true))
                 ->values()
             : collect();
+
+        $wordsLearning = UserWord::query()
+            ->where('user_id', $this->id)
+            ->count();
+
+        $wordsLearned = UserWord::query()
+            ->where('user_id', $this->id)
+            ->where('interval_days', '>', 0)
+            ->count();
 
         return [
             'id' => $this->id,
@@ -80,6 +90,8 @@ class UserResource extends JsonResource
             'streak_freezes' => $this->streak_freezes,
             'strawberry' => $this->strawberry,
             'blueberry' => $this->blueberry,
+            'words_learning' => $wordsLearning,
+            'words_learned' => $wordsLearned,
             'exp' => $this->exp,
             'created_at' => $this->created_at?->toIso8601String(),
         ];

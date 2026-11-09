@@ -4,6 +4,7 @@ import type { DictionaryTab } from "../../api/dictionary";
 
 const TABS: { key: DictionaryTab; label: string }[] = [
   { key: "all", label: "Все слова" },
+  { key: "progress", label: "В процессе" },
   { key: "learned", label: "Изучено" },
   { key: "review", label: "На повторение" },
 ];
