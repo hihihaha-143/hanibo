@@ -113,3 +113,15 @@ export async function deleteUserWord(
   );
   return data;
 }
+
+// ---------- слово дня ----------
+
+export interface DailyWordResponse {
+  date: string;
+  word: DictionaryWord;
+}
+
+export async function getDailyWord(): Promise<DailyWordResponse> {
+  const { data } = await apiClient.get<DailyWordResponse>("/daily-word");
+  return data;
+}

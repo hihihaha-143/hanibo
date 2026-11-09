@@ -10,6 +10,7 @@ import {
 import type { Topic } from "../../api/course";
 import { DictionaryToolbarBlock } from "./DictionaryToolbarBlock";
 import { DictionaryGridBlock } from "./DictionaryGridBlock";
+import { DailyWordBlock } from "./DailyWordBlock";
 
 const EMPTY_PAGE: Paginated<DictionaryWord> = {
   data: [],
@@ -108,8 +109,6 @@ export function DictionaryTab() {
           word.id === wordId ? { ...word, progress } : word,
         );
 
-        // Если активен таб "learned" или "review" и статус сбросили — слово
-        // выпадает из выборки. Убираем его локально, чтобы не было визуального шума.
         if (tab !== "all" && progress === null) {
           return {
             ...prev,
@@ -145,15 +144,23 @@ export function DictionaryTab() {
         onTopicChange={handleTopicChange}
       />
 
-      <DictionaryGridBlock
-        words={words.data}
-        loading={loading}
-        error={error}
-        currentPage={words.meta.current_page}
-        lastPage={words.meta.last_page}
-        onPageChange={handlePageChange}
-        onProgressChange={handleProgressChange}
-      />
+      <div className="dictionary-tab__body">
+        <div className="dictionary-tab__aside">
+          <DailyWordBlock />
+        </div>
+
+        <div className="dictionary-tab__main">
+          <DictionaryGridBlock
+            words={words.data}
+            loading={loading}
+            error={error}
+            currentPage={words.meta.current_page}
+            lastPage={words.meta.last_page}
+            onPageChange={handlePageChange}
+            onProgressChange={handleProgressChange}
+          />
+        </div>
+      </div>
     </div>
   );
 }

@@ -5,6 +5,7 @@ use App\Models\Tip;
 use App\Http\Controllers\Api\CourseItemController;
 use App\Http\Controllers\Api\CourseItemWordController;
 use App\Http\Controllers\Api\CourseItemGrammarController;
+use App\Http\Controllers\Api\DailyWordController;
 use App\Http\Controllers\Api\DictionaryController;
 use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Api\UserWordController;
@@ -43,6 +44,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // --- Dictionary ---
     Route::get('/dictionary', [DictionaryController::class, 'index']);
     Route::get('/topics', [TopicController::class, 'index']);
+
+    // --- Daily Word ---
+    Route::get('/daily-word', [DailyWordController::class, 'show']);
 
     // --- UserWord (SRS-прогресс слов) ---
     Route::post('/user-words/start', [UserWordController::class, 'start']);

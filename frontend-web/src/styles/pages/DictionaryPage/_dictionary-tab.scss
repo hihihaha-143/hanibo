@@ -22,4 +22,30 @@
     font-size: 0.875rem;
     color: var(--color-text-secondary);
   }
+
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    min-width: 0;
+
+    @include up(lg) {
+      grid-template-columns: 20rem 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+  }
+
+  &__aside {
+    min-width: 0;
+
+    @include up(lg) {
+      position: sticky;
+      top: 1rem;
+    }
+  }
+
+  &__main {
+    min-width: 0;
+  }
 }
