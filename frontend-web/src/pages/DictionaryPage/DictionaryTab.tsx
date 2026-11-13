@@ -12,6 +12,8 @@ import { DictionaryToolbarBlock } from "./DictionaryToolbarBlock";
 import { DictionaryGridBlock } from "./DictionaryGridBlock";
 import { DailyWordBlock } from "./DailyWordBlock";
 import { DailyQuizBlock } from "./DailyQuizBlock";
+import { MiniGamesModal, type MiniGameId } from "./MiniGame/MiniGamesModal";
+import { TrueFalseGame } from "./MiniGame/TrueFalseGame";
 
 const EMPTY_PAGE: Paginated<DictionaryWord> = {
   data: [],
@@ -37,6 +39,9 @@ export function DictionaryTab() {
   const [words, setWords] = useState<Paginated<DictionaryWord>>(EMPTY_PAGE);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [miniGamesOpen, setMiniGamesOpen] = useState(false);
+  const [activeGame, setActiveGame] = useState<MiniGameId | null>(null);
 
   const requestIdRef = useRef(0);
 
@@ -124,6 +129,15 @@ export function DictionaryTab() {
     [tab],
   );
 
+  const handlePlay = useCallback((id: MiniGameId) => {
+    setActiveGame(id);
+  }, []);
+
+  const closeAll = useCallback(() => {
+    setActiveGame(null);
+    setMiniGamesOpen(false);
+  }, []);
+
   return (
     <div className="dictionary-tab">
       <div className="dictionary-tab__head">
@@ -143,12 +157,13 @@ export function DictionaryTab() {
         topics={topics}
         topicId={topicId}
         onTopicChange={handleTopicChange}
+        onOpenMiniGames={() => setMiniGamesOpen(true)}
       />
 
       <div className="dictionary-tab__body">
         <div className="dictionary-tab__aside">
           <DailyWordBlock />
-          <DailyQuizBlock />
+          <DailyQuizBlock disabled={miniGamesOpen} />
         </div>
 
         <div className="dictionary-tab__main">
@@ -163,6 +178,16 @@ export function DictionaryTab() {
           />
         </div>
       </div>
+
+      <MiniGamesModal
+        open={miniGamesOpen}
+        onClose={() => setMiniGamesOpen(false)}
+        activeGame={activeGame}
+        onPlay={handlePlay}
+        onExitGame={() => setActiveGame(null)}
+      >
+        {activeGame === "true-false" && <TrueFalseGame onClose={closeAll} />}
+      </MiniGamesModal>
     </div>
   );
 }

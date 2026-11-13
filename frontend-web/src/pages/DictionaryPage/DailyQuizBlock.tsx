@@ -49,7 +49,11 @@ function buildQuestion(data: DailyQuizResponse): TestQuestionChoose {
   };
 }
 
-export function DailyQuizBlock() {
+interface DailyQuizBlockProps {
+  disabled?: boolean;
+}
+
+export function DailyQuizBlock({ disabled = false }: DailyQuizBlockProps) {
   const { refreshUser } = useAuth();
   const [question, setQuestion] = useState<TestQuestionChoose | null>(null);
   const [targetId, setTargetId] = useState<number | null>(null);
@@ -82,7 +86,7 @@ export function DailyQuizBlock() {
 
   const handleSelect = useCallback(
     (index: number) => {
-      if (!question || answered) return;
+      if (!question || answered || disabled) return;
       setSelected(index);
       setAnswered(true);
 
@@ -108,7 +112,7 @@ export function DailyQuizBlock() {
         loadNext();
       }, NEXT_DELAY);
     },
-    [question, answered, targetId, loadNext, refreshUser],
+    [question, answered, targetId, loadNext, refreshUser, disabled],
   );
 
   useHotkeys(
@@ -117,8 +121,11 @@ export function DailyQuizBlock() {
       const idx = Number(e.key) - 1;
       if (idx < 4) handleSelect(idx);
     },
-    { enabled: !!question && !answered, preventDefault: true },
-    [question, answered, handleSelect],
+    {
+      enabled: !!question && !answered && !disabled,
+      preventDefault: true,
+    },
+    [question, answered, handleSelect, disabled],
   );
 
   return (

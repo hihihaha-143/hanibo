@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\CourseItemGrammarController;
 use App\Http\Controllers\Api\DailyQuizController;
 use App\Http\Controllers\Api\DailyWordController;
 use App\Http\Controllers\Api\DictionaryController;
+use App\Http\Controllers\Api\MiniGame\RewardController;
+use App\Http\Controllers\Api\MiniGame\TrueFalseController;
 use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Api\UserWordController;
 use App\Http\Controllers\AuthController;
@@ -56,6 +58,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user-words/start', [UserWordController::class, 'start']);
     Route::post('/user-words/progress', [UserWordController::class, 'progress']);
     Route::delete('/user-words/{wordId}', [UserWordController::class, 'destroy']);
+
+    // --- MiniGames ---
+    Route::prefix('minigames')->group(function () {
+        Route::get('/true-false', [TrueFalseController::class, 'show']);
+        Route::post('/reward', [RewardController::class, 'store']);
+    });
 });
 
 Route::get('/course-items/{courseItem}/grammar', [CourseItemGrammarController::class, 'index']);

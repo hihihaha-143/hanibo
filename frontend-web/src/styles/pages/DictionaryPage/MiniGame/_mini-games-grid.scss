@@ -1,0 +1,69 @@
+@use '../../../abstracts' as *;
+
+.mini-games-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+
+  @include up(sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &__card {
+    @include flex(column, flex-start, flex-start, 0.375rem);
+    position: relative;
+    padding: 1rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.875rem;
+    text-align: left;
+    transition:
+      border-color var(--transition-fast),
+      transform var(--transition-fast);
+
+    &:hover:not(:disabled) {
+      border-color: var(--color-accent);
+      transform: translateY(-2px);
+    }
+
+    &--disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+  }
+
+  &__icon {
+    @include flex(row, center, center);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.625rem;
+    color: var(--color-accent);
+    background-color: color-mix(in srgb, var(--color-accent) 15%, transparent);
+  }
+
+  &__title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  &__desc {
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: var(--color-text-secondary);
+  }
+
+  &__badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 0.375rem;
+    background-color: var(--color-surface-alt);
+    color: var(--color-text-secondary);
+  }
+}

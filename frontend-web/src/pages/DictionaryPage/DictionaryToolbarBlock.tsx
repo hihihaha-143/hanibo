@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search, Gamepad2 } from "lucide-react";
 import type { Topic } from "../../api/course";
 import type { DictionaryTab } from "../../api/dictionary";
 
@@ -17,6 +17,7 @@ interface DictionaryToolbarBlockProps {
   topics: Topic[];
   topicId: number | null;
   onTopicChange: (id: number | null) => void;
+  onOpenMiniGames: () => void;
 }
 
 export function DictionaryToolbarBlock({
@@ -27,6 +28,7 @@ export function DictionaryToolbarBlock({
   topics,
   topicId,
   onTopicChange,
+  onOpenMiniGames,
 }: DictionaryToolbarBlockProps) {
   return (
     <div className="library-toolbar-block">
@@ -67,6 +69,15 @@ export function DictionaryToolbarBlock({
             </option>
           ))}
         </select>
+
+        <button
+          type="button"
+          className="btn btn--outline btn--sm library-toolbar-block__minigames"
+          onClick={onOpenMiniGames}
+        >
+          <Gamepad2 size={16} />
+          <span>Мини-игры</span>
+        </button>
       </div>
     </div>
   );
