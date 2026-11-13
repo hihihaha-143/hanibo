@@ -35,6 +35,7 @@ class UserResource extends JsonResource
 
         $wordsLearning = UserWord::query()
             ->where('user_id', $this->id)
+            ->where('interval_days', 0)
             ->count();
 
         $wordsLearned = UserWord::query()

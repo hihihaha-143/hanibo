@@ -114,6 +114,22 @@ export async function deleteUserWord(
   return data;
 }
 
+export interface UserWordProgressUpdate {
+  word_id: number;
+  is_correct: boolean;
+}
+
+export async function updateUserWordProgress(
+  wordId: number,
+  isCorrect: boolean,
+): Promise<UserWordProgressResponse> {
+  const { data } = await apiClient.post<UserWordProgressResponse>(
+    "/user-words/progress",
+    { word_id: wordId, is_correct: isCorrect },
+  );
+  return data;
+}
+
 // ---------- слово дня ----------
 
 export interface DailyWordResponse {
@@ -123,5 +139,23 @@ export interface DailyWordResponse {
 
 export async function getDailyWord(): Promise<DailyWordResponse> {
   const { data } = await apiClient.get<DailyWordResponse>("/daily-word");
+  return data;
+}
+
+// ---------- тест 1 из 4 ----------
+
+export interface DailyQuizWord {
+  id: number;
+  hangul: string;
+  translation: string;
+}
+
+export interface DailyQuizResponse {
+  target: DailyQuizWord;
+  distractors: DailyQuizWord[];
+}
+
+export async function getDailyQuiz(): Promise<DailyQuizResponse> {
+  const { data } = await apiClient.get<DailyQuizResponse>("/daily-quiz");
   return data;
 }

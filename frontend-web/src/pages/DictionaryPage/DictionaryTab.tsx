@@ -11,6 +11,7 @@ import type { Topic } from "../../api/course";
 import { DictionaryToolbarBlock } from "./DictionaryToolbarBlock";
 import { DictionaryGridBlock } from "./DictionaryGridBlock";
 import { DailyWordBlock } from "./DailyWordBlock";
+import { DailyQuizBlock } from "./DailyQuizBlock";
 
 const EMPTY_PAGE: Paginated<DictionaryWord> = {
   data: [],
@@ -147,6 +148,7 @@ export function DictionaryTab() {
       <div className="dictionary-tab__body">
         <div className="dictionary-tab__aside">
           <DailyWordBlock />
+          <DailyQuizBlock />
         </div>
 
         <div className="dictionary-tab__main">
