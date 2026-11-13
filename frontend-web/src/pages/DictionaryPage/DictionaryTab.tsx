@@ -28,6 +28,8 @@ const EMPTY_PAGE: Paginated<DictionaryWord> = {
   },
 };
 
+const NOW_TICK_MS = 30_000;
+
 export function DictionaryTab() {
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -43,7 +45,14 @@ export function DictionaryTab() {
   const [miniGamesOpen, setMiniGamesOpen] = useState(false);
   const [activeGame, setActiveGame] = useState<MiniGameId | null>(null);
 
+  const [now, setNow] = useState<number>(() => Date.now());
+
   const requestIdRef = useRef(0);
+
+  useEffect(() => {
+    const id = window.setInterval(() => setNow(Date.now()), NOW_TICK_MS);
+    return () => window.clearInterval(id);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -173,6 +182,7 @@ export function DictionaryTab() {
             error={error}
             currentPage={words.meta.current_page}
             lastPage={words.meta.last_page}
+            now={now}
             onPageChange={handlePageChange}
             onProgressChange={handleProgressChange}
           />

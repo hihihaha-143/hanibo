@@ -8,6 +8,7 @@ interface DictionaryGridBlockProps {
   error: string | null;
   currentPage: number;
   lastPage: number;
+  now: number;
   onPageChange: (page: number) => void;
   onProgressChange: (wordId: number, progress: WordProgress | null) => void;
 }
@@ -35,6 +36,7 @@ export function DictionaryGridBlock({
   error,
   currentPage,
   lastPage,
+  now,
   onPageChange,
   onProgressChange,
 }: DictionaryGridBlockProps) {
@@ -77,6 +79,7 @@ export function DictionaryGridBlock({
           <DictionaryCardBlock
             key={word.id}
             word={word}
+            now={now}
             onProgressChange={onProgressChange}
           />
         ))}

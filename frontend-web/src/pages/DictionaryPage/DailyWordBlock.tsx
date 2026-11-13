@@ -8,6 +8,8 @@ import {
 } from "../../api/dictionary";
 import { useAuth } from "../../context/useAuth";
 
+const TICK_MS = 60_000;
+
 function formatDate(iso: string): string {
   try {
     return new Date(iso).toLocaleDateString("ru-RU", {
@@ -19,15 +21,30 @@ function formatDate(iso: string): string {
   }
 }
 
+function currentDayKey(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+}
+
 export function DailyWordBlock() {
   const { refreshUser } = useAuth();
   const [word, setWord] = useState<DictionaryWord | null>(null);
   const [date, setDate] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [pending, setPending] = useState(false);
+  const [dayKey, setDayKey] = useState<string>(() => currentDayKey());
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      const next = currentDayKey();
+      setDayKey((prev) => (prev === next ? prev : next));
+    }, TICK_MS);
+    return () => window.clearInterval(id);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
+    setLoading(true);
 
     getDailyWord()
       .then((res) => {
@@ -45,7 +62,7 @@ export function DailyWordBlock() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [dayKey]);
 
   const isStarted = word?.progress !== null && word?.progress !== undefined;
 

@@ -9,24 +9,47 @@ import { useAuth } from "../../context/useAuth";
 
 interface DictionaryCardBlockProps {
   word: DictionaryWord;
+  now: number;
   onProgressChange: (wordId: number, progress: WordProgress | null) => void;
 }
 
-function formatReviewDate(iso: string): string {
+function formatReviewDate(iso: string, now: number): string {
   const date = new Date(iso);
-  const diffMs = date.getTime() - Date.now();
+  const diffMs = date.getTime() - now;
+  const diffMinutes = Math.ceil(diffMs / (1000 * 60));
+  const diffHours = Math.ceil(diffMs / (1000 * 60 * 60));
   const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffDays <= 0) return "сегодня";
-  if (diffDays === 1) return "завтра";
+  if (diffMs <= 0) return "сегодня";
+  if (diffMinutes < 60) return "меньше чем через час";
+  if (diffHours === 1) return "через час";
+  if (diffHours < 24) return `через ${diffHours} часа`;
+
+  // Календарный «завтра» / «сегодня» по TZ пользователя
+  const nowDate = new Date(now);
+  const targetDate = new Date(iso);
+  const sameDay =
+    nowDate.getFullYear() === targetDate.getFullYear() &&
+    nowDate.getMonth() === targetDate.getMonth() &&
+    nowDate.getDate() === targetDate.getDate();
+
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const isTomorrow =
+    tomorrow.getFullYear() === targetDate.getFullYear() &&
+    tomorrow.getMonth() === targetDate.getMonth() &&
+    tomorrow.getDate() === targetDate.getDate();
+
+  if (sameDay) return "сегодня";
+  if (isTomorrow) return "завтра";
   if (diffDays < 5) return `через ${diffDays} дня`;
   return `через ${diffDays} дней`;
 }
 
-function getProgressLabel(word: DictionaryWord): {
-  text: string;
-  mod: string;
-} {
+function getProgressLabel(
+  word: DictionaryWord,
+  now: number,
+): { text: string; mod: string } {
   const progress = word.progress;
 
   if (!progress) {
@@ -38,12 +61,12 @@ function getProgressLabel(word: DictionaryWord): {
   }
 
   if (progress.next_review_at) {
-    const date = new Date(progress.next_review_at);
-    if (date.getTime() <= Date.now()) {
+    const target = new Date(progress.next_review_at).getTime();
+    if (target <= now) {
       return { text: "На повторение", mod: "review" };
     }
     return {
-      text: `Повтор ${formatReviewDate(progress.next_review_at)}`,
+      text: `Повтор ${formatReviewDate(progress.next_review_at, now)}`,
       mod: "learned",
     };
   }
@@ -53,12 +76,13 @@ function getProgressLabel(word: DictionaryWord): {
 
 export function DictionaryCardBlock({
   word,
+  now,
   onProgressChange,
 }: DictionaryCardBlockProps) {
   const { refreshUser } = useAuth();
   const [pending, setPending] = useState(false);
 
-  const status = getProgressLabel(word);
+  const status = getProgressLabel(word, now);
   const firstPhrase = word.phrases[0];
   const isStarted = word.progress !== null;
 
@@ -80,7 +104,7 @@ export function DictionaryCardBlock({
       }
       await refreshUser();
     } catch {
-      // молча: пользователь увидит, что ничего не изменилось
+      // молча
     } finally {
       setPending(false);
     }

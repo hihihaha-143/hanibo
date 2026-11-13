@@ -16,16 +16,16 @@ class DailyWordController extends Controller
         $timezone = $user->timezone ?: 'UTC';
 
         $today = now($timezone)->startOfDay();
-        $dayIndex = (int) $today->diffInDays(now('UTC')->startOfDay(), false);
+        $epoch = now($timezone)->setDate(1970, 1, 1)->startOfDay();
+        $dayIndex = (int) $epoch->diffInDays($today);
 
-        // Детерминированный выбор: одинаковый весь день, меняется в 00:00 по TZ.
         $total = Word::query()->count();
 
         if ($total === 0) {
             return response()->json(['message' => 'No words yet'], 404);
         }
 
-        $seed = abs($dayIndex) * 13 + 7;
+        $seed = $dayIndex * 13 + 7;
         $offset = $seed % $total;
 
         $word = Word::query()
