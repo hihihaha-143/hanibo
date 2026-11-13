@@ -36,6 +36,23 @@ export async function getAudioChoose(): Promise<AudioChooseResponse> {
   return data;
 }
 
+// ---------- Match ----------
+
+export interface MatchPairWord {
+  id: number;
+  hangul: string;
+  translation: string;
+}
+
+export interface MatchResponse {
+  pairs: MatchPairWord[];
+}
+
+export async function getMatch(): Promise<MatchResponse> {
+  const { data } = await apiClient.get<MatchResponse>("/minigames/match");
+  return data;
+}
+
 // ---------- Награда ----------
 
 export interface RewardResponse {

@@ -45,17 +45,17 @@ const MINI_GAMES: MiniGameInfo[] = [
     available: true,
   },
   {
-    id: "syllable-gap",
-    title: "Собери слог",
-    description: "Один слог потерялся",
-    icon: <Puzzle size={22} />,
-    available: false,
-  },
-  {
     id: "match",
     title: "Найди пару",
     description: "6 слов и 6 переводов",
     icon: <Layers size={22} />,
+    available: true,
+  },
+  {
+    id: "syllable-gap",
+    title: "Собери слог",
+    description: "Один слог потерялся",
+    icon: <Puzzle size={22} />,
     available: false,
   },
   {

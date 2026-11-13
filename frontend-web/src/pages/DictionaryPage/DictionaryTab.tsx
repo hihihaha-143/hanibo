@@ -15,6 +15,7 @@ import { DailyQuizBlock } from "./DailyQuizBlock";
 import { MiniGamesModal, type MiniGameId } from "./MiniGame/MiniGamesModal";
 import { TrueFalseGame } from "./MiniGame/TrueFalseGame";
 import { AudioChooseGame } from "./MiniGame/AudioChooseGame";
+import { MatchGame } from "./MiniGame/MatchGame";
 
 const EMPTY_PAGE: Paginated<DictionaryWord> = {
   data: [],
@@ -201,6 +202,7 @@ export function DictionaryTab() {
         {activeGame === "audio-choose" && (
           <AudioChooseGame onClose={closeAll} />
         )}
+        {activeGame === "match" && <MatchGame onClose={closeAll} />}
       </MiniGamesModal>
     </div>
   );
