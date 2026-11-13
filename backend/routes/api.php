@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\CourseItemGrammarController;
 use App\Http\Controllers\Api\DailyQuizController;
 use App\Http\Controllers\Api\DailyWordController;
 use App\Http\Controllers\Api\DictionaryController;
+use App\Http\Controllers\Api\MiniGame\AudioChooseController;
 use App\Http\Controllers\Api\MiniGame\RewardController;
 use App\Http\Controllers\Api\MiniGame\TrueFalseController;
 use App\Http\Controllers\Api\TopicController;
@@ -62,6 +63,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // --- MiniGames ---
     Route::prefix('minigames')->group(function () {
         Route::get('/true-false', [TrueFalseController::class, 'show']);
+        Route::get('/audio-choose', [AudioChooseController::class, 'show']);
         Route::post('/reward', [RewardController::class, 'store']);
     });
 });

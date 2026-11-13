@@ -42,7 +42,7 @@ const MINI_GAMES: MiniGameInfo[] = [
     title: "Аудио-угадайка",
     description: "Слушай и выбирай перевод",
     icon: <Volume2 size={22} />,
-    available: false,
+    available: true,
   },
   {
     id: "syllable-gap",
