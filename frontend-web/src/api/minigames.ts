@@ -53,6 +53,25 @@ export async function getMatch(): Promise<MatchResponse> {
   return data;
 }
 
+// ---------- Syllable Gap ----------
+
+export interface SyllableGapQuestion {
+  word_id: number;
+  hangul: string;
+  translation: string;
+  prompt: string;
+  correct: string;
+  variants: string[];
+  correct_index: number;
+}
+
+export async function getSyllableGap(): Promise<SyllableGapQuestion> {
+  const { data } = await apiClient.get<SyllableGapQuestion>(
+    "/minigames/syllable-gap",
+  );
+  return data;
+}
+
 // ---------- Награда ----------
 
 export interface RewardResponse {

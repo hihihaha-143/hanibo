@@ -16,6 +16,7 @@ import { MiniGamesModal, type MiniGameId } from "./MiniGame/MiniGamesModal";
 import { TrueFalseGame } from "./MiniGame/TrueFalseGame";
 import { AudioChooseGame } from "./MiniGame/AudioChooseGame";
 import { MatchGame } from "./MiniGame/MatchGame";
+import { SyllableGapGame } from "./MiniGame/SyllableGapGame";
 
 const EMPTY_PAGE: Paginated<DictionaryWord> = {
   data: [],
@@ -216,6 +217,9 @@ export function DictionaryTab() {
           <AudioChooseGame onClose={handleExitGame} />
         )}
         {activeGame === "match" && <MatchGame onClose={handleExitGame} />}
+        {activeGame === "syllable-gap" && (
+          <SyllableGapGame onClose={handleExitGame} />
+        )}
       </MiniGamesModal>
     </div>
   );

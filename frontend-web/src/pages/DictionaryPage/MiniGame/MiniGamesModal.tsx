@@ -56,7 +56,7 @@ const MINI_GAMES: MiniGameInfo[] = [
     title: "Собери слог",
     description: "Один слог потерялся",
     icon: <Puzzle size={22} />,
-    available: false,
+    available: true,
   },
   {
     id: "syllable-order",
