@@ -63,7 +63,7 @@ const MINI_GAMES: MiniGameInfo[] = [
     title: "Слог за слогом",
     description: "Собери слово из слогов",
     icon: <ArrowLeftRight size={22} />,
-    available: false,
+    available: true,
   },
   {
     id: "speed",

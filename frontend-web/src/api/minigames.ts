@@ -72,6 +72,22 @@ export async function getSyllableGap(): Promise<SyllableGapQuestion> {
   return data;
 }
 
+// ---------- Syllable Order ----------
+
+export interface SyllableOrderQuestion {
+  word_id: number;
+  hangul: string;
+  translation: string;
+  syllables: string[];
+}
+
+export async function getSyllableOrder(): Promise<SyllableOrderQuestion> {
+  const { data } = await apiClient.get<SyllableOrderQuestion>(
+    "/minigames/syllable-order",
+  );
+  return data;
+}
+
 // ---------- Награда ----------
 
 export interface RewardResponse {
