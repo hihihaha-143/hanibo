@@ -49,7 +49,12 @@ export function DictionaryTab() {
 
   const [now, setNow] = useState<number>(() => Date.now());
 
+  const [reloadTick, setReloadTick] = useState(0);
   const requestIdRef = useRef(0);
+
+  const reloadWords = useCallback(() => {
+    setReloadTick((t) => t + 1);
+  }, []);
 
   useEffect(() => {
     const id = window.setInterval(() => setNow(Date.now()), NOW_TICK_MS);
@@ -102,7 +107,7 @@ export function DictionaryTab() {
         if (id !== requestIdRef.current) return;
         setLoading(false);
       });
-  }, [debouncedSearch, topicId, tab, page]);
+  }, [debouncedSearch, topicId, tab, page, reloadTick]);
 
   const handleTabChange = useCallback((next: DictionaryTabId) => {
     setTab(next);
@@ -144,10 +149,16 @@ export function DictionaryTab() {
     setActiveGame(id);
   }, []);
 
-  const closeAll = useCallback(() => {
+  const handleExitGame = useCallback(() => {
     setActiveGame(null);
+    reloadWords();
+  }, [reloadWords]);
+
+  const handleCloseModal = useCallback(() => {
     setMiniGamesOpen(false);
-  }, []);
+    setActiveGame(null);
+    reloadWords();
+  }, [reloadWords]);
 
   return (
     <div className="dictionary-tab">
@@ -174,7 +185,7 @@ export function DictionaryTab() {
       <div className="dictionary-tab__body">
         <div className="dictionary-tab__aside">
           <DailyWordBlock />
-          <DailyQuizBlock disabled={miniGamesOpen} />
+          <DailyQuizBlock disabled={miniGamesOpen} onAnswered={reloadWords} />
         </div>
 
         <div className="dictionary-tab__main">
@@ -193,16 +204,18 @@ export function DictionaryTab() {
 
       <MiniGamesModal
         open={miniGamesOpen}
-        onClose={() => setMiniGamesOpen(false)}
+        onClose={handleCloseModal}
         activeGame={activeGame}
         onPlay={handlePlay}
-        onExitGame={() => setActiveGame(null)}
+        onExitGame={handleExitGame}
       >
-        {activeGame === "true-false" && <TrueFalseGame onClose={closeAll} />}
-        {activeGame === "audio-choose" && (
-          <AudioChooseGame onClose={closeAll} />
+        {activeGame === "true-false" && (
+          <TrueFalseGame onClose={handleExitGame} />
         )}
-        {activeGame === "match" && <MatchGame onClose={closeAll} />}
+        {activeGame === "audio-choose" && (
+          <AudioChooseGame onClose={handleExitGame} />
+        )}
+        {activeGame === "match" && <MatchGame onClose={handleExitGame} />}
       </MiniGamesModal>
     </div>
   );

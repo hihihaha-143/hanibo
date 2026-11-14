@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import {
   getMatch,
@@ -7,16 +8,14 @@ import {
 } from "../../../api/minigames";
 import { updateUserWordProgress } from "../../../api/dictionary";
 import { useAuth } from "../../../context/useAuth";
+import { spring } from "../../../lib/motion";
 
 type Phase = "playing" | "result" | "loading";
 
+const PAIR_COLORS = ["#7aa2f7", "#bb9af7", "#7dcfff", "#f7768e"];
+
 interface MatchGameProps {
   onClose: () => void;
-}
-
-interface Pair {
-  hangul: MatchPairWord;
-  translation: MatchPairWord;
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -32,36 +31,48 @@ export function MatchGame({ onClose }: MatchGameProps) {
   const { refreshUser } = useAuth();
 
   const [phase, setPhase] = useState<Phase>("loading");
-  const [pairs, setPairs] = useState<Pair[]>([]);
-  const [leftItems, setLeftItems] = useState<MatchPairWord[]>([]);
-  const [rightItems, setRightItems] = useState<MatchPairWord[]>([]);
-  const [selectedLeft, setSelectedLeft] = useState<MatchPairWord | null>(null);
-  const [matchedIds, setMatchedIds] = useState<Set<number>>(new Set());
-  const [wrongPair, setWrongPair] = useState<{
-    left: number;
-    right: number;
-  } | null>(null);
-  const [mistakesWordIds, setMistakesWordIds] = useState<Set<number>>(
-    new Set(),
-  );
+  const [words, setWords] = useState<MatchPairWord[]>([]);
+  const [leftItems, setLeftItems] = useState<string[]>([]);
+  const [rightItems, setRightItems] = useState<string[]>([]);
+
+  const [pairs, setPairs] = useState<Record<string, string>>({});
+  const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
+  const [selectedRight, setSelectedRight] = useState<string | null>(null);
+  const [draggingLeft, setDraggingLeft] = useState<string | null>(null);
+  const [answered, setAnswered] = useState(false);
   const [reward, setReward] = useState<number | null>(null);
+  const [correctCount, setCorrectCount] = useState(0);
+
+  const correctMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const w of words) map[w.hangul] = w.translation;
+    return map;
+  }, [words]);
+
+  const wordIdByHangul = useMemo(() => {
+    const map: Record<string, number> = {};
+    for (const w of words) map[w.hangul] = w.id;
+    return map;
+  }, [words]);
 
   const loadGame = useCallback(() => {
     setPhase("loading");
-    setPairs([]);
+    setWords([]);
     setLeftItems([]);
     setRightItems([]);
+    setPairs({});
     setSelectedLeft(null);
-    setMatchedIds(new Set());
-    setWrongPair(null);
-    setMistakesWordIds(new Set());
+    setSelectedRight(null);
+    setDraggingLeft(null);
+    setAnswered(false);
     setReward(null);
+    setCorrectCount(0);
 
     getMatch()
       .then((data) => {
-        setPairs(data.pairs.map((p) => ({ hangul: p, translation: p })));
-        setLeftItems(shuffle(data.pairs));
-        setRightItems(shuffle(data.pairs));
+        setWords(data.pairs);
+        setLeftItems(shuffle(data.pairs.map((p) => p.hangul)));
+        setRightItems(shuffle(data.pairs.map((p) => p.translation)));
         setPhase("playing");
       })
       .catch(() => {
@@ -73,165 +84,246 @@ export function MatchGame({ onClose }: MatchGameProps) {
     loadGame();
   }, [loadGame]);
 
+  const pairIndexByLeft: Record<string, number> = {};
+  Object.keys(pairs).forEach((left, i) => {
+    pairIndexByLeft[left] = i;
+  });
+
+  const getLeftForRight = (right: string): string | undefined =>
+    Object.keys(pairs).find((l) => pairs[l] === right);
+
+  const attach = (left: string, right: string) => {
+    const copy = { ...pairs };
+    delete copy[left];
+    for (const l of Object.keys(copy)) {
+      if (copy[l] === right) delete copy[l];
+    }
+    copy[left] = right;
+    setPairs(copy);
+  };
+
+  const handleLeftClick = (left: string) => {
+    if (answered) return;
+
+    if (pairs[left]) {
+      const copy = { ...pairs };
+      delete copy[left];
+      setPairs(copy);
+      return;
+    }
+
+    if (selectedRight) {
+      attach(left, selectedRight);
+      setSelectedRight(null);
+      return;
+    }
+
+    setSelectedLeft(left === selectedLeft ? null : left);
+  };
+
+  const handleRightClick = (right: string) => {
+    if (answered) return;
+
+    const existingLeft = getLeftForRight(right);
+    if (existingLeft) {
+      const copy = { ...pairs };
+      delete copy[existingLeft];
+      setPairs(copy);
+      return;
+    }
+
+    if (selectedLeft) {
+      attach(selectedLeft, right);
+      setSelectedLeft(null);
+      return;
+    }
+
+    setSelectedRight(right === selectedRight ? null : right);
+  };
+
+  const handleDragStartLeft = (left: string) => {
+    if (answered) return;
+    setDraggingLeft(left);
+  };
+
+  const handleDropOnRight = (right: string) => {
+    if (answered) return;
+    if (!draggingLeft) return;
+    attach(draggingLeft, right);
+    setDraggingLeft(null);
+    setSelectedLeft(null);
+  };
+
+  const total = words.length;
+  const allPaired = Object.keys(pairs).length === total;
+
   const finishGame = useCallback(
-    async (mistakes: Set<number>, total: number) => {
+    async (correct: number, totalCount: number) => {
       setPhase("result");
-      const correct = total - mistakes.size;
+
+      // SRS-обновление по каждому слову партии
+      for (const w of words) {
+        const userRight = pairs[w.hangul];
+        const isCorrect = userRight === w.translation;
+        updateUserWordProgress(w.id, isCorrect).catch(() => {});
+      }
 
       try {
-        const res = await postReward(correct, total);
+        const res = await postReward(correct, totalCount);
         setReward(res.reward);
         await refreshUser();
       } catch {
         setReward(0);
       }
     },
-    [refreshUser],
+    [words, pairs, refreshUser],
   );
 
-  const handleLeftClick = useCallback(
-    (item: MatchPairWord) => {
-      if (matchedIds.has(item.id) || wrongPair) return;
-      setSelectedLeft(item);
-    },
-    [matchedIds, wrongPair],
-  );
+  const handleCheck = () => {
+    if (!allPaired || answered || phase !== "playing") return;
 
-  const handleRightClick = useCallback(
-    (item: MatchPairWord) => {
-      if (!selectedLeft || matchedIds.has(item.id) || wrongPair) return;
+    const correct = Object.keys(pairs).filter(
+      (left) => correctMap[left] === pairs[left],
+    ).length;
 
-      const isMatch = selectedLeft.id === item.id;
-      const nextMistakes = new Set(mistakesWordIds);
+    setCorrectCount(correct);
+    setAnswered(true);
 
-      if (isMatch) {
-        updateUserWordProgress(selectedLeft.id, true).catch(() => {});
+    setTimeout(() => {
+      finishGame(correct, total);
+    }, 900);
+  };
 
-        const nextMatched = new Set(matchedIds);
-        nextMatched.add(selectedLeft.id);
-        setMatchedIds(nextMatched);
-        setSelectedLeft(null);
+  const renderLeft = (left: string) => {
+    const pairIdx = pairIndexByLeft[left];
+    const isPaired = pairIdx !== undefined;
+    const color = isPaired ? PAIR_COLORS[pairIdx % PAIR_COLORS.length] : null;
+    const isSelected = selectedLeft === left;
 
-        if (nextMatched.size >= pairs.length) {
-          setTimeout(() => {
-            finishGame(nextMistakes, pairs.length);
-          }, 600);
+    let modifier = "";
+    if (answered) {
+      const correct = correctMap[left] === pairs[left];
+      modifier = correct ? "match__item--correct" : "match__item--wrong";
+    } else if (isSelected) {
+      modifier = "match__item--selected";
+    }
+
+    return (
+      <motion.div
+        key={left}
+        className={`match__item ${modifier}`}
+        style={
+          color && !answered
+            ? {
+                borderColor: color,
+                color,
+                background: `${color}22`,
+              }
+            : undefined
         }
-      } else {
-        // Штраф за ошибку только один раз на слово
-        if (!nextMistakes.has(selectedLeft.id)) {
-          nextMistakes.add(selectedLeft.id);
-          setMistakesWordIds(nextMistakes);
-          updateUserWordProgress(selectedLeft.id, false).catch(() => {});
+        draggable={!answered}
+        onDragStart={() => handleDragStartLeft(left)}
+        onClick={() => handleLeftClick(left)}
+        whileHover={!answered ? { scale: 1.02 } : undefined}
+        whileTap={!answered ? { scale: 0.98 } : undefined}
+        transition={spring.bouncy}
+      >
+        {left}
+      </motion.div>
+    );
+  };
+
+  const renderRight = (right: string) => {
+    const left = getLeftForRight(right);
+    const isPaired = left !== undefined;
+    const pairIdx = isPaired ? pairIndexByLeft[left] : undefined;
+    const color =
+      pairIdx !== undefined ? PAIR_COLORS[pairIdx % PAIR_COLORS.length] : null;
+    const isSelected = selectedRight === right;
+
+    let modifier = "";
+    if (answered) {
+      const correct = left !== undefined && correctMap[left] === right;
+      modifier = correct ? "match__item--correct" : "match__item--wrong";
+    } else if (isSelected) {
+      modifier = "match__item--selected";
+    }
+
+    return (
+      <motion.div
+        key={right}
+        className={`match__item ${modifier}`}
+        style={
+          color && !answered
+            ? {
+                borderColor: color,
+                color,
+                background: `${color}22`,
+              }
+            : undefined
         }
-
-        setWrongPair({ left: selectedLeft.id, right: item.id });
-
-        setTimeout(() => {
-          setWrongPair(null);
-          setSelectedLeft(null);
-        }, 600);
-      }
-    },
-    [
-      selectedLeft,
-      matchedIds,
-      wrongPair,
-      mistakesWordIds,
-      pairs.length,
-      finishGame,
-    ],
-  );
-
-  const correctCount = pairs.length - mistakesWordIds.size;
-  const percent =
-    pairs.length > 0 ? Math.round((correctCount / pairs.length) * 100) : 0;
+        onClick={() => handleRightClick(right)}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={() => handleDropOnRight(right)}
+        whileHover={!answered ? { scale: 1.02 } : undefined}
+        whileTap={!answered ? { scale: 0.98 } : undefined}
+        transition={spring.bouncy}
+      >
+        {right}
+      </motion.div>
+    );
+  };
 
   return (
     <div className="match-game">
       <header className="match-game__header">
-        <button
-          type="button"
-          className="match-game__back"
-          onClick={onClose}
-        >
+        <button type="button" className="match-game__back" onClick={onClose}>
           <ArrowLeft size={16} />
           <span>Назад</span>
         </button>
         <h2 className="match-game__title">Найди пару</h2>
         {phase === "playing" && (
           <span className="match-game__progress">
-            {matchedIds.size} / {pairs.length}
+            {Object.keys(pairs).length} / {total}
           </span>
         )}
       </header>
 
-      {phase === "loading" && (
-        <p className="match-game__state">Загрузка…</p>
-      )}
+      {phase === "loading" && <p className="match-game__state">Загрузка…</p>}
 
       {phase === "playing" && (
-        <div className="match">
-          <div className="match__col">
-            {leftItems.map((item) => {
-              const isMatched = matchedIds.has(item.id);
-              const isSelected = selectedLeft?.id === item.id;
-              const isWrong =
-                wrongPair?.left === item.id &&
-                !matchedIds.has(item.id);
-
-              let modifier = "";
-              if (isMatched) modifier = "match__item--correct";
-              else if (isWrong) modifier = "match__item--wrong";
-              else if (isSelected) modifier = "match__item--selected";
-
-              return (
-                <button
-                  key={`l-${item.id}`}
-                  type="button"
-                  className={`match__item ${modifier}`}
-                  onClick={() => handleLeftClick(item)}
-                  disabled={isMatched}
-                >
-                  {item.hangul}
-                </button>
-              );
-            })}
+        <div className="match-game__body">
+          <div className="match">
+            <div className="match__col">{leftItems.map(renderLeft)}</div>
+            <div className="match__col">{rightItems.map(renderRight)}</div>
           </div>
 
-          <div className="match__col">
-            {rightItems.map((item) => {
-              const isMatched = matchedIds.has(item.id);
-              const isWrong =
-                wrongPair?.right === item.id &&
-                !matchedIds.has(item.id);
-
-              let modifier = "";
-              if (isMatched) modifier = "match__item--correct";
-              else if (isWrong) modifier = "match__item--wrong";
-
-              return (
-                <button
-                  key={`r-${item.id}`}
-                  type="button"
-                  className={`match__item ${modifier}`}
-                  onClick={() => handleRightClick(item)}
-                  disabled={isMatched}
-                >
-                  {item.translation}
-                </button>
-              );
-            })}
-          </div>
+          {!answered && (
+            <div className="match__footer">
+              <motion.button
+                type="button"
+                className="btn btn--accent btn--lg match__check"
+                disabled={!allPaired}
+                onClick={handleCheck}
+                whileHover={allPaired ? { y: -1, scale: 1.02 } : undefined}
+                whileTap={allPaired ? { scale: 0.97 } : undefined}
+                transition={spring.bouncy}
+              >
+                Проверить
+              </motion.button>
+            </div>
+          )}
         </div>
       )}
 
       {phase === "result" && (
         <div className="match-game__result">
           <p className="match-game__result-score">
-            {correctCount} / {pairs.length}
+            {correctCount} / {total}
           </p>
-          <p className="match-game__result-percent">{percent}%</p>
+          <p className="match-game__result-percent">
+            {total > 0 ? Math.round((correctCount / total) * 100) : 0}%
+          </p>
           {reward !== null && (
             <p className="match-game__result-reward">
               {reward > 0 ? `+${reward} черники` : "Без награды"}

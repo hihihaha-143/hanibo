@@ -45,24 +45,14 @@
 
   &__state {
     padding: 3rem 0;
-    font-size: 0.9375rem;
+    font-size: 1.9375rem;
     color: var(--color-text-secondary);
     text-align: center;
   }
 
-  // Компактная сетка для узкой модалки
-  .match {
-    gap: 0.75rem;
-  }
-
-  .match__col {
-    gap: 0.375rem;
-  }
-
-  .match__item {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
-    border-radius: 0.5rem;
+  &__body {
+    @include flex(column, flex-start, stretch, 1rem);
+    flex: 1 1 auto;
   }
 
   &__result {
@@ -87,7 +77,7 @@
   &__result-reward {
     margin-top: 0.25rem;
     padding: 0.375rem 0.75rem;
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--color-text);
     background-color: var(--color-success-bg);

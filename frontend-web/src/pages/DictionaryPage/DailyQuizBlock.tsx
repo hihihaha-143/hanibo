@@ -51,9 +51,13 @@ function buildQuestion(data: DailyQuizResponse): TestQuestionChoose {
 
 interface DailyQuizBlockProps {
   disabled?: boolean;
+  onAnswered?: () => void;
 }
 
-export function DailyQuizBlock({ disabled = false }: DailyQuizBlockProps) {
+export function DailyQuizBlock({
+  disabled = false,
+  onAnswered,
+}: DailyQuizBlockProps) {
   const { refreshUser } = useAuth();
   const [question, setQuestion] = useState<TestQuestionChoose | null>(null);
   const [targetId, setTargetId] = useState<number | null>(null);
@@ -105,6 +109,7 @@ export function DailyQuizBlock({ disabled = false }: DailyQuizBlockProps) {
       if (targetId !== null) {
         updateUserWordProgress(targetId, isCorrect)
           .then(() => refreshUser())
+          .then(() => onAnswered?.())
           .catch(() => {});
       }
 
@@ -112,7 +117,7 @@ export function DailyQuizBlock({ disabled = false }: DailyQuizBlockProps) {
         loadNext();
       }, NEXT_DELAY);
     },
-    [question, answered, targetId, loadNext, refreshUser, disabled],
+    [question, answered, targetId, loadNext, refreshUser, disabled, onAnswered],
   );
 
   useHotkeys(
