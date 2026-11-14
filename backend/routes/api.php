@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\MiniGame\RewardController;
 use App\Http\Controllers\Api\MiniGame\SpeedController;
 use App\Http\Controllers\Api\MiniGame\SyllableGapController;
 use App\Http\Controllers\Api\MiniGame\SyllableOrderController;
+use App\Http\Controllers\Api\MiniGame\TextInputController;
 use App\Http\Controllers\Api\MiniGame\TrueFalseController;
 use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Api\UserWordController;
@@ -74,6 +75,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/syllable-order', [SyllableOrderController::class, 'show']);
         Route::get('/speed', [SpeedController::class, 'show']);
         Route::get('/correct-spelling', [CorrectSpellingController::class, 'show']);
+        Route::get('/text-input', [TextInputController::class, 'show']);
         Route::post('/reward', [RewardController::class, 'store']);
     });
 });
@@ -107,5 +109,3 @@ Route::get('/tips/random', function () {
 Route::get('/course/items', [CourseItemController::class, 'index']);
 Route::get('/course/items/{id}', [CourseItemController::class, 'show']);
 Route::get('/course-tests/{id}/data', [CourseItemController::class, 'testData']);
-
-

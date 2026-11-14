@@ -84,7 +84,7 @@ const MINI_GAMES: MiniGameInfo[] = [
     title: "Ввод слова",
     description: "Напиши хангыль по переводу",
     icon: <Keyboard size={22} />,
-    available: false,
+    available: true,
   },
 ];
 

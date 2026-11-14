@@ -112,6 +112,21 @@ export async function getCorrectSpelling(): Promise<CorrectSpellingQuestion> {
   return data;
 }
 
+// ---------- Text Input ----------
+
+export interface TextInputQuestion {
+  word_id: number;
+  translation: string;
+  hangul: string;
+}
+
+export async function getTextInput(): Promise<TextInputQuestion> {
+  const { data } = await apiClient.get<TextInputQuestion>(
+    "/minigames/text-input",
+  );
+  return data;
+}
+
 // ---------- Награда ----------
 
 export interface RewardResponse {
