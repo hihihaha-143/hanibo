@@ -19,6 +19,7 @@ import { MatchGame } from "./MiniGame/MatchGame";
 import { SyllableGapGame } from "./MiniGame/SyllableGapGame";
 import { SyllableOrderGame } from "./MiniGame/SyllableOrderGame";
 import { SpeedGame } from "./MiniGame/SpeedGame";
+import { CorrectSpellingGame } from "./MiniGame/CorrectSpellingGame";
 
 const EMPTY_PAGE: Paginated<DictionaryWord> = {
   data: [],
@@ -226,6 +227,9 @@ export function DictionaryTab() {
           <SyllableOrderGame onClose={handleExitGame} />
         )}
         {activeGame === "speed" && <SpeedGame onClose={handleExitGame} />}
+        {activeGame === "correct-spelling" && (
+          <CorrectSpellingGame onClose={handleExitGame} />
+        )}
       </MiniGamesModal>
     </div>
   );

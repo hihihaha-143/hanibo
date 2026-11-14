@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\DailyQuizController;
 use App\Http\Controllers\Api\DailyWordController;
 use App\Http\Controllers\Api\DictionaryController;
 use App\Http\Controllers\Api\MiniGame\AudioChooseController;
+use App\Http\Controllers\Api\MiniGame\CorrectSpellingController;
 use App\Http\Controllers\Api\MiniGame\MatchController;
 use App\Http\Controllers\Api\MiniGame\RewardController;
 use App\Http\Controllers\Api\MiniGame\SpeedController;
@@ -72,6 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/syllable-gap', [SyllableGapController::class, 'show']);
         Route::get('/syllable-order', [SyllableOrderController::class, 'show']);
         Route::get('/speed', [SpeedController::class, 'show']);
+        Route::get('/correct-spelling', [CorrectSpellingController::class, 'show']);
         Route::post('/reward', [RewardController::class, 'store']);
     });
 });
@@ -105,3 +107,5 @@ Route::get('/tips/random', function () {
 Route::get('/course/items', [CourseItemController::class, 'index']);
 Route::get('/course/items/{id}', [CourseItemController::class, 'show']);
 Route::get('/course-tests/{id}/data', [CourseItemController::class, 'testData']);
+
+

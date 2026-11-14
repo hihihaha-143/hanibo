@@ -95,6 +95,23 @@ export async function getSpeed(): Promise<AudioChooseResponse> {
   return data;
 }
 
+// ---------- Correct Spelling ----------
+
+export interface CorrectSpellingQuestion {
+  word_id: number;
+  translation: string;
+  hangul: string;
+  variants: string[];
+  correct_index: number;
+}
+
+export async function getCorrectSpelling(): Promise<CorrectSpellingQuestion> {
+  const { data } = await apiClient.get<CorrectSpellingQuestion>(
+    "/minigames/correct-spelling",
+  );
+  return data;
+}
+
 // ---------- Награда ----------
 
 export interface RewardResponse {

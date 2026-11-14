@@ -77,7 +77,7 @@ const MINI_GAMES: MiniGameInfo[] = [
     title: "Правописание",
     description: "Выбери верное написание",
     icon: <SpellCheck size={22} />,
-    available: false,
+    available: true,
   },
   {
     id: "text-input",
