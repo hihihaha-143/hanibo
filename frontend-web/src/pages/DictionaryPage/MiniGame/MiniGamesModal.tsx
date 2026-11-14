@@ -70,7 +70,7 @@ const MINI_GAMES: MiniGameInfo[] = [
     title: "Скорость",
     description: "3 секунды на ответ",
     icon: <Gauge size={22} />,
-    available: false,
+    available: true,
   },
   {
     id: "correct-spelling",

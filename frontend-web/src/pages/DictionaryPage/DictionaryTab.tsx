@@ -18,6 +18,7 @@ import { AudioChooseGame } from "./MiniGame/AudioChooseGame";
 import { MatchGame } from "./MiniGame/MatchGame";
 import { SyllableGapGame } from "./MiniGame/SyllableGapGame";
 import { SyllableOrderGame } from "./MiniGame/SyllableOrderGame";
+import { SpeedGame } from "./MiniGame/SpeedGame";
 
 const EMPTY_PAGE: Paginated<DictionaryWord> = {
   data: [],
@@ -224,6 +225,7 @@ export function DictionaryTab() {
         {activeGame === "syllable-order" && (
           <SyllableOrderGame onClose={handleExitGame} />
         )}
+        {activeGame === "speed" && <SpeedGame onClose={handleExitGame} />}
       </MiniGamesModal>
     </div>
   );

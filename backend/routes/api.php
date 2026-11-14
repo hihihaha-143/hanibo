@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\DictionaryController;
 use App\Http\Controllers\Api\MiniGame\AudioChooseController;
 use App\Http\Controllers\Api\MiniGame\MatchController;
 use App\Http\Controllers\Api\MiniGame\RewardController;
+use App\Http\Controllers\Api\MiniGame\SpeedController;
 use App\Http\Controllers\Api\MiniGame\SyllableGapController;
 use App\Http\Controllers\Api\MiniGame\SyllableOrderController;
 use App\Http\Controllers\Api\MiniGame\TrueFalseController;
@@ -70,6 +71,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/match', [MatchController::class, 'show']);
         Route::get('/syllable-gap', [SyllableGapController::class, 'show']);
         Route::get('/syllable-order', [SyllableOrderController::class, 'show']);
+        Route::get('/speed', [SpeedController::class, 'show']);
         Route::post('/reward', [RewardController::class, 'store']);
     });
 });

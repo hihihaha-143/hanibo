@@ -88,6 +88,13 @@ export async function getSyllableOrder(): Promise<SyllableOrderQuestion> {
   return data;
 }
 
+// ---------- Speed ----------
+
+export async function getSpeed(): Promise<AudioChooseResponse> {
+  const { data } = await apiClient.get<AudioChooseResponse>("/minigames/speed");
+  return data;
+}
+
 // ---------- Награда ----------
 
 export interface RewardResponse {
