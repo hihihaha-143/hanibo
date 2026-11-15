@@ -3,6 +3,7 @@
 .daily-quiz-block {
   @include flex(column, flex-start, stretch, 0.75rem);
   padding: 1rem;
+  margin-top: 1rem;
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 1rem;

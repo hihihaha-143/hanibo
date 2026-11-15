@@ -168,7 +168,7 @@ export function DictionaryTab() {
   return (
     <div className="dictionary-tab">
       <div className="dictionary-tab__head">
-        <h2 className="dictionary-tab__title">Словарь</h2>
+     
         <p className="dictionary-tab__count">
           {loading && words.meta.total === 0
             ? "загрузка…"
