@@ -6,6 +6,7 @@ import type { PracticeTabId } from "./practiceTabs";
 import { PRACTICE_TABS, DEFAULT_PRACTICE_TAB } from "./practiceTabs";
 import AlphabetPage from "../AlphabetPage/AlphabetPage";
 import { DictionaryTab } from "../DictionaryPage/DictionaryTab";
+import { PhrasesTab } from "../PhrasesPage/PhrasesTab";
 
 const STORAGE_KEY = "hanibo.practice.tab";
 
@@ -63,6 +64,8 @@ export default function PracticePage() {
               <AlphabetPage />
             ) : activeTab === "vocabulary" ? (
               <DictionaryTab />
+            ) : activeTab === "phrases" ? (
+              <PhrasesTab />
             ) : (
               <p className="practice-page__placeholder">Раздел в разработке</p>
             )}

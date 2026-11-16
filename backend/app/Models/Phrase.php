@@ -46,4 +46,9 @@ class Phrase extends Model
     {
         return $this->hasMany(PhraseToken::class)->orderBy('order');
     }
+
+    public function progress(): HasMany
+    {
+        return $this->hasMany(UserPhrase::class);
+    }
 }

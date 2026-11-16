@@ -12,7 +12,11 @@ import { DictionaryToolbarBlock } from "./DictionaryToolbarBlock";
 import { DictionaryGridBlock } from "./DictionaryGridBlock";
 import { DailyWordBlock } from "./DailyWordBlock";
 import { DailyQuizBlock } from "./DailyQuizBlock";
-import { MiniGamesModal, type MiniGameId } from "./MiniGame/MiniGamesModal";
+import {
+  MiniGamesModal,
+  WORD_MINI_GAMES,
+  type MiniGameId,
+} from "./MiniGame/MiniGamesModal";
 import { TrueFalseGame } from "./MiniGame/TrueFalseGame";
 import { AudioChooseGame } from "./MiniGame/AudioChooseGame";
 import { MatchGame } from "./MiniGame/MatchGame";
@@ -168,7 +172,6 @@ export function DictionaryTab() {
   return (
     <div className="dictionary-tab">
       <div className="dictionary-tab__head">
-     
         <p className="dictionary-tab__count">
           {loading && words.meta.total === 0
             ? "загрузка…"
@@ -207,12 +210,13 @@ export function DictionaryTab() {
         </div>
       </div>
 
-      <MiniGamesModal
+      <MiniGamesModal<MiniGameId>
         open={miniGamesOpen}
         onClose={handleCloseModal}
         activeGame={activeGame}
         onPlay={handlePlay}
         onExitGame={handleExitGame}
+        games={WORD_MINI_GAMES}
       >
         {activeGame === "true-false" && (
           <TrueFalseGame onClose={handleExitGame} />

@@ -145,3 +145,95 @@ export async function postReward(
   });
   return data;
 }
+
+// =====================================================
+// ФРАЗЫ
+// =====================================================
+
+// ---------- True / False ----------
+
+export interface PhraseTrueFalseQuestion {
+  phrase_id: number;
+  hangul: string;
+  translation: string;
+  is_correct: boolean;
+}
+
+export async function getPhraseTrueFalse(): Promise<PhraseTrueFalseQuestion> {
+  const { data } = await apiClient.get<PhraseTrueFalseQuestion>(
+    "/minigames/phrase/true-false",
+  );
+  return data;
+}
+
+// ---------- Audio Choose ----------
+
+export interface PhraseAudioChooseResponse {
+  target: AudioChooseWord;
+  distractors: AudioChooseWord[];
+}
+
+export async function getPhraseAudioChoose(): Promise<PhraseAudioChooseResponse> {
+  const { data } = await apiClient.get<PhraseAudioChooseResponse>(
+    "/minigames/phrase/audio-choose",
+  );
+  return data;
+}
+
+// ---------- Match ----------
+
+export async function getPhraseMatch(): Promise<MatchResponse> {
+  const { data } = await apiClient.get<MatchResponse>(
+    "/minigames/phrase/match",
+  );
+  return data;
+}
+
+// ---------- Speed ----------
+
+export async function getPhraseSpeed(): Promise<PhraseAudioChooseResponse> {
+  const { data } = await apiClient.get<PhraseAudioChooseResponse>(
+    "/minigames/phrase/speed",
+  );
+  return data;
+}
+
+// ---------- Correct Spelling ----------
+
+export interface PhraseCorrectSpellingQuestion {
+  phrase_id: number;
+  translation: string;
+  hangul: string;
+  variants: string[];
+  correct_index: number;
+}
+
+export async function getPhraseCorrectSpelling(): Promise<PhraseCorrectSpellingQuestion> {
+  const { data } = await apiClient.get<PhraseCorrectSpellingQuestion>(
+    "/minigames/phrase/correct-spelling",
+  );
+  return data;
+}
+
+// ---------- Order (сборка фразы из токенов) ----------
+
+export interface PhraseOrderToken {
+  order: number;
+  text: string;
+  space_after: boolean;
+}
+
+export interface PhraseOrderQuestion {
+  phrase_id: number;
+  hangul: string;
+  translation: string;
+  tokens: PhraseOrderToken[];
+  correct_text: string;
+}
+
+export async function getPhraseOrder(): Promise<PhraseOrderQuestion> {
+  const { data } = await apiClient.get<PhraseOrderQuestion>(
+    "/minigames/phrase/order",
+  );
+  return data;
+}

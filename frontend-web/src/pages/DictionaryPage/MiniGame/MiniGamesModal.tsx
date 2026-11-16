@@ -21,7 +21,15 @@ export type MiniGameId =
   | "true-false"
   | "text-input";
 
-interface MiniGameInfo {
+export type PhraseMiniGameId =
+  | "phrase-true-false"
+  | "phrase-audio-choose"
+  | "phrase-match"
+  | "phrase-speed"
+  | "phrase-correct-spelling"
+  | "phrase-order";
+
+export interface MiniGameInfo {
   id: MiniGameId;
   title: string;
   description: string;
@@ -29,7 +37,15 @@ interface MiniGameInfo {
   available: boolean;
 }
 
-const MINI_GAMES: MiniGameInfo[] = [
+export interface PhraseMiniGameInfo {
+  id: PhraseMiniGameId;
+  title: string;
+  description: string;
+  icon: ReactNode;
+  available: boolean;
+}
+
+export const WORD_MINI_GAMES: MiniGameInfo[] = [
   {
     id: "true-false",
     title: "Правда или ложь",
@@ -88,23 +104,85 @@ const MINI_GAMES: MiniGameInfo[] = [
   },
 ];
 
-interface MiniGamesModalProps {
+export const PHRASE_MINI_GAMES: PhraseMiniGameInfo[] = [
+  {
+    id: "phrase-true-false",
+    title: "Правда или ложь",
+    description: "Пара «фраза — перевод»: верно ли?",
+    icon: <CheckCheck size={22} />,
+    available: true,
+  },
+  {
+    id: "phrase-audio-choose",
+    title: "Аудио-угадайка",
+    description: "Слушай и выбирай перевод",
+    icon: <Volume2 size={22} />,
+    available: true,
+  },
+  {
+    id: "phrase-match",
+    title: "Найди пару",
+    description: "6 фраз и 6 переводов",
+    icon: <Layers size={22} />,
+    available: true,
+  },
+  {
+    id: "phrase-speed",
+    title: "Скорость",
+    description: "3 секунды на ответ",
+    icon: <Gauge size={22} />,
+    available: true,
+  },
+  {
+    id: "phrase-correct-spelling",
+    title: "Правописание",
+    description: "Выбери верное написание фразы",
+    icon: <SpellCheck size={22} />,
+    available: true,
+  },
+  {
+    id: "phrase-order",
+    title: "Собери фразу",
+    description: "Расставь слова по порядку",
+    icon: <ArrowLeftRight size={22} />,
+    available: true,
+  },
+];
+
+type AnyGameId = MiniGameId | PhraseMiniGameId;
+
+interface MiniGamesModalProps<T extends AnyGameId = MiniGameId> {
   open: boolean;
   onClose: () => void;
-  activeGame: MiniGameId | null;
-  onPlay: (id: MiniGameId) => void;
+  activeGame: T | null;
+  onPlay: (id: T) => void;
   onExitGame: () => void;
+  games?: {
+    id: T;
+    title: string;
+    description: string;
+    icon: ReactNode;
+    available: boolean;
+  }[];
+  title?: string;
   children?: ReactNode;
 }
 
-export function MiniGamesModal({
+export function MiniGamesModal<T extends AnyGameId = MiniGameId>({
   open,
   onClose,
   activeGame,
   onPlay,
   onExitGame,
+  games,
+  title = "Мини-игры",
   children,
-}: MiniGamesModalProps) {
+}: MiniGamesModalProps<T>) {
+  const list =
+    games ??
+    (WORD_MINI_GAMES as unknown as MiniGamesModalProps<T>["games"]) ??
+    [];
+
   useEffect(() => {
     if (!open) return;
 
@@ -132,7 +210,7 @@ export function MiniGamesModal({
       className="modal"
       role="dialog"
       aria-modal="true"
-      aria-label="Мини-игры"
+      aria-label={title}
       onClick={onClose}
     >
       <div
@@ -154,10 +232,10 @@ export function MiniGamesModal({
           children
         ) : (
           <>
-            <h2 className="mini-games-modal__title">Мини-игры</h2>
+            <h2 className="mini-games-modal__title">{title}</h2>
 
             <div className="mini-games-grid">
-              {MINI_GAMES.map((game) => (
+              {list.map((game) => (
                 <button
                   key={game.id}
                   type="button"

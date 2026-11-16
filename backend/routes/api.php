@@ -7,10 +7,19 @@ use App\Http\Controllers\Api\CourseItemWordController;
 use App\Http\Controllers\Api\CourseItemGrammarController;
 use App\Http\Controllers\Api\DailyQuizController;
 use App\Http\Controllers\Api\DailyWordController;
+use App\Http\Controllers\Api\DailyPhraseController;
+use App\Http\Controllers\Api\DailyPhraseQuizController;
 use App\Http\Controllers\Api\DictionaryController;
+use App\Http\Controllers\Api\PhrasesController;
 use App\Http\Controllers\Api\MiniGame\AudioChooseController;
 use App\Http\Controllers\Api\MiniGame\CorrectSpellingController;
 use App\Http\Controllers\Api\MiniGame\MatchController;
+use App\Http\Controllers\Api\MiniGame\Phrase\PhraseAudioChooseController;
+use App\Http\Controllers\Api\MiniGame\Phrase\PhraseCorrectSpellingController;
+use App\Http\Controllers\Api\MiniGame\Phrase\PhraseMatchController;
+use App\Http\Controllers\Api\MiniGame\Phrase\PhraseOrderController;
+use App\Http\Controllers\Api\MiniGame\Phrase\PhraseSpeedController;
+use App\Http\Controllers\Api\MiniGame\Phrase\PhraseTrueFalseController;
 use App\Http\Controllers\Api\MiniGame\RewardController;
 use App\Http\Controllers\Api\MiniGame\SpeedController;
 use App\Http\Controllers\Api\MiniGame\SyllableGapController;
@@ -19,6 +28,7 @@ use App\Http\Controllers\Api\MiniGame\TextInputController;
 use App\Http\Controllers\Api\MiniGame\TrueFalseController;
 use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Api\UserWordController;
+use App\Http\Controllers\Api\UserPhraseController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\LibraryItemController;
 use App\Http\Controllers\AlphabetProgressController;
@@ -55,18 +65,32 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dictionary', [DictionaryController::class, 'index']);
     Route::get('/topics', [TopicController::class, 'index']);
 
+    // --- Phrases (словарь фраз) ---
+    Route::get('/phrases', [PhrasesController::class, 'index']);
+
     // --- Daily Word ---
     Route::get('/daily-word', [DailyWordController::class, 'show']);
 
     // --- Daily Quiz ---
     Route::get('/daily-quiz', [DailyQuizController::class, 'show']);
 
+    // --- Daily Phrase ---
+    Route::get('/daily-phrase', [DailyPhraseController::class, 'show']);
+
+    // --- Daily Phrase Quiz ---
+    Route::get('/daily-phrase-quiz', [DailyPhraseQuizController::class, 'show']);
+
     // --- UserWord (SRS-прогресс слов) ---
     Route::post('/user-words/start', [UserWordController::class, 'start']);
     Route::post('/user-words/progress', [UserWordController::class, 'progress']);
     Route::delete('/user-words/{wordId}', [UserWordController::class, 'destroy']);
 
-    // --- MiniGames ---
+    // --- UserPhrase (SRS-прогресс фраз) ---
+    Route::post('/user-phrases/start', [UserPhraseController::class, 'start']);
+    Route::post('/user-phrases/progress', [UserPhraseController::class, 'progress']);
+    Route::delete('/user-phrases/{phraseId}', [UserPhraseController::class, 'destroy']);
+
+    // --- MiniGames (слова) ---
     Route::prefix('minigames')->group(function () {
         Route::get('/true-false', [TrueFalseController::class, 'show']);
         Route::get('/audio-choose', [AudioChooseController::class, 'show']);
@@ -77,6 +101,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/correct-spelling', [CorrectSpellingController::class, 'show']);
         Route::get('/text-input', [TextInputController::class, 'show']);
         Route::post('/reward', [RewardController::class, 'store']);
+
+        // --- MiniGames (фразы) ---
+        Route::prefix('phrase')->group(function () {
+            Route::get('/true-false', [PhraseTrueFalseController::class, 'show']);
+            Route::get('/audio-choose', [PhraseAudioChooseController::class, 'show']);
+            Route::get('/match', [PhraseMatchController::class, 'show']);
+            Route::get('/speed', [PhraseSpeedController::class, 'show']);
+            Route::get('/correct-spelling', [PhraseCorrectSpellingController::class, 'show']);
+            Route::get('/order', [PhraseOrderController::class, 'show']);
+        });
     });
 });
 

@@ -26,6 +26,10 @@ export default function BannerStats() {
   const dailyGoal = user.daily_exp_goal ?? 0;
   const freezes = user.streak_freezes ?? 0;
 
+  const learningTotal =
+    (user.words_learning ?? 0) + (user.phrases_learning ?? 0);
+  const learnedTotal = (user.words_learned ?? 0) + (user.phrases_learned ?? 0);
+
   const streakState: StreakState = user.streak_extended_today
     ? "active"
     : user.streak_frozen_today
@@ -62,12 +66,12 @@ export default function BannerStats() {
     {
       key: "words_learning",
       icon: <BookOpen size={24} />,
-      value: user.words_learning,
+      value: learningTotal,
       tooltip: (
         <>
           <span className="banner-stats__tooltip-title">Изучается</span>
           <span className="banner-stats__tooltip-sub">
-            Слова, которые сейчас в процессе
+            Слова и фразы, которые сейчас в процессе
           </span>
         </>
       ),
@@ -75,12 +79,12 @@ export default function BannerStats() {
     {
       key: "words_learned",
       icon: <GraduationCap size={24} />,
-      value: user.words_learned,
+      value: learnedTotal,
       tooltip: (
         <>
           <span className="banner-stats__tooltip-title">Изучено</span>
           <span className="banner-stats__tooltip-sub">
-            Слова, доведённые до уверенного уровня
+            Слова и фразы, доведённые до уверенного уровня
           </span>
         </>
       ),
