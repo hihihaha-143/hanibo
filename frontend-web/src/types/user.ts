@@ -36,6 +36,10 @@ export interface User {
   blueberry: number;
   words_learning: number;
   words_learned: number;
+  phrases_learning: number;
+  phrases_learned: number;
+  grammar_learning: number;
+  grammar_learned: number;
   exp: number;
   streak_current: number;
   streak_best: number;

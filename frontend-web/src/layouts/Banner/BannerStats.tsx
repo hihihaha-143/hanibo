@@ -26,9 +26,16 @@ export default function BannerStats() {
   const dailyGoal = user.daily_exp_goal ?? 0;
   const freezes = user.streak_freezes ?? 0;
 
-  const learningTotal =
-    (user.words_learning ?? 0) + (user.phrases_learning ?? 0);
-  const learnedTotal = (user.words_learned ?? 0) + (user.phrases_learned ?? 0);
+  const wordsLearning = user.words_learning ?? 0;
+  const phrasesLearning = user.phrases_learning ?? 0;
+  const grammarLearning = user.grammar_learning ?? 0;
+
+  const wordsLearned = user.words_learned ?? 0;
+  const phrasesLearned = user.phrases_learned ?? 0;
+  const grammarLearned = user.grammar_learned ?? 0;
+
+  const learningTotal = wordsLearning + phrasesLearning + grammarLearning;
+  const learnedTotal = wordsLearned + phrasesLearned + grammarLearned;
 
   const streakState: StreakState = user.streak_extended_today
     ? "active"
@@ -71,7 +78,13 @@ export default function BannerStats() {
         <>
           <span className="banner-stats__tooltip-title">Изучается</span>
           <span className="banner-stats__tooltip-sub">
-            Слова и фразы, которые сейчас в процессе
+            Слова: {wordsLearning}
+          </span>
+          <span className="banner-stats__tooltip-sub">
+            Фразы: {phrasesLearning}
+          </span>
+          <span className="banner-stats__tooltip-sub">
+            Грамматика: {grammarLearning}
           </span>
         </>
       ),
@@ -84,7 +97,13 @@ export default function BannerStats() {
         <>
           <span className="banner-stats__tooltip-title">Изучено</span>
           <span className="banner-stats__tooltip-sub">
-            Слова и фразы, доведённые до уверенного уровня
+            Слова: {wordsLearned}
+          </span>
+          <span className="banner-stats__tooltip-sub">
+            Фразы: {phrasesLearned}
+          </span>
+          <span className="banner-stats__tooltip-sub">
+            Грамматика: {grammarLearned}
           </span>
         </>
       ),

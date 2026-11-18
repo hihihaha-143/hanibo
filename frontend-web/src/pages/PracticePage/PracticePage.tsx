@@ -7,6 +7,7 @@ import { PRACTICE_TABS, DEFAULT_PRACTICE_TAB } from "./practiceTabs";
 import AlphabetPage from "../AlphabetPage/AlphabetPage";
 import { DictionaryTab } from "../DictionaryPage/DictionaryTab";
 import { PhrasesTab } from "../PhrasesPage/PhrasesTab";
+import { GrammarTab } from "../GrammarPage/GrammarTab";
 
 const STORAGE_KEY = "hanibo.practice.tab";
 
@@ -66,6 +67,8 @@ export default function PracticePage() {
               <DictionaryTab />
             ) : activeTab === "phrases" ? (
               <PhrasesTab />
+            ) : activeTab === "grammar" ? (
+              <GrammarTab />
             ) : (
               <p className="practice-page__placeholder">Раздел в разработке</p>
             )}
