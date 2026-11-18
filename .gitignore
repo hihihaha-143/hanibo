@@ -38,3 +38,4 @@ backend/public/build
 
 # OSPanel
 .osp/*.lnk
+*.lnk
