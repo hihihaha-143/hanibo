@@ -177,4 +177,10 @@ class User extends Authenticatable
 
         return app(StreakService::class)->refreshStreak($this);
     }
+
+
+    public function grammarRules(): HasMany
+{
+    return $this->hasMany(UserGrammarRule::class);
+}
 }

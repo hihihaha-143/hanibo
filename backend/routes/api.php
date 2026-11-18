@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\DailyPhraseController;
 use App\Http\Controllers\Api\DailyPhraseQuizController;
 use App\Http\Controllers\Api\DictionaryController;
 use App\Http\Controllers\Api\PhrasesController;
+use App\Http\Controllers\Api\GrammarRuleController;
+use App\Http\Controllers\Api\UserGrammarController;
 use App\Http\Controllers\Api\MiniGame\AudioChooseController;
 use App\Http\Controllers\Api\MiniGame\CorrectSpellingController;
 use App\Http\Controllers\Api\MiniGame\MatchController;
@@ -89,6 +91,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user-phrases/start', [UserPhraseController::class, 'start']);
     Route::post('/user-phrases/progress', [UserPhraseController::class, 'progress']);
     Route::delete('/user-phrases/{phraseId}', [UserPhraseController::class, 'destroy']);
+
+    // --- Grammar (словарь грамматики + SRS) ---
+    Route::get('/grammar-rules', [GrammarRuleController::class, 'index']);
+    Route::get('/grammar-rules/filters', [GrammarRuleController::class, 'filters']);
+    Route::get('/grammar-rules/{grammarRule}', [GrammarRuleController::class, 'show']);
+
+    Route::get('/user/grammar-rules', [UserGrammarController::class, 'index']);
+    Route::post('/user/grammar-rules/{grammarRule}/start', [UserGrammarController::class, 'start']);
+    Route::post('/user/grammar-rules/{grammarRule}/review', [UserGrammarController::class, 'review']);
+    Route::delete('/user/grammar-rules/{grammarRule}/reset', [UserGrammarController::class, 'reset']);
 
     // --- MiniGames (слова) ---
     Route::prefix('minigames')->group(function () {

@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Shop\ShopItem;
 use App\Models\UserWord;
 use App\Models\UserPhrase;
+use App\Models\UserGrammarRule;
 use App\Http\Resources\Shop\ShopItemResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -52,6 +53,16 @@ class UserResource extends JsonResource
         $phrasesLearned = UserPhrase::query()
             ->where('user_id', $this->id)
             ->where('interval_days', '>', 0)
+            ->count();
+
+        $grammarLearning = UserGrammarRule::query()
+            ->where('user_id', $this->id)
+            ->whereIn('status', ['learning', 'review'])
+            ->count();
+
+        $grammarLearned = UserGrammarRule::query()
+            ->where('user_id', $this->id)
+            ->where('status', 'learned')
             ->count();
 
         return [
@@ -106,6 +117,8 @@ class UserResource extends JsonResource
             'words_learned' => $wordsLearned,
             'phrases_learning' => $phrasesLearning,
             'phrases_learned' => $phrasesLearned,
+            'grammar_learning' => $grammarLearning,
+            'grammar_learned' => $grammarLearned,
             'exp' => $this->exp,
             'created_at' => $this->created_at?->toIso8601String(),
         ];

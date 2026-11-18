@@ -13,9 +13,19 @@ class GrammarRuleResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'construction' => $this->construction,
-            'form' => new FormResource($this->whenLoaded('form')),
-            'level' => new LevelResource($this->whenLoaded('level')),
-            'phrases' => PhraseResource::collection($this->whenLoaded('phrases')),
+            'form' => $this->whenLoaded('form', fn () => $this->form ? [
+                'id' => $this->form->id,
+                'title' => $this->form->title,
+            ] : null),
+            'level' => $this->whenLoaded('level', fn () => $this->level ? [
+                'id' => $this->level->id,
+                'title' => $this->level->title,
+            ] : null),
+            'status' => $this->user_status,
+            'interval_days' => $this->user_interval_days,
+            'next_review_at' => $this->user_next_review_at,
+            'correct_streak' => $this->user_correct_streak,
+            'mistakes_count' => $this->user_mistakes_count,
         ];
     }
 }
