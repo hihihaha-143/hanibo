@@ -66,7 +66,7 @@ function generateAllGrammarQuestions(
   rules: GrammarRule[],
   poolRules: GrammarRuleLike[],
 ): TestQuestion[] {
-  const phrases = uniquePhrases(rules.flatMap((r) => r.phrases));
+  const phrases = uniquePhrases(rules.flatMap((r) => r.phrases ?? []));
   const pool = buildWordPoolFromPhrases(phrases);
 
   return [

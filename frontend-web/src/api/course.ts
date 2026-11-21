@@ -1,6 +1,6 @@
 import { apiClient } from "./client";
 
-export type CourseItemType = "lesson" | "extra" | "test";
+export type CourseItemType = "lesson" | "extra" | "test" | "review" | "errors";
 
 export interface CourseItem {
   id: number;

@@ -8,6 +8,9 @@ import ExpBoostBadge from "./components/ExpBoostBadge/ExpBoostBadge";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const CoursePage = lazy(() => import("./pages/CoursePage/CoursePage"));
+const CourseTrainingPage = lazy(
+  () => import("./pages/CoursePage/CourseTrainingPage"),
+);
 const ItemPage = lazy(() => import("./pages/ItemPage/ItemPage"));
 const LibraryPage = lazy(() => import("./pages/LibraryPage/LibraryPage"));
 const LibraryViewPage = lazy(
@@ -43,6 +46,14 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="*" element={<NotFoundPage />} />
             <Route path="/course" element={<CoursePage />} />
+            <Route
+              path="/course/review"
+              element={<CourseTrainingPage mode="review" />}
+            />
+            <Route
+              path="/course/errors"
+              element={<CourseTrainingPage mode="errors" />}
+            />
             <Route path="/course/item/:id" element={<ItemPage />} />
 
             <Route path="/alphabet" element={<AlphabetPage />} />

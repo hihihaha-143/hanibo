@@ -21,6 +21,7 @@ class GrammarRuleResource extends JsonResource
                 'id' => $this->level->id,
                 'title' => $this->level->title,
             ] : null),
+            'phrases' => PhraseResource::collection($this->whenLoaded('phrases')),
             'status' => $this->user_status,
             'interval_days' => $this->user_interval_days,
             'next_review_at' => $this->user_next_review_at,

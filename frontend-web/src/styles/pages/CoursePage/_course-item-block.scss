@@ -32,6 +32,21 @@
     }
   }
 
+  &__training-icon {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+
+    &--errors {
+      background: var(--color-error-bg);
+      color: var(--color-error);
+    }
+  }
+
   &__inner {
     @include flex(row, center, center);
     position: relative;

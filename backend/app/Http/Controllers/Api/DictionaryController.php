@@ -50,7 +50,8 @@ class DictionaryController extends Controller
             });
         }
 
-        $words = $query->orderBy('hangul')->paginate(30);
+        $perPage = min(100, max(1, (int) $request->input('per_page', 30)));
+        $words = $query->orderBy('hangul')->paginate($perPage);
 
         return WordResource::collection($words);
     }

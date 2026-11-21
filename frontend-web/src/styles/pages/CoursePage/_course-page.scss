@@ -1,3 +1,36 @@
 @use '../../abstracts' as *;
 @use './course-list-block';
 @use './course-item-block';
+@use './course-dictionary';
+@use './course-stats';
+@use './course-training-block';
+@use './course-training-page';
+
+.course-page {
+  width: 100%;
+  min-width: 0;
+
+  &__header {
+    gap: 0.35rem;
+  }
+
+  &__subtitle {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+  }
+
+  &__content {
+    min-width: 0;
+  }
+}
+
+.course-tab-empty {
+  @include flex(column, center, center, 0.75rem);
+  min-height: 16rem;
+  padding: 2rem;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+}

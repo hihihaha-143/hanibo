@@ -7,6 +7,8 @@ export interface WordProgress {
   interval_days: number;
   next_review_at: string | null;
   is_learned: boolean;
+  mistakes_count?: number;
+  correct_streak?: number;
 }
 
 // ---------- слово словаря ----------
@@ -51,6 +53,7 @@ export interface DictionaryFilters {
   topic_id?: number | null;
   tab?: DictionaryTab;
   page?: number;
+  per_page?: number;
 }
 
 // ---------- запросы ----------
@@ -71,6 +74,9 @@ export async function getDictionary(
   }
   if (filters.page && filters.page > 1) {
     params.page = filters.page;
+  }
+  if (filters.per_page) {
+    params.per_page = filters.per_page;
   }
 
   const { data } = await apiClient.get<Paginated<DictionaryWord>>(
@@ -170,6 +176,8 @@ export interface PhraseProgress {
   interval_days: number;
   next_review_at: string | null;
   is_learned: boolean;
+  mistakes_count?: number;
+  correct_streak?: number;
 }
 
 // ---------- фраза словаря ----------
@@ -197,6 +205,7 @@ export interface PhraseFilters {
   level_id?: number | null;
   tab?: DictionaryTab;
   page?: number;
+  per_page?: number;
 }
 
 // ---------- запросы ----------
@@ -220,6 +229,9 @@ export async function getPhrases(
   }
   if (filters.page && filters.page > 1) {
     params.page = filters.page;
+  }
+  if (filters.per_page) {
+    params.per_page = filters.per_page;
   }
 
   const { data } = await apiClient.get<Paginated<DictionaryPhrase>>(

@@ -28,6 +28,8 @@ class PhraseResource extends JsonResource
                     'interval_days' => $progress->interval_days,
                     'next_review_at' => $progress->next_review_at?->toIso8601String(),
                     'is_learned' => $progress->interval_days >= 30,
+                    'mistakes_count' => $progress->mistakes_count,
+                    'correct_streak' => $progress->correct_streak,
                 ];
             }),
         ];

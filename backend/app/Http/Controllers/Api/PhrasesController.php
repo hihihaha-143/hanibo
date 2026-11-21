@@ -54,7 +54,8 @@ class PhrasesController extends Controller
             });
         }
 
-        $phrases = $query->orderBy('hangul')->paginate(30);
+        $perPage = min(100, max(1, (int) $request->input('per_page', 30)));
+        $phrases = $query->orderBy('hangul')->paginate($perPage);
 
         return PhraseResource::collection($phrases);
     }

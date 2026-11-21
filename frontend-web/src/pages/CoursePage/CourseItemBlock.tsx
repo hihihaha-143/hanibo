@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { AlertTriangle, RotateCcw } from "lucide-react";
 import { motion } from "framer-motion";
 import blueberryIcon from "../../assets/blueberry.png";
 import strawberryIcon from "../../assets/strawberry.png";
@@ -47,6 +48,18 @@ export default function CourseItemBlock({
             alt=""
             className="course-item-block__image"
           />
+        );
+      case "review":
+        return (
+          <span className="course-item-block__training-icon course-item-block__training-icon--review">
+            <RotateCcw size={18} />
+          </span>
+        );
+      case "errors":
+        return (
+          <span className="course-item-block__training-icon course-item-block__training-icon--errors">
+            <AlertTriangle size={18} />
+          </span>
         );
     }
   })();
