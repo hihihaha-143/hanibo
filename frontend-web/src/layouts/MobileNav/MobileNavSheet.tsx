@@ -9,6 +9,7 @@ import {
   ShoppingBag,
   Trophy,
   UserRound,
+  ShieldCheck,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/useTheme";
@@ -123,7 +124,7 @@ export default function MobileNavSheet({ onClose }: MobileNavSheetProps) {
           <span>Магазин</span>
         </Link>
 
-        {isAuthenticated && (
+        {isAuthenticated && user && (
           <>
             <Link
               to="/profile"
@@ -149,6 +150,16 @@ export default function MobileNavSheet({ onClose }: MobileNavSheetProps) {
               <Settings size={18} aria-hidden="true" />
               <span>Настройки</span>
             </Link>
+            {user.role === "admin" && (
+              <Link
+                to="/admin"
+                className="mobile-nav-sheet__quick-link"
+                onClick={onClose}
+              >
+                <ShieldCheck size={18} aria-hidden="true" />
+                <span>Админка</span>
+              </Link>
+            )}
           </>
         )}
 

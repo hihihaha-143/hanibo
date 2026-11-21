@@ -8,6 +8,7 @@ import {
   Dumbbell,
   ShoppingBag,
   Clapperboard,
+  ShieldCheck,
 } from "lucide-react";
 import { spring } from "../../lib/motion";
 import { useAuth } from "../../context/useAuth";
@@ -36,7 +37,14 @@ export default function SidebarNav({ expanded }: SidebarNavProps) {
   const [hovered, setHovered] = useState<string | null>(null);
   const { user } = useAuth();
 
-  const items = user ? studentItems : guestItems;
+  const items = user
+    ? user.role === "admin"
+      ? [
+          ...studentItems,
+          { to: "/admin", label: "Админка", icon: ShieldCheck },
+        ]
+      : studentItems
+    : guestItems;
 
   return (
     <nav className="sidebar-nav">

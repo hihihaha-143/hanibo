@@ -34,6 +34,8 @@ use App\Http\Controllers\Api\UserPhraseController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\LibraryItemController;
 use App\Http\Controllers\Api\AchievementController;
+use App\Http\Controllers\Api\AdminController;
+use App\Http\Middleware\EnsureAdmin;
 use App\Http\Controllers\Api\CourseProgressController;
 use App\Http\Controllers\AlphabetProgressController;
 use App\Http\Controllers\AlphabetGroupProgressController;
@@ -142,6 +144,36 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     });
 });
+
+Route::middleware(['auth:sanctum', EnsureAdmin::class])
+    ->prefix('admin')
+    ->group(function () {
+        Route::get('/stats', [AdminController::class, 'stats']);
+        Route::get('/users', [AdminController::class, 'users']);
+        Route::patch('/users/{user}', [AdminController::class, 'updateUser']);
+        Route::post('/users/{user}/reset-progress', [AdminController::class, 'resetUserProgress']);
+
+        Route::get('/grammar-rules', [AdminController::class, 'grammarRules']);
+        Route::post('/grammar-rules', [AdminController::class, 'storeGrammarRule']);
+        Route::patch('/grammar-rules/{grammarRule}', [AdminController::class, 'updateGrammarRule']);
+        Route::delete('/grammar-rules/{grammarRule}', [AdminController::class, 'destroyGrammarRule']);
+
+        Route::get('/library-items', [AdminController::class, 'libraryItems']);
+        Route::post('/library-items', [AdminController::class, 'storeLibraryItem']);
+        Route::patch('/library-items/{libraryItem}', [AdminController::class, 'updateLibraryItem']);
+        Route::delete('/library-items/{libraryItem}', [AdminController::class, 'destroyLibraryItem']);
+
+        Route::get('/tips', [AdminController::class, 'tips']);
+        Route::post('/tips', [AdminController::class, 'storeTip']);
+        Route::patch('/tips/{tip}', [AdminController::class, 'updateTip']);
+        Route::delete('/tips/{tip}', [AdminController::class, 'destroyTip']);
+
+        Route::get('/course-items', [AdminController::class, 'courseItems']);
+        Route::patch('/course-items/{courseItem}', [AdminController::class, 'updateCourseItem']);
+
+        Route::get('/achievements', [AdminController::class, 'achievements']);
+        Route::get('/logs', [AdminController::class, 'logs']);
+    });
 
 Route::get('/course-items/{courseItem}/grammar', [CourseItemGrammarController::class, 'index']);
 Route::get('/course-items/{courseItem}/words', [CourseItemWordController::class, 'index']);

@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import GuestOnlyRoute from "./components/GuestOnlyRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute/AdminRoute";
 import StreakToast from "./components/StreakToast/StreakToast";
 import ExpBoostBadge from "./components/ExpBoostBadge/ExpBoostBadge";
 import AchievementRouteSync from "./components/AchievementRouteSync/AchievementRouteSync";
@@ -27,6 +28,7 @@ const BreakdownDetailPage = lazy(
 );
 const ShopPage = lazy(() => import("./pages/ShopPage/ShopPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage/ProfilePage"));
+const AdminPage = lazy(() => import("./pages/AdminPage/AdminPage"));
 const AchievementsPage = lazy(
   () => import("./pages/AchievementsPage/AchievementsPage"),
 );
@@ -128,6 +130,16 @@ function App() {
             <Route
               path="/settings"
               element={<Navigate to="/profile?tab=settings" replace />}
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminRoute>
+                    <AdminPage />
+                  </AdminRoute>
+                </ProtectedRoute>
+              }
             />
           </Route>
           <Route
