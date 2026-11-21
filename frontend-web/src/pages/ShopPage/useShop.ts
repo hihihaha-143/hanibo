@@ -16,6 +16,8 @@ interface UseShopResult {
   items: ShopItem[];
   loading: boolean;
   error: string | null;
+  actionError: string | null;
+  clearActionError: () => void;
   actionPendingId: number | null;
   actionPendingType: PendingAction | null;
   reload: () => Promise<void>;
@@ -31,6 +33,9 @@ export function useShop(): UseShopResult {
   const [items, setItems] = useState<ShopItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+
+  const clearActionError = useCallback(() => setActionError(null), []);
 
   const [actionPendingId, setActionPendingId] = useState<number | null>(null);
   const [actionPendingType, setActionPendingType] =
@@ -65,6 +70,7 @@ export function useShop(): UseShopResult {
 
   const buy = useCallback(
     async (item: ShopItem) => {
+      setActionError(null);
       setActionPendingId(item.id);
       setActionPendingType("buy");
 
@@ -72,6 +78,8 @@ export function useShop(): UseShopResult {
         const result = await buyShopItem(item.id);
         applyUser(result.user);
         await reload();
+      } catch {
+        setActionError("Не удалось купить предмет. Попробуйте ещё раз.");
       } finally {
         setActionPendingId(null);
         setActionPendingType(null);
@@ -82,6 +90,7 @@ export function useShop(): UseShopResult {
 
   const equip = useCallback(
     async (item: ShopItem) => {
+      setActionError(null);
       setActionPendingId(item.id);
       setActionPendingType("equip");
 
@@ -89,6 +98,8 @@ export function useShop(): UseShopResult {
         const updatedUser = await equipShopItem(item.id);
         applyUser(updatedUser);
         await reload();
+      } catch {
+        setActionError("Не удалось надеть предмет. Попробуйте ещё раз.");
       } finally {
         setActionPendingId(null);
         setActionPendingType(null);
@@ -99,6 +110,7 @@ export function useShop(): UseShopResult {
 
   const unequip = useCallback(
     async (item: ShopItem) => {
+      setActionError(null);
       setActionPendingId(item.id);
       setActionPendingType("unequip");
 
@@ -106,6 +118,8 @@ export function useShop(): UseShopResult {
         const updatedUser = await unequipShopItem(item.id);
         applyUser(updatedUser);
         await reload();
+      } catch {
+        setActionError("Не удалось снять предмет. Попробуйте ещё раз.");
       } finally {
         setActionPendingId(null);
         setActionPendingType(null);
@@ -116,6 +130,7 @@ export function useShop(): UseShopResult {
 
   const activate = useCallback(
     async (item: ShopItem) => {
+      setActionError(null);
       setActionPendingId(item.id);
       setActionPendingType("activate");
 
@@ -123,6 +138,8 @@ export function useShop(): UseShopResult {
         const result = await activateShopItem(item.id);
         applyUser(result.user);
         await reload();
+      } catch {
+        setActionError("Не удалось активировать предмет. Попробуйте ещё раз.");
       } finally {
         setActionPendingId(null);
         setActionPendingType(null);
@@ -135,6 +152,8 @@ export function useShop(): UseShopResult {
     items,
     loading,
     error,
+    actionError,
+    clearActionError,
     actionPendingId,
     actionPendingType,
     reload,

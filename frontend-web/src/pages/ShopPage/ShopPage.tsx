@@ -22,6 +22,8 @@ export function ShopPage() {
     error,
     actionPendingId,
     actionPendingType,
+    actionError,
+    clearActionError,
     buy,
     equip,
     unequip,
@@ -73,6 +75,19 @@ export function ShopPage() {
           layoutId="shop-chip-highlight"
         />
       </div>
+
+      {actionError && (
+        <div className="shop-page__action-error" role="alert">
+          <span>{actionError}</span>
+          <button
+            type="button"
+            className="btn btn--ghost btn--sm"
+            onClick={clearActionError}
+          >
+            Закрыть
+          </button>
+        </div>
+      )}
 
       <div className="shop-page__content">
         {loading ? (
