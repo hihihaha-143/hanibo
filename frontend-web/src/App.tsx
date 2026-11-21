@@ -39,6 +39,12 @@ const AlphabetTestPage = lazy(
 
 const LoginPage = lazy(() => import("./pages/AuthPage/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/AuthPage/RegisterPage"));
+const ForgotPasswordPage = lazy(
+  () => import("./pages/AuthPage/ForgotPasswordPage"),
+);
+const ResetPasswordPage = lazy(
+  () => import("./pages/AuthPage/ResetPasswordPage"),
+);
 
 function AppLoader() {
   return (
@@ -137,6 +143,22 @@ function App() {
             element={
               <GuestOnlyRoute>
                 <RegisterPage />
+              </GuestOnlyRoute>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <GuestOnlyRoute>
+                <ForgotPasswordPage />
+              </GuestOnlyRoute>
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <GuestOnlyRoute>
+                <ResetPasswordPage />
               </GuestOnlyRoute>
             }
           />

@@ -63,6 +63,28 @@ export async function logout(): Promise<void> {
   await apiClient.post("/auth/logout");
 }
 
+export async function logoutAll(): Promise<void> {
+  await apiClient.post("/auth/logout-all");
+}
+
+export async function forgotPassword(email: string): Promise<void> {
+  await apiClient.post("/auth/forgot-password", { email });
+}
+
+export async function resetPassword(payload: {
+  email: string;
+  token: string;
+  password: string;
+  password_confirmation: string;
+}): Promise<void> {
+  await apiClient.post("/auth/reset-password", payload);
+}
+
+export async function refreshToken(): Promise<AuthResponse> {
+  const { data } = await apiClient.post<AuthResponse>("/auth/refresh");
+  return data;
+}
+
 export async function me(): Promise<MeResponse> {
   const { data } = await apiClient.get<MeResponse>("/auth/me");
   return data;
@@ -76,7 +98,6 @@ export async function updateTimezone(
   });
   return data;
 }
-
 
 export async function updateProfile(payload: {
   nickname: string;

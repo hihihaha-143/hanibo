@@ -168,6 +168,10 @@ export default function LoginPage() {
           passwordToggle
         />
 
+        <Link to="/forgot-password" className="auth-forgot-link">
+          Забыли пароль?
+        </Link>
+
         <button
           type="submit"
           className="btn btn--accent btn--lg btn--block"

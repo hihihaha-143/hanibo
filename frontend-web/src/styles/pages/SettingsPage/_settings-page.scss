@@ -62,6 +62,13 @@
     grid-column: 1 / -1;
   }
 
+  &__danger-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    justify-content: flex-end;
+  }
+
   &--danger {
     flex-direction: row;
     align-items: center;

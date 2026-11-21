@@ -62,7 +62,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const token = localStorage.getItem(TOKEN_KEY);
 
     if (!token) {
-      setIsLoading(false);
+      authApi
+        .refreshToken()
+        .then(async ({ user: u, token: nextToken, refresh_daily }) => {
+          localStorage.setItem(TOKEN_KEY, nextToken);
+          const synced = await syncTimezone(u);
+          setUser(synced);
+          setRefreshDaily(refresh_daily);
+        })
+        .catch(() => {
+          // Гостевой режим
+        })
+        .finally(() => setIsLoading(false));
       return;
     }
 
@@ -129,6 +140,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const updateUser = useCallback((u: User) => {
     setUser(u);
+  }, []);
+
+  useEffect(() => {
+    const onUserUpdated = (event: Event) => {
+      const updated = (event as CustomEvent<User>).detail;
+      if (updated) setUser(updated);
+    };
+
+    window.addEventListener("hanibo:user-updated", onUserUpdated);
+    return () => {
+      window.removeEventListener("hanibo:user-updated", onUserUpdated);
+    };
   }, []);
 
   const clearRefreshDaily = useCallback(() => {

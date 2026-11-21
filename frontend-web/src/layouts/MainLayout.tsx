@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Banner from "./Banner/Banner";
 import Sidebar from "./Sidebar/Sidebar";
 import MobileNav from "./MobileNav/MobileNav";
+import CourseProgressSync from "../components/CourseProgressSync/CourseProgressSync";
 
 export default function MainLayout() {
   return (
@@ -14,6 +15,7 @@ export default function MainLayout() {
         </div>
       </main>
       <MobileNav />
+      <CourseProgressSync />
     </div>
   );
 }

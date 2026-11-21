@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\UserPhraseController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\LibraryItemController;
 use App\Http\Controllers\Api\AchievementController;
+use App\Http\Controllers\Api\CourseProgressController;
 use App\Http\Controllers\AlphabetProgressController;
 use App\Http\Controllers\AlphabetGroupProgressController;
 use App\Http\Controllers\Shop\ShopController;
@@ -46,9 +47,13 @@ Route::get('/alphabet', [\App\Http\Controllers\Api\AlphabetController::class, 'i
 // --- Auth ---
 Route::post('/auth/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
 Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
+Route::post('/auth/refresh', [AuthController::class, 'refresh'])->middleware('throttle:30,1');
+Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:5,1');
+Route::post('/auth/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:5,1');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::post('/auth/logout-all', [AuthController::class, 'logoutAll']);
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/timezone', [AuthController::class, 'updateTimezone']);
     Route::patch('/auth/profile', [AuthController::class, 'updateProfile']);
@@ -62,6 +67,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // ВАЖНО: group/progress должен идти ВЫШЕ {letter}/progress
     Route::post('/alphabet/group/progress', [AlphabetGroupProgressController::class, 'store']);
     Route::post('/alphabet/{letter}/progress', [AlphabetProgressController::class, 'store']);
+
+    // --- Course progress ---
+    Route::get('/course/progress', [CourseProgressController::class, 'index']);
+    Route::post('/course/items/{courseItem}/progress', [CourseProgressController::class, 'update']);
 
     // --- Shop ---
     Route::get('/shop/items', [ShopController::class, 'index']);

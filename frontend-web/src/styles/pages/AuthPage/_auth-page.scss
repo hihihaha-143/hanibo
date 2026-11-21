@@ -113,3 +113,44 @@
   font-size: 0.7rem;
   line-height: 1.35;
 }
+
+.auth-forgot-link {
+  align-self: flex-end;
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+}
+
+.auth-hint,
+.auth-success {
+  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.auth-success {
+  padding: 0.8rem;
+  border: 1px solid var(--color-success);
+  border-radius: var(--radius-sm);
+  color: var(--color-success);
+  text-align: center;
+
+  .btn {
+    margin-top: 0.8rem;
+  }
+}
+
+.auth-back-link {
+  align-self: center;
+  color: var(--color-text-secondary);
+  font-size: 0.78rem;
+
+  &:hover {
+    color: var(--color-accent);
+  }
+}

@@ -36,9 +36,11 @@ export default function AuthPage({
 
         {children}
 
-        <p className="auth-page__switch">
-          {switchText} <Link to={switchLinkTo}>{switchLinkLabel}</Link>
-        </p>
+        {(switchText || switchLinkLabel) && (
+          <p className="auth-page__switch">
+            {switchText} <Link to={switchLinkTo}>{switchLinkLabel}</Link>
+          </p>
+        )}
       </div>
     </main>
   );

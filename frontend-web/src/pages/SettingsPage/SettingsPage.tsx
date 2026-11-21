@@ -19,6 +19,7 @@ import { useAuth } from "../../context/useAuth";
 import { useTheme } from "../../context/useTheme";
 import { useNotifications } from "../../context/useNotifications";
 import {
+  logoutAll,
   updatePassword,
   updateProfile,
   updateSettings,
@@ -156,6 +157,15 @@ export default function SettingsPage({ embedded = false }: SettingsPageProps) {
   const handleLogout = async () => {
     await logout();
     navigate("/");
+  };
+
+  const handleLogoutAll = async () => {
+    try {
+      await logoutAll();
+    } finally {
+      await logout();
+      navigate("/");
+    }
   };
 
   return (
@@ -462,10 +472,20 @@ export default function SettingsPage({ embedded = false }: SettingsPageProps) {
             <h2>Выход</h2>
             <p>Завершить сеанс на этом устройстве.</p>
           </div>
-          <button type="button" className="btn btn--ghost btn--sm" onClick={handleLogout}>
-            <LogOut size={15} />
-            Выйти
-          </button>
+          <div className="settings-card__danger-actions">
+            <button type="button" className="btn btn--ghost btn--sm" onClick={handleLogout}>
+              <LogOut size={15} />
+              Выйти
+            </button>
+            <button
+              type="button"
+              className="btn btn--ghost btn--sm"
+              onClick={handleLogoutAll}
+            >
+              <LogOut size={15} />
+              Выйти на всех устройствах
+            </button>
+          </div>
         </section>
       </div>
     </div>

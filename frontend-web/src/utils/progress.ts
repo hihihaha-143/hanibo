@@ -1,5 +1,11 @@
 // src/utils/progress.ts
 
+import {
+  getCourseProgress,
+  reportCourseProgress,
+  type CourseProgressEntry,
+} from "../api/courseProgress";
+
 const STORAGE_KEY = "hanibo:progress";
 
 export const PASS_THRESHOLD = 70;
@@ -89,14 +95,17 @@ function updateLesson(itemId: number, patch: Partial<LessonProgress>): void {
 
 export function setWordsPercent(itemId: number, percent: number): void {
   updateLesson(itemId, { wordsPercent: percent });
+  void reportCourseProgress(itemId, "words", percent);
 }
 
 export function setGrammarPercent(itemId: number, percent: number): void {
   updateLesson(itemId, { grammarPercent: percent });
+  void reportCourseProgress(itemId, "grammar", percent);
 }
 
 export function setFinalPercent(itemId: number, percent: number): void {
   updateLesson(itemId, { finalPercent: percent });
+  void reportCourseProgress(itemId, "final", percent);
 }
 
 export function isWordsPassed(itemId: number): boolean {
@@ -141,5 +150,43 @@ export function setTestPercent(itemId: number, percent: number): void {
     percent: Math.max(current.percent, percent),
   };
   writeProgress(progress);
+  void reportCourseProgress(itemId, "test", percent);
+}
+
+export function applyServerCourseProgress(
+  entries: CourseProgressEntry[],
+): void {
+  if (entries.length === 0) return;
+
+  const progress = readProgress();
+  for (const entry of entries) {
+    const existing = progress.lessons[entry.course_item_id] ?? {
+      ...EMPTY_LESSON,
+    };
+    progress.lessons[entry.course_item_id] = {
+      wordsPercent: Math.max(existing.wordsPercent, entry.words_percent),
+      grammarPercent: Math.max(existing.grammarPercent, entry.grammar_percent),
+      finalPercent: Math.max(existing.finalPercent, entry.final_percent),
+    };
+
+    if (entry.test_percent > 0) {
+      const currentTest = progress.tests[entry.course_item_id] ?? {
+        ...EMPTY_TEST,
+      };
+      progress.tests[entry.course_item_id] = {
+        percent: Math.max(currentTest.percent, entry.test_percent),
+      };
+    }
+  }
+  writeProgress(progress);
+}
+
+export async function syncCourseProgressFromServer(): Promise<void> {
+  if (!localStorage.getItem("hanibo_token")) return;
+  try {
+    applyServerCourseProgress(await getCourseProgress());
+  } catch {
+    // Прогресс остаётся локальным, если API временно недоступен.
+  }
 }
 
