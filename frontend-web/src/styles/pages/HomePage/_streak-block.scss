@@ -1,0 +1,297 @@
+@use '../../abstracts' as *;
+
+.streak-block {
+  @include flex(column, flex-start, stretch, 1rem);
+  position: relative;
+  padding: 1.25rem;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      color-mix(in srgb, #ff7a45 12%, transparent),
+      transparent 45%
+    ),
+    var(--color-surface);
+  box-shadow: var(--shadow-sm);
+
+  &__top {
+    @include flex(row, flex-start, center, 0.75rem);
+    min-width: 0;
+  }
+
+  &__flame {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    color: #fff;
+    background: linear-gradient(135deg, #ff9a3c, #ff4d6d);
+    box-shadow: 0 0 22px color-mix(in srgb, #ff6b4a 45%, transparent);
+  }
+
+  &__title-wrap {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  &__eyebrow {
+    display: block;
+    margin-bottom: 0.1rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+  }
+
+  &__count {
+    margin: 0;
+    font-size: 1.9rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--color-text);
+    white-space: nowrap;
+
+    span {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+  }
+
+  &__badges {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex-shrink: 0;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: 24px;
+    padding: 0.15rem 0.45rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-alt);
+    color: var(--color-text-secondary);
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  &__week {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.25rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  &__day {
+    @include flex(column, center, center, 0.3rem);
+    min-width: 0;
+  }
+
+  &__day-name {
+    font-size: 0.66rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+
+  &__day-dot {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: var(--color-surface-alt);
+    color: var(--color-text-secondary);
+  }
+
+  &__day--done &__day-dot {
+    border-color: var(--color-success);
+    background: var(--color-success);
+    color: var(--color-on-accent);
+  }
+
+  &__day--frozen &__day-dot {
+    border-color: var(--color-accent);
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+
+  &__day--today &__day-name {
+    color: var(--color-accent);
+    font-weight: 800;
+  }
+
+  &__day--today &__day-dot {
+    box-shadow: 0 0 0 3px var(--color-accent-soft);
+  }
+
+  &__day--future &__day-dot {
+    opacity: 0.55;
+  }
+
+  &__goal {
+    @include flex(column, flex-start, stretch, 0.35rem);
+  }
+
+  &__goal-head,
+  &__goal-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.76rem;
+    color: var(--color-text-secondary);
+  }
+
+  &__goal-head strong {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  &__bar {
+    height: 8px;
+    overflow: hidden;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-alt);
+
+    span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #ff9a3c, #ff4d6d);
+      transition: width var(--transition-base);
+    }
+  }
+
+  &__milestones {
+    @include flex(column, flex-start, stretch, 0.45rem);
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  &__milestones-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    color: var(--color-text-secondary);
+
+    > span:first-child {
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  &__next {
+    color: var(--color-text);
+    font-weight: 600;
+    text-align: right;
+  }
+
+  &__milestone-list {
+    display: flex;
+    gap: 0.3rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__milestone {
+    @include flex(row, center, center);
+    flex-shrink: 0;
+    min-width: 2rem;
+    height: 1.8rem;
+    padding-inline: 0.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    color: var(--color-text-secondary);
+    font-size: 0.72rem;
+    font-weight: 700;
+
+    &--done {
+      border-color: var(--color-success);
+      background: var(--color-success);
+      color: var(--color-on-accent);
+    }
+
+    &--next {
+      border-color: var(--color-accent);
+      background: var(--color-accent);
+      color: var(--color-on-accent);
+    }
+  }
+
+  &__reward {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.76rem;
+    color: var(--color-text-secondary);
+
+    strong {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: var(--color-accent);
+      font-weight: 700;
+    }
+  }
+
+  &__milestone-bar {
+    height: 4px;
+    overflow: hidden;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-alt);
+
+    span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--color-accent);
+      transition: width var(--transition-base);
+    }
+  }
+
+  &__cta {
+    margin-top: 0.25rem;
+  }
+
+  @include down('sm') {
+    gap: 0.8rem;
+    padding: 1rem;
+
+    &__flame {
+      width: 44px;
+      height: 44px;
+    }
+
+    &__count {
+      font-size: 1.6rem;
+    }
+
+    &__day-dot {
+      width: 27px;
+      height: 27px;
+    }
+
+    &__day-name {
+      font-size: 0.6rem;
+    }
+  }
+}

@@ -2,10 +2,15 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LogIn } from "lucide-react";
 import { spring } from "../../lib/motion";
+import { useAuth } from "../../context/useAuth";
 
 const MotionLink = motion.create(Link);
 
 export default function AuthPromptBlock() {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading || isAuthenticated) return null;
+
   return (
     <div className="auth-prompt-block">
       <p className="auth-prompt-block__text">

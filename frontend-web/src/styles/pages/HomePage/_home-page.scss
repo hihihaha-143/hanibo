@@ -2,6 +2,7 @@
 @use './about-block';
 @use './tip-block';
 @use './auth-prompt-block';
+@use './streak-block';
 
 .home-page {
   display: grid;

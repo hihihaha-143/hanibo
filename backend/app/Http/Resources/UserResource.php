@@ -112,6 +112,7 @@ class UserResource extends JsonResource
             'streak_frozen_today' => $streakFrozenToday,
             'streak_freezes' => $this->streak_freezes,
             'streak_rewards_claimed' => $this->streak_rewards_claimed ?? 0,
+            'streak_milestone_claimed' => $this->streak_milestone_claimed ?? 0,
             'strawberry' => $this->strawberry,
             'blueberry' => $this->blueberry,
             'words_learning' => $wordsLearning,

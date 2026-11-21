@@ -7,6 +7,10 @@ use Carbon\Carbon;
 
 class StreakService
 {
+    private const MILESTONES = [
+        7, 10, 30, 50, 75, 100, 125, 150, 175, 200, 250, 300, 365, 500,
+    ];
+
     public function addExp(User $user, int $amount): array
     {
         $tz = $user->timezone ?: 'UTC';
@@ -104,6 +108,7 @@ class StreakService
         if (($user->streak_current ?? 0) > 0) {
             $user->streak_current = 0;
             $user->streak_rewards_claimed = 0;
+            $user->streak_milestone_claimed = 0;
             $user->streak_last_date = null;
             $user->save();
 
@@ -134,6 +139,7 @@ class StreakService
             $this->updateBest($user);
             $this->rewardFreeze($user);
             $this->rewardBerries($user);
+            $this->rewardMilestones($user);
 
             return [false, 0, false];
         }
@@ -146,6 +152,7 @@ class StreakService
             $this->updateBest($user);
             $this->rewardFreeze($user);
             $this->rewardBerries($user);
+            $this->rewardMilestones($user);
 
             return [false, 0, false];
         }
@@ -167,6 +174,7 @@ class StreakService
 
         $user->streak_current = 1;
         $user->streak_rewards_claimed = 0;
+        $user->streak_milestone_claimed = 0;
         $user->streak_last_date = $today;
         $this->updateBest($user);
 
@@ -188,6 +196,33 @@ class StreakService
         if ($current > 0 && $current % 7 === 0) {
             $user->streak_freezes = ($user->streak_freezes ?? 0) + 1;
         }
+    }
+
+    private function rewardMilestones(User $user): void
+    {
+        $current = $user->streak_current ?? 0;
+        $claimed = $user->streak_milestone_claimed ?? 0;
+
+        if ($current <= 0) {
+            return;
+        }
+
+        foreach (self::MILESTONES as $milestone) {
+            if ($milestone > $current) {
+                break;
+            }
+
+            if ($milestone <= $claimed) {
+                continue;
+            }
+
+            // Подарок за милстоун: заморозка. Список и тип подарка
+            // вынесены сюда, чтобы их можно было менять в одном месте.
+            $user->streak_freezes = ($user->streak_freezes ?? 0) + 1;
+            $claimed = $milestone;
+        }
+
+        $user->streak_milestone_claimed = $claimed;
     }
 
     private function rewardBerries(User $user): void

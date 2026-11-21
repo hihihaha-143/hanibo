@@ -48,5 +48,6 @@ export interface User {
   streak_frozen_today: boolean;
   streak_freezes: number;
   streak_rewards_claimed: number;
+  streak_milestone_claimed: number;
   created_at: string;
 }

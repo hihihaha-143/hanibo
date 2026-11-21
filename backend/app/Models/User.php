@@ -49,6 +49,7 @@ class User extends Authenticatable
         'streak_frozen_date',
         'streak_freezes',
         'streak_rewards_claimed',
+        'streak_milestone_claimed',
     ];
 
     protected $hidden = [
@@ -71,6 +72,7 @@ class User extends Authenticatable
             'streak_best' => 'integer',
             'streak_freezes' => 'integer',
             'streak_rewards_claimed' => 'integer',
+            'streak_milestone_claimed' => 'integer',
             'daily_exp_goal' => 'integer',
             'exp_today' => 'integer',
             'selected_icon_ids' => 'array',
