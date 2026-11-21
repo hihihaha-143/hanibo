@@ -12,6 +12,15 @@ import { GrammarGridBlock } from "./GrammarGridBlock";
 import { GrammarRuleModal } from "./GrammarRuleModal";
 import { DailyGrammarBlock } from "./DailyGrammarBlock";
 import { DailyGrammarQuizBlock } from "./DailyGrammarQuizBlock";
+import { MiniGamesModal } from "../DictionaryPage/MiniGame/MiniGamesModal";
+import {
+  GRAMMAR_MINI_GAMES,
+  type GrammarMiniGameId,
+} from "./MiniGame/grammarMiniGames";
+import { ChooseRuleGame } from "./MiniGame/ChooseRuleGame";
+import { RuleToConstructionGame } from "./MiniGame/RuleToConstructionGame";
+import { MatchRuleGame } from "./MiniGame/MatchRuleGame";
+import { ChooseExampleGame } from "./MiniGame/ChooseExampleGame";
 
 const EMPTY_PAGE: Paginated<GrammarRule> = {
   data: [],
@@ -43,6 +52,10 @@ export function GrammarTab() {
   const [error, setError] = useState<string | null>(null);
 
   const [openRuleId, setOpenRuleId] = useState<number | null>(null);
+
+  const [miniGamesOpen, setMiniGamesOpen] = useState(false);
+  const [activeGame, setActiveGame] = useState<GrammarMiniGameId | null>(null);
+
   const [reloadTick, setReloadTick] = useState(0);
   const requestIdRef = useRef(0);
 
@@ -117,6 +130,17 @@ export function GrammarTab() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  const handleExitGame = useCallback(() => {
+    setActiveGame(null);
+    reload();
+  }, [reload]);
+
+  const handleCloseMiniGames = useCallback(() => {
+    setMiniGamesOpen(false);
+    setActiveGame(null);
+    reload();
+  }, [reload]);
+
   return (
     <div className="dictionary-tab">
       <div className="dictionary-tab__head">
@@ -138,9 +162,7 @@ export function GrammarTab() {
         levels={filters.levels}
         levelId={levelId}
         onLevelChange={handleLevelChange}
-        onOpenMiniGames={() => {
-          // подключим на шаге 6
-        }}
+        onOpenMiniGames={() => setMiniGamesOpen(true)}
       />
 
       <div className="dictionary-tab__body">
@@ -169,6 +191,28 @@ export function GrammarTab() {
           onChanged={reload}
         />
       )}
+
+      <MiniGamesModal<GrammarMiniGameId>
+        open={miniGamesOpen}
+        onClose={handleCloseMiniGames}
+        activeGame={activeGame}
+        onPlay={setActiveGame}
+        onExitGame={handleExitGame}
+        games={GRAMMAR_MINI_GAMES}
+      >
+        {activeGame === "choose-rule" && (
+          <ChooseRuleGame onClose={handleExitGame} />
+        )}
+        {activeGame === "rule-to-construction" && (
+          <RuleToConstructionGame onClose={handleExitGame} />
+        )}
+        {activeGame === "match-rule" && (
+          <MatchRuleGame onClose={handleExitGame} />
+        )}
+        {activeGame === "choose-example" && (
+          <ChooseExampleGame onClose={handleExitGame} />
+        )}
+      </MiniGamesModal>
     </div>
   );
 }

@@ -29,6 +29,8 @@ export type PhraseMiniGameId =
   | "phrase-correct-spelling"
   | "phrase-order";
 
+export type AnyMiniGameId = MiniGameId | PhraseMiniGameId | (string & {});
+
 export interface MiniGameInfo {
   id: MiniGameId;
   title: string;
@@ -149,9 +151,7 @@ export const PHRASE_MINI_GAMES: PhraseMiniGameInfo[] = [
   },
 ];
 
-type AnyGameId = MiniGameId | PhraseMiniGameId;
-
-interface MiniGamesModalProps<T extends AnyGameId = MiniGameId> {
+interface MiniGamesModalProps<T extends AnyMiniGameId = MiniGameId> {
   open: boolean;
   onClose: () => void;
   activeGame: T | null;
@@ -168,7 +168,7 @@ interface MiniGamesModalProps<T extends AnyGameId = MiniGameId> {
   children?: ReactNode;
 }
 
-export function MiniGamesModal<T extends AnyGameId = MiniGameId>({
+export function MiniGamesModal<T extends AnyMiniGameId = MiniGameId>({
   open,
   onClose,
   activeGame,
