@@ -44,7 +44,10 @@
 
     @include up(lg) {
       position: sticky;
-      top: 1rem;
+      top: calc(var(--banner-height) + 1rem);
+      max-height: calc(100dvh - var(--banner-height) - 2rem);
+      overflow-y: auto;
+      padding-right: 0.25rem;
     }
   }
 

@@ -2,6 +2,7 @@
 
 .dictionary-card {
   @include flex(column, flex-start, stretch, 0.75rem);
+  height: 100%;
   padding: 1rem;
   transition:
     border-color var(--transition-fast),
@@ -79,13 +80,15 @@
   &__chip {
     display: inline-flex;
     align-items: center;
-    height: 1.5rem;
-    padding: 0 0.5rem;
+    min-height: 1.5rem;
+    max-width: 100%;
+    padding: 0.2rem 0.5rem;
     font-size: 0.75rem;
     font-weight: 600;
-    line-height: 1;
+    line-height: 1.25;
     border-radius: 0.5rem;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
 
     &--pos {
       background-color: var(--color-surface-alt);
@@ -106,7 +109,6 @@
 
   &__example {
     @include flex(column, flex-start, stretch, 0.125rem);
-    margin-top: auto;
     padding-top: 0.75rem;
     border-top: 1px solid var(--color-border);
   }
@@ -125,6 +127,8 @@
   }
 
   &__action {
-    align-self: flex-start;
+    align-self: stretch;
+    width: 100%;
+    margin-top: auto;
   }
 }

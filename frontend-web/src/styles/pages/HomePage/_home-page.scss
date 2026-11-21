@@ -6,6 +6,9 @@
 .home-page {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
   gap: var(--page-gap);
   align-items: stretch;
 
