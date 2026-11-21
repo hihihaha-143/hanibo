@@ -5,6 +5,8 @@ import GuestOnlyRoute from "./components/GuestOnlyRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 import StreakToast from "./components/StreakToast/StreakToast";
 import ExpBoostBadge from "./components/ExpBoostBadge/ExpBoostBadge";
+import AchievementRouteSync from "./components/AchievementRouteSync/AchievementRouteSync";
+import { AchievementsProvider } from "./context/AchievementsProvider";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const CoursePage = lazy(() => import("./pages/CoursePage/CoursePage"));
@@ -24,6 +26,7 @@ const BreakdownDetailPage = lazy(
   () => import("./pages/BreakdownsPage/BreakdownDetailPage"),
 );
 const ShopPage = lazy(() => import("./pages/ShopPage/ShopPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage/ProfilePage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
 
 const AlphabetPage = lazy(() => import("./pages/AlphabetPage/AlphabetPage"));
@@ -46,7 +49,9 @@ function AppLoader() {
 function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<AppLoader />}>
+      <AchievementsProvider>
+        <AchievementRouteSync />
+        <Suspense fallback={<AppLoader />}>
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
@@ -109,6 +114,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
           </Route>
           <Route
             path="/login"
@@ -127,9 +140,10 @@ function App() {
             }
           />
         </Routes>
-        <StreakToast />
-        <ExpBoostBadge />
-      </Suspense>
+          <StreakToast />
+          <ExpBoostBadge />
+        </Suspense>
+      </AchievementsProvider>
     </BrowserRouter>
   );
 }

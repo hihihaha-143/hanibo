@@ -15,6 +15,7 @@ import { setTestPercent } from "../../../utils/progress";
 import Test from "../LessonView/Test/Test";
 import StateBlock from "../../../components/StateBlock/StateBlock";
 import BackLink from "../../../components/BackLink/BackLink";
+import { requestAchievementSync } from "../../../lib/achievementStats";
 
 interface CourseTestViewProps {
   item: CourseItemDetails;
@@ -66,6 +67,7 @@ export default function CourseTestView({ item }: CourseTestViewProps) {
   const handleFinish = (correct: number, total: number) => {
     const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
     setTestPercent(item.id, percent);
+    requestAchievementSync();
   };
 
   const handleRepeat = useCallback(() => {

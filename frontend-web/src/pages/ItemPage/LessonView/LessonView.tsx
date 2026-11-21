@@ -1,3 +1,5 @@
+import { requestAchievementSync } from "../../../lib/achievementStats";
+import AchievementsStrip from "../../../components/AchievementsStrip/AchievementsStrip";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -138,6 +140,8 @@ export default function LessonView({ item }: LessonViewProps) {
         <h1 className="page__title">{item.title}</h1>
       </header>
 
+      <AchievementsStrip categoryCode="course" />
+
       <div className="tabs" role="tablist" aria-label="Разделы урока">
         {TABS.map(({ id, label }) => {
           const isActive = tab === id;
@@ -229,6 +233,7 @@ export default function LessonView({ item }: LessonViewProps) {
                   const percent =
                     total > 0 ? Math.round((correct / total) * 100) : 0;
                   setFinalPercent(item.id, percent);
+                  requestAchievementSync();
                   refreshProgress();
                 }}
                 onRepeat={handleFinalRepeat}

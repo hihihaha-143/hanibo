@@ -14,5 +14,6 @@
 @use './ProgressBar/progress-bar';
 @use './ChipsBlock/chips-block';
 @use './AchievementUnlockModal/achievement-unlock-modal';
+@use './AchievementsStrip/index' as achievements-strip;
 @use './StreakToast/streak-toast';
 @use './ExpBoostBadge/exp-boost-badge';

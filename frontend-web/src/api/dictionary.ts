@@ -1,4 +1,5 @@
 import { apiClient } from "./client";
+import { requestAchievementSync } from "../lib/achievementStats";
 import type { Level, PartOfSpeech, Phrase, Topic } from "./course";
 
 // ---------- прогресс слова ----------
@@ -108,6 +109,7 @@ export async function startUserWord(
     "/user-words/start",
     { word_id: wordId },
   );
+  requestAchievementSync();
   return data;
 }
 
@@ -258,6 +260,7 @@ export async function startUserPhrase(
     "/user-phrases/start",
     { phrase_id: phraseId },
   );
+  requestAchievementSync();
   return data;
 }
 

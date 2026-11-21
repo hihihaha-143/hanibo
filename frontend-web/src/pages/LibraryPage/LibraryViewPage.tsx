@@ -2,9 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchLibraryItem } from "../../api/library";
 import { pushRecent } from "../../lib/libraryRecent";
+import { requestAchievementSync } from "../../lib/achievementStats";
 import type { LibraryItem } from "../../types/library";
 import LibraryViewerBlock from "./LibraryViewerBlock";
 import StateBlock from "../../components/StateBlock/StateBlock";
+import AchievementsStrip from "../../components/AchievementsStrip/AchievementsStrip";
 
 export default function LibraryViewPage() {
   const { id } = useParams<{ id: string }>();
@@ -37,6 +39,7 @@ export default function LibraryViewPage() {
   useEffect(() => {
     if (item) {
       pushRecent(item.id);
+      requestAchievementSync();
     }
   }, [item]);
 
@@ -45,6 +48,7 @@ export default function LibraryViewPage() {
 
   return (
     <div className="library-view-page">
+      <AchievementsStrip categoryCode="library" />
       <LibraryViewerBlock item={item} />
     </div>
   );

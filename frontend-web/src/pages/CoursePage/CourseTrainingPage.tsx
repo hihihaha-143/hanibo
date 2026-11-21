@@ -17,6 +17,10 @@ import {
 } from "../../utils/testGenerator";
 import Test from "../ItemPage/LessonView/Test/Test";
 import StateBlock from "../../components/StateBlock/StateBlock";
+import {
+  markCourseTrainingComplete,
+  requestAchievementSync,
+} from "../../lib/achievementStats";
 
 interface CourseTrainingPageProps {
   mode: "review" | "errors";
@@ -217,7 +221,10 @@ export default function CourseTrainingPage({ mode }: CourseTrainingPageProps) {
 
       <Test
         questions={questions}
-        onFinish={() => {}}
+        onFinish={() => {
+          markCourseTrainingComplete(mode);
+          requestAchievementSync();
+        }}
         onRepeat={handleRepeat}
         onBack={() => navigate("/course")}
         backLabel="К курсу"

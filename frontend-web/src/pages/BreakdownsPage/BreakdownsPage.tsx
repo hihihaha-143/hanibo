@@ -1,5 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import ChipsBlock from "../../components/ChipsBlock/ChipsBlock";
+import AchievementsStrip from "../../components/AchievementsStrip/AchievementsStrip";
 import BreakdownsHomeTab from "./BreakdownsHomeTab";
 import BreakdownsCatalogTab from "./BreakdownsCatalogTab";
 import BreakdownsAccountTab from "./BreakdownsAccountTab";
@@ -42,6 +43,8 @@ export default function BreakdownsPage() {
         onTabChange={handleTabChange}
         layoutId="breakdowns-chip-highlight"
       />
+
+      <AchievementsStrip categoryCode="breakdowns" />
 
       <div className="breakdowns-page__content">
         {activeTab === "home" && <BreakdownsHomeTab />}

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { LogOut, Award, Clapperboard } from "lucide-react";
+import { LogOut, Award, Clapperboard, UserRound } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/useTheme";
 import { useAuth } from "../../context/useAuth";
@@ -95,6 +95,17 @@ export default function MobileNavSheet({ onClose }: MobileNavSheetProps) {
           <Clapperboard size={18} aria-hidden="true" />
           <span>Разборы</span>
         </Link>
+
+        {isAuthenticated && (
+          <Link
+            to="/profile"
+            className="mobile-nav-sheet__quick-link"
+            onClick={onClose}
+          >
+            <UserRound size={18} aria-hidden="true" />
+            <span>Профиль и достижения</span>
+          </Link>
+        )}
 
         {isAuthenticated && user && (
           <div className="mobile-nav-sheet__user">

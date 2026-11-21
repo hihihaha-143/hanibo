@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { spring } from "../../lib/motion";
 import ChipsBlock from "../../components/ChipsBlock/ChipsBlock";
+import AchievementsStrip from "../../components/AchievementsStrip/AchievementsStrip";
 import { useAuth } from "../../context/useAuth";
 import { useShop } from "./useShop";
 import { ShopItemCard } from "./ShopItemCard";
@@ -75,6 +76,8 @@ export function ShopPage() {
           layoutId="shop-chip-highlight"
         />
       </div>
+
+      <AchievementsStrip categoryCode="shop" />
 
       {actionError && (
         <div className="shop-page__action-error" role="alert">

@@ -1,4 +1,5 @@
 import { apiClient } from "./client";
+import { requestAchievementSync } from "../lib/achievementStats";
 
 export type GrammarTabId = "all" | "progress" | "learned" | "review";
 
@@ -108,6 +109,7 @@ export async function getGrammarFilters(): Promise<GrammarFilters> {
 
 export async function startGrammarRule(id: number): Promise<void> {
   await apiClient.post(`/user/grammar-rules/${id}/start`);
+  requestAchievementSync();
 }
 
 export async function reviewGrammarRule(

@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\UserWordController;
 use App\Http\Controllers\Api\UserPhraseController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\LibraryItemController;
+use App\Http\Controllers\Api\AchievementController;
 use App\Http\Controllers\AlphabetProgressController;
 use App\Http\Controllers\AlphabetGroupProgressController;
 use App\Http\Controllers\Shop\ShopController;
@@ -50,6 +51,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/timezone', [AuthController::class, 'updateTimezone']);
+
+    // --- Достижения ---
+    Route::get('/achievements', [AchievementController::class, 'index']);
+    Route::post('/achievements/sync', [AchievementController::class, 'sync']);
 
     // ВАЖНО: group/progress должен идти ВЫШЕ {letter}/progress
     Route::post('/alphabet/group/progress', [AlphabetGroupProgressController::class, 'store']);

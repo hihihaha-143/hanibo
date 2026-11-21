@@ -2,6 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { spring } from "../../lib/motion";
 import ChipsBlock from "../../components/ChipsBlock/ChipsBlock";
+import AchievementsStrip from "../../components/AchievementsStrip/AchievementsStrip";
 import type { PracticeTabId } from "./practiceTabs";
 import { PRACTICE_TABS, DEFAULT_PRACTICE_TAB } from "./practiceTabs";
 import AlphabetPage from "../AlphabetPage/AlphabetPage";
@@ -57,6 +58,8 @@ export default function PracticePage() {
         onTabChange={handleTabChange}
         layoutId="practice-chip-highlight"
       />
+
+      <AchievementsStrip categoryCode="practice" />
 
       <div className="practice-page__content">
         <AnimatePresence mode="wait" initial={false}>

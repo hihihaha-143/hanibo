@@ -14,6 +14,8 @@ import BackLink from "../../components/BackLink/BackLink";
 import SpeakControls from "../../components/SpeakButton/SpeakControls";
 import StateBlock from "../../components/StateBlock/StateBlock";
 import { useAuth } from "../../context/useAuth";
+import { requestAchievementSync } from "../../lib/achievementStats";
+import AchievementsStrip from "../../components/AchievementsStrip/AchievementsStrip";
 import {
   findBreakdown,
   type BreakdownEpisode,
@@ -364,6 +366,7 @@ export default function BreakdownDetailPage() {
     if (!page) return;
     updateProgress({ page: next });
     selectLine(page.lines[0]);
+    requestAchievementSync();
   };
 
   const changeEpisode = (next: number) => {
@@ -371,6 +374,7 @@ export default function BreakdownDetailPage() {
     if (!episode) return;
     updateProgress({ episode: next });
     selectLine(episode.lines[0]);
+    requestAchievementSync();
   };
 
   const toggleSaved = () => {
@@ -383,11 +387,14 @@ export default function BreakdownDetailPage() {
       translation: selectedLine.translation,
     });
     setSaved(next);
+    requestAchievementSync();
   };
 
   return (
     <div className="page breakdown-detail-page">
       <BackLink to="/breakdowns">Все разборы</BackLink>
+
+      <AchievementsStrip categoryCode="breakdowns" />
 
       <header className="breakdown-detail__hero">
         <div
@@ -435,9 +442,10 @@ export default function BreakdownDetailPage() {
             "btn btn--sm " +
             (progress.completed ? "btn--success" : "btn--accent")
           }
-          onClick={() =>
-            updateProgress({ completed: !progress.completed })
-          }
+          onClick={() => {
+            updateProgress({ completed: !progress.completed });
+            requestAchievementSync();
+          }}
         >
           <Check size={16} />
           {progress.completed ? "Разобрано" : "Отметить разобранным"}

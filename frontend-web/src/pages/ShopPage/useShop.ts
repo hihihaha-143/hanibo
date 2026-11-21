@@ -9,6 +9,7 @@ import {
 import type { ShopItem } from "../../types/shop";
 import type { User } from "../../types/user";
 import { useAuth } from "../../context/useAuth";
+import { requestAchievementSync } from "../../lib/achievementStats";
 
 type PendingAction = "buy" | "equip" | "unequip" | "activate";
 
@@ -77,6 +78,7 @@ export function useShop(): UseShopResult {
       try {
         const result = await buyShopItem(item.id);
         applyUser(result.user);
+        requestAchievementSync();
         await reload();
       } catch {
         setActionError("Не удалось купить предмет. Попробуйте ещё раз.");

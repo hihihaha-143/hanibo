@@ -1,5 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import ChipsBlock from "../../components/ChipsBlock/ChipsBlock";
+import AchievementsStrip from "../../components/AchievementsStrip/AchievementsStrip";
 import CourseListBlock from "./CourseListBlock";
 import MyDictionaryBlock from "./MyDictionaryBlock";
 import CourseStatsBlock from "./CourseStatsBlock";
@@ -58,6 +59,8 @@ export default function CoursePage() {
         onTabChange={handleTabChange}
         layoutId="course-chip-highlight"
       />
+
+      <AchievementsStrip categoryCode="course" />
 
       <div className="course-page__content">
         {activeTab === "course" && <CourseListBlock />}

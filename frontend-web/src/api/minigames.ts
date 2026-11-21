@@ -143,6 +143,7 @@ export async function postReward(
     correct,
     total,
   });
+  window.dispatchEvent(new Event("hanibo:achievements-sync"));
   return data;
 }
 

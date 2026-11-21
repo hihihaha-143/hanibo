@@ -8,6 +8,7 @@ import LibraryGridBlock from "./LibraryGridBlock";
 import LibraryShelfBlock from "./LibraryShelfBlock";
 import LibraryContinueBlock from "./LibraryContinueBlock";
 import LibraryRecentBlock from "./LibraryRecentBlock";
+import AchievementsStrip from "../../components/AchievementsStrip/AchievementsStrip";
 
 export default function LibraryPage() {
   const [items, setItems] = useState<LibraryItem[]>([]);
@@ -136,6 +137,8 @@ export default function LibraryPage() {
           Учебники, словари и материалы для чтения
         </p>
       </header>
+
+      <AchievementsStrip categoryCode="library" />
 
       {continueItem && <LibraryContinueBlock item={continueItem} />}
 
