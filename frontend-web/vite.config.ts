@@ -17,7 +17,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: proxyConfig,
-    host: "127.0.0.1",
+    // WSL: localhost-проброс иногда зависает, поэтому слушаем все интерфейсы.
+    host: "0.0.0.0",
   },
   preview: {
     proxy: proxyConfig,
