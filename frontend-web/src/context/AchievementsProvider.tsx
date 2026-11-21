@@ -4,6 +4,7 @@ import { getAchievements, syncAchievements } from "../api/achievements";
 import type { AchievementCategory } from "../api/achievements";
 import type { UnlockedAchievement } from "../api/alphabet";
 import { useAuth } from "./useAuth";
+import { useNotifications } from "./useNotifications";
 import {
   AchievementContext,
   type AchievementSyncExtra,
@@ -17,6 +18,7 @@ interface AchievementsProviderProps {
 
 export function AchievementsProvider({ children }: AchievementsProviderProps) {
   const { user, updateUser } = useAuth();
+  const { notifyAchievements } = useNotifications();
   const [categories, setCategories] = useState<AchievementCategory[]>([]);
   const [loading, setLoading] = useState(false);
   const [unlocked, setUnlocked] = useState<UnlockedAchievement[]>([]);
@@ -66,6 +68,7 @@ export function AchievementsProvider({ children }: AchievementsProviderProps) {
         updateUser(result.user);
 
         if (result.unlocked_achievements.length > 0) {
+          notifyAchievements(result.unlocked_achievements);
           setUnlocked((previous) => {
             const known = new Set(previous.map((item) => item.id));
             const fresh = result.unlocked_achievements.filter(
@@ -79,7 +82,7 @@ export function AchievementsProvider({ children }: AchievementsProviderProps) {
         // Не блокируем обучение из-за фоновой проверки достижений
       }
     },
-    [refresh, updateUser],
+    [refresh, updateUser, notifyAchievements],
   );
 
   const clearUnlocked = useCallback(() => setUnlocked([]), []);

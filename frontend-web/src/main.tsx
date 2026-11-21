@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 import "./lib/pdf";
 import { ThemeProvider } from "./context/ThemeProvider";
 import { AuthProvider } from "./context/AuthProvider";
+import { NotificationsProvider } from "./context/NotificationsProvider";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import App from "./App";
 import "./styles/main.scss";
@@ -13,7 +14,9 @@ createRoot(document.getElementById("root")!).render(
   <ErrorBoundary>
     <ThemeProvider>
       <AuthProvider>
-        <App />
+        <NotificationsProvider>
+          <App />
+        </NotificationsProvider>
       </AuthProvider>
     </ThemeProvider>
   </ErrorBoundary>,

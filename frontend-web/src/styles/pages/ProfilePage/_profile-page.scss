@@ -3,6 +3,20 @@
 .profile-page {
   min-width: 0;
   @include flex(column, flex-start, stretch, 1rem);
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__subtitle {
+    margin: 0.25rem 0 0;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+  }
 }
 
 .profile-hero {

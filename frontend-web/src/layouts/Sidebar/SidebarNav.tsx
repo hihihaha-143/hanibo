@@ -8,7 +8,6 @@ import {
   Dumbbell,
   ShoppingBag,
   Clapperboard,
-  Settings,
 } from "lucide-react";
 import { spring } from "../../lib/motion";
 import { useAuth } from "../../context/useAuth";
@@ -30,7 +29,6 @@ const studentItems = [
   { to: "/library", label: "Библиотека", icon: Library },
   { to: "/practice", label: "Практика", icon: Dumbbell },
   { to: "/shop", label: "Магазин", icon: ShoppingBag },
-  { to: "/settings", label: "Настройки", icon: Settings },
 ];
 
 export default function SidebarNav({ expanded }: SidebarNavProps) {

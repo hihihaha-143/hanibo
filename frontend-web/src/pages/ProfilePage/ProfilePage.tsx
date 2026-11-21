@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   BookOpen,
   Clapperboard,
@@ -23,6 +23,9 @@ import { getProgress, getSavedPhrases } from "../BreakdownsPage/breakdownStorage
 import { readRecent } from "../../lib/libraryRecent";
 import { getUserAvatarUrl, resolveShopImage } from "../../lib/shopImages";
 import AchievementIcon from "../../components/AchievementIcon/AchievementIcon";
+import ChipsBlock from "../../components/ChipsBlock/ChipsBlock";
+import NotificationBell from "../../components/NotificationBell/NotificationBell";
+import SettingsPage from "../SettingsPage/SettingsPage";
 
 interface CourseSummary {
   lessonsTotal: number;
@@ -45,8 +48,18 @@ function formatDate(value: string | null | undefined): string {
   }
 }
 
+const PROFILE_TABS = [
+  { id: "profile", label: "Профиль" },
+  { id: "settings", label: "Настройки" },
+];
+
+type ProfileTab = "profile" | "settings";
+
 export default function ProfilePage() {
   const { user } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab: ProfileTab =
+    searchParams.get("tab") === "settings" ? "settings" : "profile";
   const {
     categories,
     loading: achievementsLoading,
@@ -147,6 +160,13 @@ export default function ProfilePage() {
     return <div className="page profile-page" />;
   }
 
+  const handleTabChange = (tab: string) => {
+    const next = new URLSearchParams(searchParams);
+    if (tab === "profile") next.delete("tab");
+    else next.set("tab", tab);
+    setSearchParams(next, { replace: false });
+  };
+
   const avatarUrl = getUserAvatarUrl(user);
   const frameUrl = resolveShopImage(user.selected_frame?.image);
   const bannerUrl = resolveShopImage(user.selected_banner?.image);
@@ -157,6 +177,31 @@ export default function ProfilePage() {
 
   return (
     <div className="page profile-page">
+      <header className="page__header profile-page__header">
+        <div>
+          <h1 className="page__title">
+            {activeTab === "settings" ? "Настройки" : "Профиль"}
+          </h1>
+          <p className="profile-page__subtitle">
+            {activeTab === "settings"
+              ? "Аккаунт, внешний вид, обучение и безопасность"
+              : "Статистика, прогресс и достижения"}
+          </p>
+        </div>
+        <NotificationBell />
+      </header>
+
+      <ChipsBlock
+        tabs={PROFILE_TABS}
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        layoutId="profile-chip-highlight"
+      />
+
+      {activeTab === "settings" ? (
+        <SettingsPage embedded />
+      ) : (
+        <>
       <header
         className="profile-hero"
         style={
@@ -196,7 +241,10 @@ export default function ProfilePage() {
             {user.nickname}
           </h1>
           <p className="profile-hero__email">{user.email}</p>
-          <Link to="/settings" className="profile-hero__settings-link">
+          <Link
+            to="/profile?tab=settings"
+            className="profile-hero__settings-link"
+          >
             <Settings size={14} />
             Настройки
           </Link>
@@ -375,6 +423,8 @@ export default function ProfilePage() {
         Статистика курса и разборов хранится на этом устройстве; SRS, серия,
         магазин и достижения синхронизируются с аккаунтом.
       </p>
+        </>
+      )}
     </div>
   );
 }

@@ -1,6 +1,15 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { LogOut, Award, Clapperboard, Settings, Trophy, UserRound } from "lucide-react";
+import {
+  LogOut,
+  Award,
+  Clapperboard,
+  Library,
+  Settings,
+  ShoppingBag,
+  Trophy,
+  UserRound,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/useTheme";
 import { useAuth } from "../../context/useAuth";
@@ -96,6 +105,24 @@ export default function MobileNavSheet({ onClose }: MobileNavSheetProps) {
           <span>Разборы</span>
         </Link>
 
+        <Link
+          to="/library"
+          className="mobile-nav-sheet__quick-link"
+          onClick={onClose}
+        >
+          <Library size={18} aria-hidden="true" />
+          <span>Библиотека</span>
+        </Link>
+
+        <Link
+          to="/shop"
+          className="mobile-nav-sheet__quick-link"
+          onClick={onClose}
+        >
+          <ShoppingBag size={18} aria-hidden="true" />
+          <span>Магазин</span>
+        </Link>
+
         {isAuthenticated && (
           <>
             <Link
@@ -115,7 +142,7 @@ export default function MobileNavSheet({ onClose }: MobileNavSheetProps) {
               <span>Достижения</span>
             </Link>
             <Link
-              to="/settings"
+              to="/profile?tab=settings"
               className="mobile-nav-sheet__quick-link"
               onClick={onClose}
             >

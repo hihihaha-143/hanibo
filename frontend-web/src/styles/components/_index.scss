@@ -15,5 +15,6 @@
 @use './ChipsBlock/chips-block';
 @use './AchievementUnlockModal/achievement-unlock-modal';
 @use './AchievementsStrip/index' as achievements-strip;
+@use './NotificationBell/notification-bell';
 @use './StreakToast/streak-toast';
 @use './ExpBoostBadge/exp-boost-badge';

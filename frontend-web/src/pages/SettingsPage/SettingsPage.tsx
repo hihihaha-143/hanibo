@@ -17,35 +17,12 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../context/useAuth";
 import { useTheme } from "../../context/useTheme";
+import { useNotifications } from "../../context/useNotifications";
 import {
   updatePassword,
   updateProfile,
   updateSettings,
 } from "../../api/auth";
-
-const NOTIFICATIONS_KEY = "hanibo:settings:notifications";
-
-interface NotificationSettings {
-  achievements: boolean;
-  streak: boolean;
-  daily: boolean;
-}
-
-const DEFAULT_NOTIFICATIONS: NotificationSettings = {
-  achievements: true,
-  streak: true,
-  daily: false,
-};
-
-function readNotifications(): NotificationSettings {
-  try {
-    const raw = localStorage.getItem(NOTIFICATIONS_KEY);
-    if (!raw) return DEFAULT_NOTIFICATIONS;
-    return { ...DEFAULT_NOTIFICATIONS, ...(JSON.parse(raw) as NotificationSettings) };
-  } catch {
-    return DEFAULT_NOTIFICATIONS;
-  }
-}
 
 function errorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
@@ -69,10 +46,19 @@ const TIMEZONES = [
   "UTC",
 ];
 
-export default function SettingsPage() {
+interface SettingsPageProps {
+  embedded?: boolean;
+}
+
+export default function SettingsPage({ embedded = false }: SettingsPageProps) {
   const { user, updateUser, logout } = useAuth();
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
+  const {
+    settings: notificationSettings,
+    updateSettings: updateNotificationSettings,
+  } = useNotifications();
+  const [browserError, setBrowserError] = useState("");
 
   const [nickname, setNickname] = useState(user?.nickname ?? "");
   const [email, setEmail] = useState(user?.email ?? "");
@@ -87,9 +73,6 @@ export default function SettingsPage() {
     "idle" | "saving" | "saved"
   >("idle");
   const [learningError, setLearningError] = useState("");
-
-  const [notifications, setNotifications] =
-    useState<NotificationSettings>(readNotifications);
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -154,13 +137,19 @@ export default function SettingsPage() {
     }
   };
 
-  const toggleNotification = (key: keyof NotificationSettings) => {
-    const next = { ...notifications, [key]: !notifications[key] };
-    setNotifications(next);
-    try {
-      localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(next));
-    } catch {
-      // ignore
+  const toggleNotification = async (
+    key: "achievements" | "streak" | "daily" | "browser",
+  ) => {
+    setBrowserError("");
+    await updateNotificationSettings({
+      [key]: !notificationSettings[key],
+    });
+    if (key === "browser" && !notificationSettings.browser) {
+      if (!("Notification" in window)) {
+        setBrowserError("Этот браузер не поддерживает системные уведомления.");
+      } else if (window.Notification.permission !== "granted") {
+        setBrowserError("Разрешение на уведомления не выдано.");
+      }
     }
   };
 
@@ -170,20 +159,24 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="page settings-page">
-      <Link to="/profile" className="settings-page__back">
-        <ArrowLeft size={16} />
-        В профиль
-      </Link>
+    <div className={embedded ? "profile-settings" : "page settings-page"}>
+      {!embedded && (
+        <Link to="/profile" className="settings-page__back">
+          <ArrowLeft size={16} />
+          В профиль
+        </Link>
+      )}
 
-      <header className="settings-page__header">
+      {!embedded && (
+        <header className="settings-page__header">
         <span className="settings-page__eyebrow">
           <SettingsIcon size={16} />
           Управление аккаунтом
         </span>
         <h1>Настройки</h1>
-        <p>Профиль, внешний вид, обучение, уведомления и безопасность.</p>
-      </header>
+          <p>Профиль, внешний вид, обучение, уведомления и безопасность.</p>
+        </header>
+      )}
 
       <div className="settings-grid">
         <section className="card settings-card">
@@ -363,23 +356,35 @@ export default function SettingsPage() {
           <div className="settings-switches">
             <NotificationRow
               label="Новые достижения"
-              hint="Показывать окно с наградой"
-              checked={notifications.achievements}
-              onChange={() => toggleNotification("achievements")}
+              hint="Уведомление о новой награде"
+              checked={notificationSettings.achievements}
+              onChange={() => void toggleNotification("achievements")}
             />
             <NotificationRow
               label="Серия"
               hint="Напоминать о сохранении серии"
-              checked={notifications.streak}
-              onChange={() => toggleNotification("streak")}
+              checked={notificationSettings.streak}
+              onChange={() => void toggleNotification("streak")}
             />
             <NotificationRow
               label="Дневная цель"
               hint="Сообщать о выполнении цели"
-              checked={notifications.daily}
-              onChange={() => toggleNotification("daily")}
+              checked={notificationSettings.daily}
+              onChange={() => void toggleNotification("daily")}
+            />
+            <NotificationRow
+              label="Уведомления браузера"
+              hint="Системные уведомления, если разрешено"
+              checked={notificationSettings.browser}
+              onChange={() => void toggleNotification("browser")}
             />
           </div>
+          {browserError && (
+            <p className="settings-message settings-message--error" role="alert">
+              <AlertCircle size={15} />
+              {browserError}
+            </p>
+          )}
         </section>
 
         <section className="card settings-card settings-card--wide">

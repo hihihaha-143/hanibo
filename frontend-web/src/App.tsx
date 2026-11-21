@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import GuestOnlyRoute from "./components/GuestOnlyRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -30,7 +30,6 @@ const ProfilePage = lazy(() => import("./pages/ProfilePage/ProfilePage"));
 const AchievementsPage = lazy(
   () => import("./pages/AchievementsPage/AchievementsPage"),
 );
-const SettingsPage = lazy(() => import("./pages/SettingsPage/SettingsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
 
 const AlphabetPage = lazy(() => import("./pages/AlphabetPage/AlphabetPage"));
@@ -136,11 +135,7 @@ function App() {
             />
             <Route
               path="/settings"
-              element={
-                <ProtectedRoute>
-                  <SettingsPage />
-                </ProtectedRoute>
-              }
+              element={<Navigate to="/profile?tab=settings" replace />}
             />
           </Route>
           <Route
