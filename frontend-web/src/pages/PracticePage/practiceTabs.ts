@@ -1,7 +1,6 @@
 export type PracticeTabId =
   | "alphabet"
   | "grammar"
-  | "analysis"
   | "vocabulary"
   | "phrases";
 
@@ -13,7 +12,6 @@ export interface PracticeTab {
 export const PRACTICE_TABS: PracticeTab[] = [
   { id: "alphabet", label: "Алфавит" },
   { id: "grammar", label: "Грамматика" },
-  { id: "analysis", label: "Разбор" },
   { id: "vocabulary", label: "Словарь" },
   { id: "phrases", label: "Фразы" },
 ];

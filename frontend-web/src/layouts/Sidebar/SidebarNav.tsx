@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Home, BookOpen, Library, Dumbbell, ShoppingBag } from "lucide-react";
+import {
+  Home,
+  BookOpen,
+  Library,
+  Dumbbell,
+  ShoppingBag,
+  Clapperboard,
+} from "lucide-react";
 import { spring } from "../../lib/motion";
 import { useAuth } from "../../context/useAuth";
 
@@ -12,11 +19,13 @@ interface SidebarNavProps {
 const guestItems = [
   { to: "/", label: "Главная", icon: Home },
   { to: "/course", label: "Курс", icon: BookOpen },
+  { to: "/breakdowns", label: "Разборы", icon: Clapperboard },
 ];
 
 const studentItems = [
   { to: "/", label: "Главная", icon: Home },
   { to: "/course", label: "Курс", icon: BookOpen },
+  { to: "/breakdowns", label: "Разборы", icon: Clapperboard },
   { to: "/library", label: "Библиотека", icon: Library },
   { to: "/practice", label: "Практика", icon: Dumbbell },
   { to: "/shop", label: "Магазин", icon: ShoppingBag },

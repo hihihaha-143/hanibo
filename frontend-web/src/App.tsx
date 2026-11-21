@@ -17,6 +17,12 @@ const LibraryViewPage = lazy(
   () => import("./pages/LibraryPage/LibraryViewPage"),
 );
 const PracticePage = lazy(() => import("./pages/PracticePage/PracticePage"));
+const BreakdownsPage = lazy(
+  () => import("./pages/BreakdownsPage/BreakdownsPage"),
+);
+const BreakdownDetailPage = lazy(
+  () => import("./pages/BreakdownsPage/BreakdownDetailPage"),
+);
 const ShopPage = lazy(() => import("./pages/ShopPage/ShopPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
 
@@ -46,6 +52,11 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="*" element={<NotFoundPage />} />
             <Route path="/course" element={<CoursePage />} />
+            <Route path="/breakdowns" element={<BreakdownsPage />} />
+            <Route
+              path="/breakdowns/:id"
+              element={<BreakdownDetailPage />}
+            />
             <Route
               path="/course/review"
               element={<CourseTrainingPage mode="review" />}

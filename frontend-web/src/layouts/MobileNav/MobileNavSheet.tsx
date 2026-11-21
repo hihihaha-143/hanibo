@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { LogOut, Award } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { LogOut, Award, Clapperboard } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/useTheme";
 import { useAuth } from "../../context/useAuth";
 import { spring } from "../../lib/motion";
@@ -86,6 +86,15 @@ export default function MobileNavSheet({ onClose }: MobileNavSheetProps) {
             <span className="theme-switch__slider" />
           </label>
         </div>
+
+        <Link
+          to="/breakdowns"
+          className="mobile-nav-sheet__quick-link"
+          onClick={onClose}
+        >
+          <Clapperboard size={18} aria-hidden="true" />
+          <span>Разборы</span>
+        </Link>
 
         {isAuthenticated && user && (
           <div className="mobile-nav-sheet__user">

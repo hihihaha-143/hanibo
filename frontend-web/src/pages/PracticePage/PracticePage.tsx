@@ -76,9 +76,7 @@ export default function PracticePage() {
               <PhrasesTab />
             ) : activeTab === "grammar" ? (
               <GrammarTab />
-            ) : (
-              <p className="practice-page__placeholder">Раздел в разработке</p>
-            )}
+            ) : null}
           </motion.div>
         </AnimatePresence>
       </div>
