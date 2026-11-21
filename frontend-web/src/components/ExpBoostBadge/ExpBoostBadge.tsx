@@ -27,15 +27,14 @@ export default function ExpBoostBadge() {
   const isActive = boostUntil !== null && boostUntil > now;
 
   useEffect(() => {
-    if (!boostUntil) return;
-    if (boostUntil <= Date.now()) return;
+    if (!isActive) return;
 
     const interval = window.setInterval(() => {
       setNow(Date.now());
     }, 1000);
 
     return () => window.clearInterval(interval);
-  }, [boostUntil]);
+  }, [isActive]);
 
   const remaining = boostUntil ? boostUntil - now : 0;
 
