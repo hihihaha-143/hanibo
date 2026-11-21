@@ -8,4 +8,8 @@
     font-weight: 700;
     color: var(--color-text);
   }
+
+  &__back {
+    align-self: flex-start;
+  }
 }

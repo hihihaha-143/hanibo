@@ -184,7 +184,7 @@ export function GrammarTab() {
       <div className="dictionary-tab__body">
         <div className="dictionary-tab__aside">
           <DailyGrammarBlock />
-          <DailyGrammarQuizBlock onAnswered={reload} />
+          <DailyGrammarQuizBlock disabled={miniGamesOpen} onAnswered={reload} />
         </div>
 
         <div className="dictionary-tab__main">
@@ -216,6 +216,7 @@ export function GrammarTab() {
         onPlay={setActiveGame}
         onExitGame={handleExitGame}
         games={GRAMMAR_MINI_GAMES}
+        showBackToList={activeGame === "choose-rule"}
       >
         {activeGame === "choose-rule" && (
           <ChooseRuleGame onClose={handleExitGame} />

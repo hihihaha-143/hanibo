@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from "react";
-import { X } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import { WORD_MINI_GAMES } from "./miniGamesData";
 import type { AnyMiniGameId, MiniGameId } from "./miniGamesData";
 
@@ -17,6 +17,8 @@ interface MiniGamesModalProps<T extends AnyMiniGameId = MiniGameId> {
     available: boolean;
   }[];
   title?: string;
+  /** Показать возврат к списку игр, если у игры нет своей кнопки «Назад». */
+  showBackToList?: boolean;
   children?: ReactNode;
 }
 
@@ -28,6 +30,7 @@ export function MiniGamesModal<T extends AnyMiniGameId = MiniGameId>({
   onExitGame,
   games,
   title = "Мини-игры",
+  showBackToList = false,
   children,
 }: MiniGamesModalProps<T>) {
   const list =
@@ -81,7 +84,19 @@ export function MiniGamesModal<T extends AnyMiniGameId = MiniGameId>({
         )}
 
         {activeGame ? (
-          children
+          <>
+            {showBackToList && (
+              <button
+                type="button"
+                className="btn btn--ghost btn--sm mini-games-modal__back"
+                onClick={onExitGame}
+              >
+                <ArrowLeft size={16} />
+                К играм
+              </button>
+            )}
+            {children}
+          </>
         ) : (
           <>
             <h2 className="mini-games-modal__title">{title}</h2>

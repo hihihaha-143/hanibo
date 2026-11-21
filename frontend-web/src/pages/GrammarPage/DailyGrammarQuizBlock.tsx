@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import {
   getGrammarRules,
   reviewGrammarRule,
@@ -49,6 +50,7 @@ export function DailyGrammarQuizBlock({
   const [selected, setSelected] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
   const [streak, setStreak] = useState(0);
+  const [bestStreak, setBestStreak] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const loadNext = useCallback(() => {
@@ -72,8 +74,15 @@ export function DailyGrammarQuizBlock({
       setAnswered(true);
 
       const isCorrect = index === question.correctIndex;
-      if (isCorrect) setStreak((s) => s + 1);
-      else setStreak(0);
+      if (isCorrect) {
+        setStreak((s) => {
+          const next = s + 1;
+          setBestStreak((best) => (next > best ? next : best));
+          return next;
+        });
+      } else {
+        setStreak(0);
+      }
 
       reviewGrammarRule(question.target.id, isCorrect)
         .then(() => refreshUser())
@@ -85,11 +94,32 @@ export function DailyGrammarQuizBlock({
     [question, answered, disabled, loadNext, refreshUser, onAnswered],
   );
 
+  useHotkeys(
+    ["1", "2", "3", "4"],
+    (e) => {
+      const idx = Number(e.key) - 1;
+      if (idx < 4) handleSelect(idx);
+    },
+    {
+      enabled: !!question && !answered && !disabled,
+      preventDefault: true,
+    },
+    [question, answered, handleSelect, disabled],
+  );
+
   return (
     <aside className="daily-quiz-block">
       <div className="daily-quiz-block__head">
         <span className="daily-quiz-block__title">Тренировка</span>
-        <span className="daily-quiz-block__streak">Серия: {streak}</span>
+        <span className="daily-quiz-block__streak">
+          Серия: {streak}
+          {bestStreak > streak && (
+            <span className="daily-quiz-block__best">
+              {" "}
+              · рекорд {bestStreak}
+            </span>
+          )}
+        </span>
       </div>
 
       {loading && !question && (
