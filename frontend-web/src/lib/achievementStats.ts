@@ -9,6 +9,7 @@ import {
 import { readRecent } from "./libraryRecent";
 
 const TRAINING_KEY = "hanibo:course:training";
+const PROFILE_VISITS_PREFIX = "hanibo:profile-visits:";
 
 export type CourseTrainingMode = "review" | "errors";
 
@@ -75,4 +76,22 @@ export function collectAchievementStats(owner: string): AchievementStats {
 
 export function requestAchievementSync(): void {
   window.dispatchEvent(new Event("hanibo:achievements-sync"));
+}
+
+export function getProfileVisits(owner: string): number {
+  try {
+    return Math.max(0, Number(localStorage.getItem(PROFILE_VISITS_PREFIX + owner) || 0));
+  } catch {
+    return 0;
+  }
+}
+
+export function recordProfileVisit(owner: string): number {
+  const next = getProfileVisits(owner) + 1;
+  try {
+    localStorage.setItem(PROFILE_VISITS_PREFIX + owner, String(next));
+  } catch {
+    // ignore
+  }
+  return next;
 }

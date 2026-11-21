@@ -28,17 +28,21 @@ class AchievementController extends Controller
             ->get()
             ->map(function (AchievementCategory $category) use ($unlocked) {
                 $achievements = $category->achievements
-                    ->filter(fn ($achievement) => !$achievement->is_hidden || $unlocked->has($achievement->id))
                     ->values()
                     ->map(function ($achievement) use ($unlocked) {
                         $entry = $unlocked->get($achievement->id);
 
+                        $isUnlocked = $entry !== null;
+                        $isSecret = $achievement->is_hidden && !$isUnlocked;
+
                         return [
                             'id' => $achievement->id,
                             'code' => $achievement->code,
-                            'title' => $achievement->title,
-                            'description' => $achievement->description,
-                            'icon' => $achievement->icon,
+                            'title' => $isSecret ? 'Секретное достижение' : $achievement->title,
+                            'description' => $isSecret
+                                ? 'Условие скрыто. Но оно того стоит.'
+                                : $achievement->description,
+                            'icon' => $isSecret ? 'lock' : $achievement->icon,
                             'image' => $achievement->image,
                             'category_id' => $achievement->category_id,
                             'is_hidden' => $achievement->is_hidden,
@@ -75,6 +79,8 @@ class AchievementController extends Controller
             'breakdown_phrases_saved' => ['sometimes', 'integer', 'min:0', 'max:100000'],
             'library_books_opened' => ['sometimes', 'integer', 'min:0', 'max:100000'],
             'profile_visited' => ['sometimes', 'boolean'],
+            'settings_visited' => ['sometimes', 'boolean'],
+            'profile_visits' => ['sometimes', 'integer', 'min:0', 'max:100000'],
         ]);
 
         $user = $request->user();

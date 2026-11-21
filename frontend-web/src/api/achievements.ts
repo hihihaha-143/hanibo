@@ -35,6 +35,8 @@ export interface AchievementSyncPayload {
   breakdown_phrases_saved?: number;
   library_books_opened?: number;
   profile_visited?: boolean;
+  settings_visited?: boolean;
+  profile_visits?: number;
 }
 
 interface AchievementsResponse {

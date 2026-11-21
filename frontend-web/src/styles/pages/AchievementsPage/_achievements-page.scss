@@ -1,0 +1,200 @@
+@use '../../abstracts' as *;
+
+.achievements-page {
+  min-width: 0;
+  @include flex(column, flex-start, stretch, 1rem);
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    align-self: flex-start;
+    color: var(--color-text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+
+    h1 {
+      margin: 0.25rem 0 0.15rem;
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+    }
+
+    p {
+      margin: 0;
+      color: var(--color-text-secondary);
+      font-size: 0.8rem;
+    }
+  }
+
+  &__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  &__percent {
+    color: var(--color-accent);
+    font-size: 1.8rem;
+    font-weight: 800;
+  }
+
+  &__bar {
+    height: 9px;
+    overflow: hidden;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-alt);
+
+    span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--color-accent), #7aa2f7);
+    }
+  }
+
+  &__filters {
+    @include flex(column, flex-start, stretch, 0.45rem);
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  &__groups {
+    @include flex(column, flex-start, stretch, 1rem);
+  }
+
+  &__group-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+
+    h2 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    span {
+      color: var(--color-text-secondary);
+      font-size: 0.72rem;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.55rem;
+
+    @include down('lg') {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include down('sm') {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__state {
+    padding: 1.5rem;
+    color: var(--color-text-secondary);
+    text-align: center;
+  }
+}
+
+.achievement-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  opacity: 0.72;
+
+  &--unlocked {
+    opacity: 1;
+    border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
+    background: color-mix(in srgb, var(--color-accent-soft) 30%, var(--color-surface));
+  }
+
+  &--secret {
+    border-style: dashed;
+    background: var(--color-surface-alt);
+    opacity: 0.65;
+  }
+
+  &__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--color-surface-alt);
+    color: var(--color-text-secondary);
+  }
+
+  &--unlocked &__icon {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  &--secret &__icon {
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+  }
+
+  &__body {
+    min-width: 0;
+    flex: 1;
+
+    strong {
+      display: block;
+      font-size: 0.82rem;
+      line-height: 1.25;
+    }
+
+    p {
+      margin: 0.15rem 0 0.3rem;
+      color: var(--color-text-secondary);
+      font-size: 0.7rem;
+      line-height: 1.4;
+    }
+
+    > span {
+      color: var(--color-accent);
+      font-size: 0.66rem;
+      font-weight: 600;
+    }
+  }
+
+  &__check {
+    position: absolute;
+    top: 0.55rem;
+    right: 0.6rem;
+    color: var(--color-success);
+    font-size: 0.85rem;
+    font-weight: 800;
+  }
+}

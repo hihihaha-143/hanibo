@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
@@ -95,6 +97,87 @@ class AuthController extends Controller
             'user' => new UserResource($user),
             'refresh_daily' => $refreshDaily,
         ]);
+    }
+
+    public function updateProfile(Request $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $data = $request->validate([
+            'nickname' => [
+                'required',
+                'string',
+                'min:3',
+                'max:32',
+                'alpha_dash',
+                Rule::unique('users', 'nickname')->ignore($user->id),
+            ],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($user->id),
+            ],
+        ]);
+
+        $user->fill($data)->save();
+        $user->load(self::USER_RELATIONS);
+        $user->refresh();
+
+        return response()->json([
+            'user' => new UserResource($user),
+        ]);
+    }
+
+    public function updateSettings(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'daily_exp_goal' => ['sometimes', 'integer', 'min:10', 'max:1000'],
+            'timezone' => ['sometimes', 'string', 'timezone'],
+        ]);
+
+        /** @var User $user */
+        $user = $request->user();
+
+        if (array_key_exists('daily_exp_goal', $data)) {
+            $user->daily_exp_goal = $data['daily_exp_goal'];
+        }
+        if (array_key_exists('timezone', $data)) {
+            $user->timezone = $data['timezone'];
+        }
+        $user->save();
+        $user->load(self::USER_RELATIONS);
+        $refreshDaily = $user->refreshDailyExp();
+
+        return response()->json([
+            'user' => new UserResource($user),
+            'refresh_daily' => $refreshDaily,
+        ]);
+    }
+
+    public function updatePassword(Request $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $data = $request->validate([
+            'current_password' => ['required', 'string'],
+            'password' => ['required', 'string', 'confirmed', Password::min(8)],
+        ]);
+
+        if (! Hash::check($data['current_password'], $user->password)) {
+            return response()->json([
+                'message' => 'Текущий пароль указан неверно.',
+                'errors' => ['current_password' => ['Текущий пароль указан неверно.']],
+            ], 422);
+        }
+
+        $user->password = Hash::make($data['password']);
+        $user->save();
+
+        return response()->json(['message' => 'Пароль обновлён.']);
     }
 
     public function updateTimezone(Request $request)

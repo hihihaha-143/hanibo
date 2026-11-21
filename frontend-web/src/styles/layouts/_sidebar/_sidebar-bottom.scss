@@ -42,6 +42,55 @@
     @include truncate(1);
   }
 
+  &__tools {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0 0.35rem;
+  }
+
+  &__tools-label {
+    color: color-mix(in srgb, var(--color-neutral-light) 65%, transparent);
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  &__account-row {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+    padding: 0 0.15rem;
+  }
+
+  &__account {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    flex: 1 1 auto;
+    padding: 0.45rem 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--color-on-primary) 12%, transparent);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--color-on-primary) 6%, transparent);
+    color: var(--color-on-primary);
+    text-decoration: none;
+    transition:
+      background-color var(--transition-fast),
+      border-color var(--transition-fast);
+
+    &:hover {
+      border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+      background: color-mix(in srgb, var(--color-on-primary) 11%, transparent);
+    }
+  }
+
+  &__account-arrow {
+    flex-shrink: 0;
+    color: color-mix(in srgb, var(--color-on-primary) 55%, transparent);
+  }
+
   &__user {
     @include flex(row, space-between, center, 0.5rem);
     min-width: 0;

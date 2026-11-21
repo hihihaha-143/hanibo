@@ -604,5 +604,59 @@ class AchievementSeeder extends Seeder
                 ],
             );
         }
+
+        $secrets = [
+            [
+                'code' => 'secret_settings',
+                'title' => 'Настройщик',
+                'description' => 'Открыть настройки. Секретно, но очень полезно.',
+                'icon' => 'settings',
+                'is_hidden' => true,
+                'blueberry_reward' => 10,
+                'sort_order' => 100,
+            ],
+            [
+                'code' => 'secret_night',
+                'title' => 'Ночной корейский',
+                'description' => 'Заглянуть в профиль или настройки после полуночи.',
+                'icon' => 'moon',
+                'is_hidden' => true,
+                'blueberry_reward' => 10,
+                'sort_order' => 110,
+            ],
+            [
+                'code' => 'secret_profile_10',
+                'title' => 'Ты точно меня любишь',
+                'description' => 'Открыть свой профиль 10 раз.',
+                'icon' => 'heart',
+                'is_hidden' => true,
+                'blueberry_reward' => 15,
+                'sort_order' => 120,
+            ],
+            [
+                'code' => 'secret_phrases_50',
+                'title' => 'Фразовый дракон',
+                'description' => 'Сохранить 50 фраз из разборов.',
+                'icon' => 'flame',
+                'is_hidden' => true,
+                'blueberry_reward' => 25,
+                'sort_order' => 130,
+            ],
+        ];
+
+        foreach ($secrets as $item) {
+            Achievement::updateOrCreate(
+                ['code' => $item['code']],
+                [
+                    'title' => $item['title'],
+                    'description' => $item['description'],
+                    'icon' => $item['icon'],
+                    'category_id' => $categoryIds['global'],
+                    'is_hidden' => $item['is_hidden'],
+                    'blueberry_reward' => $item['blueberry_reward'],
+                    'sort_order' => $item['sort_order'],
+                ],
+            );
+        }
     }
 }

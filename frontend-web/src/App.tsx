@@ -27,6 +27,10 @@ const BreakdownDetailPage = lazy(
 );
 const ShopPage = lazy(() => import("./pages/ShopPage/ShopPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage/ProfilePage"));
+const AchievementsPage = lazy(
+  () => import("./pages/AchievementsPage/AchievementsPage"),
+);
+const SettingsPage = lazy(() => import("./pages/SettingsPage/SettingsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
 
 const AlphabetPage = lazy(() => import("./pages/AlphabetPage/AlphabetPage"));
@@ -119,6 +123,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/achievements"
+              element={
+                <ProtectedRoute>
+                  <AchievementsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <SettingsPage />
                 </ProtectedRoute>
               }
             />

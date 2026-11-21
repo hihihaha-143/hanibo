@@ -35,6 +35,7 @@ class AchievementSyncService
         $breakdownsCompleted = $this->clampInt($data['breakdowns_completed'] ?? 0);
         $breakdownPhrases = $this->clampInt($data['breakdown_phrases_saved'] ?? 0);
         $libraryBooks = $this->clampInt($data['library_books_opened'] ?? 0);
+        $profileVisits = $this->clampInt($data['profile_visits'] ?? 0);
 
         if ($lessons >= 1) $codes[] = 'course_first_lesson';
         if ($lessons >= 5) $codes[] = 'course_5_lessons';
@@ -73,6 +74,16 @@ class AchievementSyncService
         if ($user->streak_best >= 30) $codes[] = 'streak_30';
         if ($user->daily_exp_goal > 0 && $user->exp_today >= $user->daily_exp_goal) {
             $codes[] = 'daily_goal';
+        }
+
+        if (!empty($data['settings_visited'])) $codes[] = 'secret_settings';
+        if ($profileVisits >= 10) $codes[] = 'secret_profile_10';
+        if ($breakdownPhrases >= 50) $codes[] = 'secret_phrases_50';
+
+        $hour = (int) now()->format('G');
+        $visitedPrivate = !empty($data['settings_visited']) || !empty($data['profile_visited']);
+        if ($visitedPrivate && $hour < 5) {
+            $codes[] = 'secret_night';
         }
 
         return $this->unlock($user, $codes);

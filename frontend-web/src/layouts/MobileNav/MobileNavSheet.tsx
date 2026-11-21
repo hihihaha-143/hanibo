@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { LogOut, Award, Clapperboard, UserRound } from "lucide-react";
+import { LogOut, Award, Clapperboard, Settings, Trophy, UserRound } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/useTheme";
 import { useAuth } from "../../context/useAuth";
@@ -97,14 +97,32 @@ export default function MobileNavSheet({ onClose }: MobileNavSheetProps) {
         </Link>
 
         {isAuthenticated && (
-          <Link
-            to="/profile"
-            className="mobile-nav-sheet__quick-link"
-            onClick={onClose}
-          >
-            <UserRound size={18} aria-hidden="true" />
-            <span>Профиль и достижения</span>
-          </Link>
+          <>
+            <Link
+              to="/profile"
+              className="mobile-nav-sheet__quick-link"
+              onClick={onClose}
+            >
+              <UserRound size={18} aria-hidden="true" />
+              <span>Профиль</span>
+            </Link>
+            <Link
+              to="/achievements"
+              className="mobile-nav-sheet__quick-link"
+              onClick={onClose}
+            >
+              <Trophy size={18} aria-hidden="true" />
+              <span>Достижения</span>
+            </Link>
+            <Link
+              to="/settings"
+              className="mobile-nav-sheet__quick-link"
+              onClick={onClose}
+            >
+              <Settings size={18} aria-hidden="true" />
+              <span>Настройки</span>
+            </Link>
+          </>
         )}
 
         {isAuthenticated && user && (

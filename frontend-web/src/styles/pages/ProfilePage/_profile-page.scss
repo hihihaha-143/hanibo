@@ -81,6 +81,22 @@
     font-weight: 700;
   }
 
+  &__settings-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+  }
+
   &__email {
     margin: 0 0 0.5rem;
     color: rgba(255, 255, 255, 0.68);
@@ -369,6 +385,12 @@
     color: var(--color-accent);
     font-size: 1.5rem;
     font-weight: 800;
+  }
+
+  &__head-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
   }
 
   &__bar {

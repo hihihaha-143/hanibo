@@ -1,0 +1,272 @@
+@use '../../abstracts' as *;
+
+.settings-page {
+  min-width: 0;
+  @include flex(column, flex-start, stretch, 1rem);
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    align-self: flex-start;
+    color: var(--color-text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  &__header {
+    h1 {
+      margin: 0.2rem 0 0.25rem;
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+    }
+
+    p {
+      margin: 0;
+      color: var(--color-text-secondary);
+      font-size: 0.9rem;
+    }
+  }
+
+  &__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+
+  @include down('md') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.settings-card {
+  @include flex(column, flex-start, stretch, 0.8rem);
+  padding: 1rem;
+
+  &--wide {
+    grid-column: 1 / -1;
+  }
+
+  &--danger {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-color: color-mix(in srgb, var(--color-error) 35%, var(--color-border));
+
+    h2 {
+      margin: 0 0 0.15rem;
+      font-size: 0.95rem;
+    }
+
+    p {
+      margin: 0;
+      color: var(--color-text-secondary);
+      font-size: 0.78rem;
+    }
+  }
+
+  &__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+
+    h2 {
+      margin: 0 0 0.1rem;
+      font-size: 0.95rem;
+    }
+
+    p {
+      margin: 0;
+      color: var(--color-text-secondary);
+      font-size: 0.74rem;
+    }
+  }
+
+  &__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+}
+
+.settings-form {
+  @include flex(column, flex-start, stretch, 0.55rem);
+
+  &--row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.55rem;
+
+    .settings-message,
+    button {
+      grid-column: 1 / -1;
+      justify-self: start;
+    }
+
+    @include down('md') {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.settings-field {
+  @include flex(column, flex-start, stretch, 0.25rem);
+
+  > span {
+    color: var(--color-text-secondary);
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  small {
+    color: var(--color-text-secondary);
+    font-size: 0.66rem;
+  }
+}
+
+.settings-message {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0;
+  font-size: 0.75rem;
+
+  &--error {
+    color: var(--color-error);
+  }
+
+  &--success {
+    color: var(--color-success);
+  }
+}
+
+.settings-theme {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+
+  &__option {
+    @include button-reset;
+    @include flex(row, flex-start, center, 0.55rem);
+    padding: 0.7rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-alt);
+    color: var(--color-text);
+    text-align: left;
+
+    &--active {
+      border-color: var(--color-accent);
+      background: var(--color-accent-soft);
+      color: var(--color-accent);
+    }
+
+    span {
+      @include flex(column, flex-start, flex-start, 0.1rem);
+    }
+
+    strong {
+      font-size: 0.8rem;
+    }
+
+    small {
+      color: var(--color-text-secondary);
+      font-size: 0.68rem;
+    }
+  }
+}
+
+.settings-switches {
+  @include flex(column, flex-start, stretch, 0.25rem);
+}
+
+.settings-switch-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px dashed var(--color-border);
+  cursor: pointer;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  > span:first-child {
+    @include flex(column, flex-start, flex-start, 0.1rem);
+
+    strong {
+      font-size: 0.8rem;
+    }
+
+    small {
+      color: var(--color-text-secondary);
+      font-size: 0.68rem;
+    }
+  }
+
+  &__input {
+    @include visually-hidden;
+  }
+
+  &__track {
+    position: relative;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 1.35rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    transition: background-color var(--transition-fast);
+
+    span {
+      position: absolute;
+      top: 0.16rem;
+      left: 0.18rem;
+      width: 0.95rem;
+      height: 0.95rem;
+      border-radius: 50%;
+      background: var(--color-text-secondary);
+      transition:
+        transform var(--transition-fast),
+        background-color var(--transition-fast);
+    }
+  }
+
+  &__input:checked + &__track {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+
+    span {
+      background: var(--color-on-accent);
+      transform: translateX(1.1rem);
+    }
+  }
+
+  &__input:focus-visible + &__track {
+    @include focus-ring;
+  }
+}

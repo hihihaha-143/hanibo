@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LogIn, LogOut, UserPlus, Award } from "lucide-react";
+import { LogIn, LogOut, UserPlus, Award, ChevronRight } from "lucide-react";
 import { useTheme } from "../../context/useTheme";
 import { useAuth } from "../../context/useAuth";
 import { spring } from "../../lib/motion";
@@ -44,19 +44,26 @@ export default function SidebarBottom({ expanded }: SidebarBottomProps) {
       aria-hidden={!expanded}
       inert={!expanded}
     >
-      <label className="theme-switch" title="Переключить тему">
-        <input
-          type="checkbox"
-          checked={isDark}
-          onChange={toggleTheme}
-          aria-label="Тёмная тема"
-        />
-        <span className="theme-switch__slider" />
-      </label>
+      <div className="sidebar-bottom__tools">
+        <span className="sidebar-bottom__tools-label">Тема</span>
+        <label className="theme-switch" title="Переключить тему">
+          <input
+            type="checkbox"
+            checked={isDark}
+            onChange={toggleTheme}
+            aria-label="Тёмная тема"
+          />
+          <span className="theme-switch__slider" />
+        </label>
+      </div>
 
       {isAuthenticated && user ? (
-        <div className="sidebar-bottom__user">
-          <div className="sidebar-bottom__user-info">
+        <div className="sidebar-bottom__account-row">
+          <Link
+            to="/profile"
+            className="sidebar-bottom__account"
+            aria-label="Открыть профиль"
+          >
             <span
               className={`sidebar-bottom__user-avatar-wrap${
                 frame ? " sidebar-bottom__user-avatar-wrap--framed" : ""
@@ -129,7 +136,12 @@ export default function SidebarBottom({ expanded }: SidebarBottomProps) {
                 </span>
               )}
             </div>
-          </div>
+            <ChevronRight
+              size={16}
+              className="sidebar-bottom__account-arrow"
+              aria-hidden="true"
+            />
+          </Link>
 
           <div className="sidebar-bottom__user-actions">
             {medal && (

@@ -7,6 +7,7 @@ import {
   GraduationCap,
   Library,
   MessageCircle,
+  Settings,
   Snowflake,
   Sparkles,
   Trophy,
@@ -133,9 +134,14 @@ export default function ProfilePage() {
 
   const allAchievements = categories.flatMap((category) => category.achievements);
   const unlockedCount = allAchievements.filter((item) => item.unlocked).length;
+  const secretCount = allAchievements.filter((item) => item.is_hidden).length;
   const achievementPercent = allAchievements.length
     ? Math.round((unlockedCount / allAchievements.length) * 100)
     : 0;
+  const previewAchievements = [
+    ...allAchievements.filter((item) => item.unlocked),
+    ...allAchievements.filter((item) => !item.unlocked && !item.is_hidden),
+  ].slice(0, 6);
 
   if (!user) {
     return <div className="page profile-page" />;
@@ -190,6 +196,10 @@ export default function ProfilePage() {
             {user.nickname}
           </h1>
           <p className="profile-hero__email">{user.email}</p>
+          <Link to="/settings" className="profile-hero__settings-link">
+            <Settings size={14} />
+            Настройки
+          </Link>
           <div className="profile-hero__badges">
             <span>{level.code} · {level.label}</span>
             {user.selected_status && (
@@ -306,13 +316,17 @@ export default function ProfilePage() {
           <div>
             <h2 id="profile-achievements-title">Достижения</h2>
             <p>
-              {unlockedCount} из {allAchievements.length} · открываются за
-              активность и приносят чернику
+              {unlockedCount} из {allAchievements.length} · {secretCount} секретных
             </p>
           </div>
-          <span className="profile-achievements__percent">
-            {achievementPercent}%
-          </span>
+          <div className="profile-achievements__head-actions">
+            <span className="profile-achievements__percent">
+              {achievementPercent}%
+            </span>
+            <Link to="/achievements" className="profile-block__link">
+              Все достижения
+            </Link>
+          </div>
         </div>
 
         <div className="profile-achievements__bar" aria-hidden="true">
@@ -321,52 +335,36 @@ export default function ProfilePage() {
 
         {achievementsLoading ? (
           <p className="profile-achievements__empty">Загружаем достижения…</p>
-        ) : allAchievements.length === 0 ? (
+        ) : previewAchievements.length === 0 ? (
           <p className="profile-achievements__empty">
             Достижения появятся после первого действия.
           </p>
         ) : (
-          <div className="profile-achievements__categories">
-            {categories.map((category) => (
-              <div key={category.id} className="profile-achievement-group">
-                <div className="profile-achievement-group__head">
-                  <h3>{category.title}</h3>
-                  <span>
-                    {category.achievements.filter((item) => item.unlocked).length}
-                    {" / "}
-                    {category.achievements.length}
+          <div className="profile-achievement-grid profile-achievements__preview">
+            {previewAchievements.map((achievement) => (
+              <article
+                key={achievement.id}
+                className={
+                  "profile-achievement" +
+                  (achievement.unlocked
+                    ? " profile-achievement--unlocked"
+                    : "")
+                }
+              >
+                <span className="profile-achievement__icon">
+                  <AchievementIcon name={achievement.icon} size={20} />
+                </span>
+                <div className="profile-achievement__body">
+                  <strong>{achievement.title}</strong>
+                  <p>{achievement.description}</p>
+                  <span className="profile-achievement__reward">
+                    {achievement.unlocked
+                      ? "Получено"
+                      : `Награда: +${achievement.blueberry_reward} черники`}
                   </span>
                 </div>
-                <div className="profile-achievement-grid">
-                  {category.achievements.map((achievement) => (
-                    <article
-                      key={achievement.id}
-                      className={
-                        "profile-achievement" +
-                        (achievement.unlocked
-                          ? " profile-achievement--unlocked"
-                          : "")
-                      }
-                    >
-                      <span className="profile-achievement__icon">
-                        <AchievementIcon name={achievement.icon} size={20} />
-                      </span>
-                      <div className="profile-achievement__body">
-                        <strong>{achievement.title}</strong>
-                        <p>{achievement.description}</p>
-                        <span className="profile-achievement__reward">
-                          {achievement.unlocked
-                            ? `Получено${achievement.unlocked_at ? ` · ${formatDate(achievement.unlocked_at)}` : ""}`
-                            : `Награда: +${achievement.blueberry_reward} черники`}
-                        </span>
-                      </div>
-                      {achievement.unlocked && (
-                        <CheckCircleIcon />
-                      )}
-                    </article>
-                  ))}
-                </div>
-              </div>
+                {achievement.unlocked && <CheckCircleIcon />}
+              </article>
             ))}
           </div>
         )}

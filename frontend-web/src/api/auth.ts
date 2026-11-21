@@ -23,6 +23,21 @@ interface TimezoneResponse {
   refresh_daily: RefreshDailyResult;
 }
 
+interface ProfileResponse {
+  user: User;
+}
+
+export interface SettingsPayload {
+  daily_exp_goal?: number;
+  timezone?: string;
+}
+
+export interface PasswordPayload {
+  current_password: string;
+  password: string;
+  password_confirmation: string;
+}
+
 export async function register(payload: {
   nickname: string;
   email: string;
@@ -60,4 +75,30 @@ export async function updateTimezone(
     timezone,
   });
   return data;
+}
+
+
+export async function updateProfile(payload: {
+  nickname: string;
+  email: string;
+}): Promise<User> {
+  const { data } = await apiClient.patch<ProfileResponse>(
+    "/auth/profile",
+    payload,
+  );
+  return data.user;
+}
+
+export async function updateSettings(
+  payload: SettingsPayload,
+): Promise<TimezoneResponse> {
+  const { data } = await apiClient.patch<TimezoneResponse>(
+    "/auth/settings",
+    payload,
+  );
+  return data;
+}
+
+export async function updatePassword(payload: PasswordPayload): Promise<void> {
+  await apiClient.patch("/auth/password", payload);
 }

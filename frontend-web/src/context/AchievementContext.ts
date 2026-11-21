@@ -5,6 +5,8 @@ import type { AchievementStats } from "../lib/achievementStats";
 
 export interface AchievementSyncExtra extends Partial<AchievementStats> {
   profile_visited?: boolean;
+  settings_visited?: boolean;
+  profile_visits?: number;
 }
 
 export interface AchievementContextValue {

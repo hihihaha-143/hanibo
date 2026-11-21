@@ -35,7 +35,7 @@ export default function AchievementsStrip({
             {unlocked.length}/{category.achievements.length}
           </span>
         </span>
-        <Link to="/profile#achievements" className="achievements-strip__all">
+        <Link to="/achievements" className="achievements-strip__all">
           Все
           <ArrowRight size={14} />
         </Link>
@@ -45,7 +45,7 @@ export default function AchievementsStrip({
         {visible.map((achievement) => (
           <Link
             key={achievement.id}
-            to="/profile#achievements"
+            to="/achievements"
             className={
               "achievements-strip__item" +
               (achievement.unlocked
