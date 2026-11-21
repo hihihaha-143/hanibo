@@ -47,6 +47,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   useEffect(() => {
+    const onAuthExpired = () => {
+      setUser(null);
+      setRefreshDaily(null);
+    };
+
+    window.addEventListener("hanibo:auth-expired", onAuthExpired);
+    return () => {
+      window.removeEventListener("hanibo:auth-expired", onAuthExpired);
+    };
+  }, []);
+
+  useEffect(() => {
     const token = localStorage.getItem(TOKEN_KEY);
 
     if (!token) {

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { LogOut, Award } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +16,23 @@ export default function MobileNavSheet({ onClose }: MobileNavSheetProps) {
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const isDark = theme === "dark";
+  const sheetRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    sheetRef.current?.focus();
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
 
   const handleLogout = async () => {
     await logout();
@@ -45,7 +63,9 @@ export default function MobileNavSheet({ onClose }: MobileNavSheetProps) {
 
       {/* Bottom sheet */}
       <motion.div
+        ref={sheetRef}
         className="mobile-nav-sheet"
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label="Меню"

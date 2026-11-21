@@ -10,6 +10,7 @@ interface FormErrors {
   nickname?: string;
   email?: string;
   password?: string;
+  password_confirmation?: string;
   general?: string;
 }
 
@@ -26,6 +27,12 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (password !== passwordConfirmation) {
+      setErrors({ password_confirmation: "Пароли не совпадают" });
+      return;
+    }
+
     setErrors({});
     setIsSubmitting(true);
 
@@ -46,6 +53,8 @@ export default function RegisterPage() {
             nickname: data.errors.nickname?.[0],
             email: data.errors.email?.[0],
             password: data.errors.password?.[0],
+            password_confirmation:
+              data.errors.password_confirmation?.[0],
           });
         } else {
           setErrors({ general: "Что-то пошло не так. Попробуйте позже." });
@@ -105,6 +114,7 @@ export default function RegisterPage() {
           autoComplete="new-password"
           value={passwordConfirmation}
           onChange={setPasswordConfirmation}
+          error={errors.password_confirmation}
           passwordToggle
         />
 

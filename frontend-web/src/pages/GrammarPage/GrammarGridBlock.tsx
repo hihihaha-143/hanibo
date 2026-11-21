@@ -9,6 +9,7 @@ interface GrammarGridBlockProps {
   currentPage: number;
   lastPage: number;
   onPageChange: (page: number) => void;
+  onRetry: () => void;
   onOpen: (id: number) => void;
 }
 
@@ -36,6 +37,7 @@ export function GrammarGridBlock({
   currentPage,
   lastPage,
   onPageChange,
+  onRetry,
   onOpen,
 }: GrammarGridBlockProps) {
   if (error) {
@@ -44,6 +46,13 @@ export function GrammarGridBlock({
         <p className="dictionary-grid__state-text dictionary-grid__state-text--error">
           {error}
         </p>
+        <button
+          type="button"
+          className="btn btn--primary btn--sm"
+          onClick={onRetry}
+        >
+          Повторить
+        </button>
       </div>
     );
   }

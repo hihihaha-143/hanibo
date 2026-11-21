@@ -37,22 +37,50 @@
     white-space: nowrap;
   }
 
+  &__body {
+    @include flex(column, flex-start, stretch, 1.25rem);
+    flex: 1 1 auto;
+  }
+
+  &__head {
+    @include flex(row, space-between, center, 0.75rem);
+  }
+
   &__progress {
     font-size: 0.8125rem;
     font-weight: 600;
     color: var(--color-text-secondary);
   }
 
-  &__state {
-    padding: 3rem 0;
-    font-size: 0.9375rem;
-    color: var(--color-text-secondary);
+  &__score {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  &--state {
+    min-height: 18rem;
+    @include flex(column, center, center, 0.5rem);
     text-align: center;
   }
 
-  &__body {
-    @include flex(column, flex-start, stretch, 1.25rem);
-    flex: 1 1 auto;
+  &__state-text {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+  }
+
+  &--result {
+    min-height: 18rem;
+    @include flex(column, center, center, 0.5rem);
+    text-align: center;
+  }
+
+  &__result-title {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
   }
 
   &__instruction {
@@ -106,6 +134,11 @@
 
     &:hover:not(:disabled) {
       border-color: var(--color-accent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
     }
 
     &:disabled {

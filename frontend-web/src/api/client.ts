@@ -19,3 +19,18 @@ apiClient.interceptors.request.use((config) => {
 
   return config;
 });
+
+// Истёкший/отозванный токен должен разлогинить приложение, а не оставлять
+// пользователя на странице с повторяющимися ошибками API.
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      if (localStorage.getItem("hanibo_token")) {
+        localStorage.removeItem("hanibo_token");
+        window.dispatchEvent(new Event("hanibo:auth-expired"));
+      }
+    }
+    return Promise.reject(error);
+  },
+);

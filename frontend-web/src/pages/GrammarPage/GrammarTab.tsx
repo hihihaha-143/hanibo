@@ -61,6 +61,15 @@ export function GrammarTab() {
 
   const reload = useCallback(() => setReloadTick((t) => t + 1), []);
 
+  const handleReset = useCallback(() => {
+    setSearchInput("");
+    setDebouncedSearch("");
+    setTab("all");
+    setFormId(null);
+    setLevelId(null);
+    setPage(1);
+  }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchInput);
@@ -163,6 +172,13 @@ export function GrammarTab() {
         levelId={levelId}
         onLevelChange={handleLevelChange}
         onOpenMiniGames={() => setMiniGamesOpen(true)}
+        onReset={handleReset}
+        hasFilters={
+          searchInput.trim() !== "" ||
+          tab !== "all" ||
+          formId !== null ||
+          levelId !== null
+        }
       />
 
       <div className="dictionary-tab__body">
@@ -178,6 +194,7 @@ export function GrammarTab() {
             error={error}
             currentPage={rules.meta.current_page}
             lastPage={rules.meta.last_page}
+            onRetry={reload}
             onPageChange={handlePageChange}
             onOpen={setOpenRuleId}
           />

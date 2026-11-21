@@ -6,8 +6,9 @@
 @use './HomePage/home-page';
 @use './ItemPage/LessonView';
 @use './LibraryPage';
+@use './NotFoundPage/not-found-page';
 @use './PracticePage';
 @use './ShopPage/index' as shop;
 
 
-@use './GrammarTab/index';
+@use './GrammarPage/index';

@@ -1,0 +1,25 @@
+@use '../../abstracts' as *;
+
+.not-found-page {
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 60vh;
+  padding-block: 3rem;
+  text-align: left;
+
+  &__code {
+    margin: 0;
+    font-size: clamp(4rem, 12vw, 8rem);
+    font-weight: 800;
+    line-height: 0.9;
+    color: var(--color-accent);
+  }
+
+  &__text {
+    max-width: 34rem;
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+}
+

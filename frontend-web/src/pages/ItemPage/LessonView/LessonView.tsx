@@ -94,7 +94,7 @@ export default function LessonView({ item }: LessonViewProps) {
   };
 
   const goToFinalTest = () => {
-    if (!(progress.grammarPercent > PASS_THRESHOLD)) return;
+    if (!(progress.grammarPercent >= PASS_THRESHOLD)) return;
     if (!finalQuestions && words && grammar) {
       const q = generateFinalTest(words, grammar, grammarPool);
       setFinalQuestions(q);
@@ -114,8 +114,8 @@ export default function LessonView({ item }: LessonViewProps) {
     if (item.next) navigate(`/course/item/${item.next.id}`);
   };
 
-  const grammarLocked = !(progress.wordsPercent > PASS_THRESHOLD);
-  const finalLocked = !(progress.grammarPercent > PASS_THRESHOLD);
+  const grammarLocked = !(progress.wordsPercent >= PASS_THRESHOLD);
+  const finalLocked = !(progress.grammarPercent >= PASS_THRESHOLD);
 
   const lockedMap: Record<Tab, boolean> = {
     words: false,

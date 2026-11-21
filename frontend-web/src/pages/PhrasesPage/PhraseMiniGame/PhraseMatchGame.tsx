@@ -296,7 +296,7 @@ export function PhraseMatchGame({ onClose }: PhraseMatchGameProps) {
             <div className="match__footer">
               <motion.button
                 type="button"
-                className="btn btn--accent btn--lg match__check"
+                className="btn btn--accent btn--lg"
                 disabled={!allPaired}
                 onClick={handleCheck}
                 whileHover={allPaired ? { y: -1, scale: 1.02 } : undefined}

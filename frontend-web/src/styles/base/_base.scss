@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 html,
 body {
   overflow-x: clip;
@@ -64,4 +66,18 @@ html {
   max-width: var(--content-max);
   margin-inline: auto;
   padding-inline: 1rem;
+}
+
+
+.app-loader {
+  @include flex(column, center, center, 0.75rem);
+  min-height: 100dvh;
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+}
+
+.error-boundary {
+  @include flex(row, center, center);
+  min-height: 100dvh;
+  padding: 1.5rem;
 }

@@ -107,16 +107,16 @@ export function ChooseRuleGame({ onClose }: ChooseRuleGameProps) {
 
   if (loading) {
     return (
-      <div className="grammar-mini-game grammar-mini-game--state">
-        <p className="grammar-mini-game__state-text">Загрузка…</p>
+      <div className="choose-rule-game choose-rule-game--state">
+        <p className="choose-rule-game__state-text">Загрузка…</p>
       </div>
     );
   }
 
   if (pool.length < 4) {
     return (
-      <div className="grammar-mini-game grammar-mini-game--state">
-        <p className="grammar-mini-game__state-text">
+      <div className="choose-rule-game choose-rule-game--state">
+        <p className="choose-rule-game__state-text">
           Нужно минимум 4 правила для игры.
         </p>
       </div>
@@ -125,9 +125,9 @@ export function ChooseRuleGame({ onClose }: ChooseRuleGameProps) {
 
   if (done) {
     return (
-      <div className="grammar-mini-game grammar-mini-game--result">
-        <p className="grammar-mini-game__result-title">Результат</p>
-        <p className="grammar-mini-game__result-score">
+      <div className="choose-rule-game choose-rule-game--result">
+        <p className="choose-rule-game__result-title">Результат</p>
+        <p className="choose-rule-game__result-score">
           {score} из {ROUNDS}
         </p>
         <button type="button" className="btn btn--accent" onClick={onClose}>
@@ -140,31 +140,31 @@ export function ChooseRuleGame({ onClose }: ChooseRuleGameProps) {
   if (!question) return null;
 
   return (
-    <div className="grammar-mini-game">
-      <div className="grammar-mini-game__head">
-        <span className="grammar-mini-game__progress">{progressLabel}</span>
-        <span className="grammar-mini-game__score">Счёт: {score}</span>
+    <div className="choose-rule-game">
+      <div className="choose-rule-game__head">
+        <span className="choose-rule-game__progress">{progressLabel}</span>
+        <span className="choose-rule-game__score">Счёт: {score}</span>
       </div>
 
-      <p className="grammar-mini-game__instruction">
+      <p className="choose-rule-game__instruction">
         Выбери правило для конструкции
       </p>
 
-      <p className="grammar-mini-game__prompt">
+      <p className="choose-rule-game__prompt">
         {question.target.construction}
       </p>
 
-      <div className="grammar-mini-game__variants">
+      <div className="choose-rule-game__variants">
         {question.variants.map((v, i) => {
           const isSelected = selected === i;
           const isCorrect = i === question.correctIndex;
           const cls =
-            "grammar-mini-game__variant" +
+            "choose-rule-game__variant" +
             (answered && isCorrect
-              ? " grammar-mini-game__variant--correct"
+              ? " choose-rule-game__variant--correct"
               : "") +
             (answered && isSelected && !isCorrect
-              ? " grammar-mini-game__variant--wrong"
+              ? " choose-rule-game__variant--wrong"
               : "");
           return (
             <button

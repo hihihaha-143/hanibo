@@ -58,6 +58,11 @@
     margin-top: 2px;
   }
 
+  &__btn {
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
   @include down("md") {
     flex-wrap: wrap;
   }

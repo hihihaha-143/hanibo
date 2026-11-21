@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
 import { spring } from "../../lib/motion";
-import { speakKorean } from "../../lib/speech";
+import { speakKorean, speechSupported } from "../../lib/speech";
 
 interface SpeakControlsProps {
   text: string;
@@ -14,6 +14,8 @@ const SPEEDS = [
 ];
 
 export default function SpeakControls({ text, className }: SpeakControlsProps) {
+  const supported = speechSupported();
+
   return (
     <div className={className ? `speak-controls ${className}` : "speak-controls"}>
       {SPEEDS.map(({ rate, label, title }) => (
@@ -22,8 +24,9 @@ export default function SpeakControls({ text, className }: SpeakControlsProps) {
           type="button"
           className="speak-button"
           onClick={() => speakKorean(text, rate)}
-          title={title}
-          aria-label={title}
+          disabled={!supported}
+          title={supported ? title : "Озвучка не поддерживается"}
+          aria-label={supported ? title : "Озвучка не поддерживается"}
           whileHover={{ y: -1 }}
           whileTap={{ scale: 0.94 }}
           transition={spring.bouncy}

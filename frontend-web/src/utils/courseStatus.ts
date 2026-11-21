@@ -61,9 +61,9 @@ export function calculateCourseStatuses(items: CourseItem[]): ItemWithStatus[] {
     result.push({ item, status, progressPercent });
 
     if (item.type === "lesson") {
-      prevPassed = getLessonProgress(item.id).finalPercent > PASS_THRESHOLD;
+      prevPassed = getLessonProgress(item.id).finalPercent >= PASS_THRESHOLD;
     } else if (item.type === "test") {
-      prevPassed = getTestProgress(item.id).percent > PASS_THRESHOLD;
+      prevPassed = getTestProgress(item.id).percent >= PASS_THRESHOLD;
     }
     // extra — не меняет prevPassed
   }

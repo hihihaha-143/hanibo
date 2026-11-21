@@ -157,7 +157,7 @@ export function ShopItemCard({
         return (
           <button
             type="button"
-            className="btn btn--primary btn--sm shop-card__button"
+            className="btn btn--primary btn--sm"
             disabled={pending || !canAfford}
             onClick={() => onBuy(item)}
           >
@@ -173,7 +173,7 @@ export function ShopItemCard({
       return (
         <button
           type="button"
-          className="btn btn--accent btn--sm shop-card__button"
+          className="btn btn--accent btn--sm"
           disabled={pending}
           onClick={() => onActivate(item)}
         >
@@ -188,7 +188,7 @@ export function ShopItemCard({
       return (
         <button
           type="button"
-          className="btn btn--primary btn--sm shop-card__button"
+          className="btn btn--primary btn--sm"
           disabled={pending || !canAfford}
           onClick={() => onBuy(item)}
         >
@@ -205,7 +205,7 @@ export function ShopItemCard({
       return (
         <button
           type="button"
-          className="btn btn--success btn--sm shop-card__button"
+          className="btn btn--success btn--sm"
           disabled={pending}
           onClick={() => onUnequip(item)}
         >
@@ -218,7 +218,7 @@ export function ShopItemCard({
     return (
       <button
         type="button"
-        className="btn btn--accent btn--sm shop-card__button"
+        className="btn btn--accent btn--sm"
         disabled={pending}
         onClick={() => onEquip(item)}
       >

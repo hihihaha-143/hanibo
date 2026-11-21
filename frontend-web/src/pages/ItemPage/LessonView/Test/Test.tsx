@@ -17,6 +17,7 @@ import SyllableGapQuestion from "./SyllableGapQuestion";
 import TestResult from "./TestResult";
 import StateBlock from "../../../../components/StateBlock/StateBlock";
 import { spring } from "../../../../lib/motion";
+import { PASS_THRESHOLD } from "../../../../utils/progress";
 
 interface TestProps {
   questions: TestQuestion[];
@@ -180,9 +181,10 @@ function TestRunner({
     onAnswer?.(current, correct);
   };
 
-  const handleFlashcardAnswer = () => {
+  const handleFlashcardAnswer = (known: boolean) => {
     if (answered) return;
     setAnswered(true);
+    onAnswer?.(current, known);
   };
 
   const resetAnswerState = () => {
@@ -198,8 +200,8 @@ function TestRunner({
   const handleNext = () => {
     if (currentIndex + 1 >= total) {
       const percent =
-        gradableTotal > 0 ? (correctCount / gradableTotal) * 100 : 0;
-      const passed = percent > 70;
+        gradableTotal > 0 ? Math.round((correctCount / gradableTotal) * 100) : 0;
+      const passed = percent >= PASS_THRESHOLD;
       setFinished(true);
       onFinish(correctCount, gradableTotal, passed);
     } else {
@@ -267,7 +269,7 @@ function TestRunner({
   if (finished) {
     const percent =
       gradableTotal > 0 ? Math.round((correctCount / gradableTotal) * 100) : 0;
-    const passed = percent > 70;
+    const passed = percent >= PASS_THRESHOLD;
     return (
       <TestResult
         correct={correctCount}

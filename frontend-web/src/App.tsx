@@ -10,9 +10,12 @@ const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const CoursePage = lazy(() => import("./pages/CoursePage/CoursePage"));
 const ItemPage = lazy(() => import("./pages/ItemPage/ItemPage"));
 const LibraryPage = lazy(() => import("./pages/LibraryPage/LibraryPage"));
-import LibraryViewPage from "./pages/LibraryPage/LibraryViewPage";
+const LibraryViewPage = lazy(
+  () => import("./pages/LibraryPage/LibraryViewPage"),
+);
 const PracticePage = lazy(() => import("./pages/PracticePage/PracticePage"));
 const ShopPage = lazy(() => import("./pages/ShopPage/ShopPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
 
 const AlphabetPage = lazy(() => import("./pages/AlphabetPage/AlphabetPage"));
 const AlphabetTestPage = lazy(
@@ -22,13 +25,23 @@ const AlphabetTestPage = lazy(
 const LoginPage = lazy(() => import("./pages/AuthPage/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/AuthPage/RegisterPage"));
 
+function AppLoader() {
+  return (
+    <div className="app-loader" role="status" aria-live="polite">
+      <span className="state-block__spinner" aria-hidden="true" />
+      <span>Загрузка…</span>
+    </div>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={null}>
+      <Suspense fallback={<AppLoader />}>
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="*" element={<NotFoundPage />} />
             <Route path="/course" element={<CoursePage />} />
             <Route path="/course/item/:id" element={<ItemPage />} />
 

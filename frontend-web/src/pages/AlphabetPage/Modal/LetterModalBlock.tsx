@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, Volume2 } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { spring } from "../../../lib/motion";
 import type { AlphabetLetter, AlphabetProgress } from "../../../api/alphabet";
 import LetterWritingBlock from "./LetterWritingBlock";
@@ -9,6 +9,8 @@ import LetterSoundBlock from "./LetterSoundBlock";
 import LetterFamilyBlock from "./LetterFamilyBlock";
 import LetterConfusionBlock from "./LetterConfusionBlock";
 import LetterTestBlock from "../Test/LetterTestBlock";
+import SpeakControls from "../../../components/SpeakButton/SpeakControls";
+import { speakKorean } from "../../../lib/speech";
 
 interface LetterModalBlockProps {
   letter: AlphabetLetter | null;
@@ -19,15 +21,6 @@ interface LetterModalBlockProps {
   hasPrev: boolean;
   hasNext: boolean;
   onProgressUpdated?: (letterId: number, progress: AlphabetProgress) => void;
-}
-
-function speak(text: string, rate = 1) {
-  if (!("speechSynthesis" in window)) return;
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "ko-KR";
-  utterance.rate = rate;
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
 }
 
 export default function LetterModalBlock({
@@ -120,7 +113,7 @@ export default function LetterModalBlock({
                     <button
                       type="button"
                       className="letter-modal-block__symbol"
-                      onClick={() => speak(letter.symbol, 1)}
+                      onClick={() => speakKorean(letter.symbol, 1)}
                       aria-label="Озвучить букву"
                     >
                       {letter.symbol}
@@ -164,7 +157,6 @@ export default function LetterModalBlock({
                     note={letter.sound_note}
                     sampleSyllable={letter.sample_syllable}
                     sampleRomanization={letter.sample_romanization}
-                    onSpeak={speak}
                   />
 
                   {!isAssimilation && (
@@ -200,32 +192,10 @@ export default function LetterModalBlock({
                         </span>
                       </div>
 
-                      <div className="letter-modal-block__example-speak">
-                        <motion.button
-                          type="button"
-                          className="btn btn--ghost letter-modal-block__speak-button"
-                          onClick={() => speak(example.word, 0.5)}
-                          title="Медленно"
-                          whileHover={{ y: -1, scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          transition={spring.bouncy}
-                        >
-                          <Volume2 size={16} />
-                          <span>0.5</span>
-                        </motion.button>
-                        <motion.button
-                          type="button"
-                          className="btn btn--ghost letter-modal-block__speak-button"
-                          onClick={() => speak(example.word, 1)}
-                          title="Обычно"
-                          whileHover={{ y: -1, scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          transition={spring.bouncy}
-                        >
-                          <Volume2 size={16} />
-                          <span>1</span>
-                        </motion.button>
-                      </div>
+                      <SpeakControls
+                        text={example.word}
+                        className="letter-modal-block__example-speak"
+                      />
                     </div>
                   ))}
                 </div>

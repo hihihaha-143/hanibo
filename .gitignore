@@ -39,3 +39,6 @@ backend/public/build
 # OSPanel
 .osp/*.lnk
 *.lnk
+
+# Database dumps may contain personal data
+*.sql

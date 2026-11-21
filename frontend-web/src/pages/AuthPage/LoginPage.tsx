@@ -22,7 +22,13 @@ export default function LoginPage() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const redirectTo = (location.state as { from?: string } | null)?.from ?? "/";
+  const rawFrom = (location.state as { from?: unknown } | null)?.from;
+  const redirectTo =
+    typeof rawFrom === "string" &&
+    rawFrom.startsWith("/") &&
+    !rawFrom.startsWith("//")
+      ? rawFrom
+      : "/";
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

@@ -34,7 +34,6 @@ export function pushRecent(id: number | string): void {
       MAX_RECENT,
     );
     localStorage.setItem(RECENT_KEY, JSON.stringify(next));
-    console.log("УСПЕШНО ЗАПИСАНО В RECENT:", next);
   } catch (e) {
     console.error("ОШИБКА ЗАПИСИ В RECENT:", e);
   }

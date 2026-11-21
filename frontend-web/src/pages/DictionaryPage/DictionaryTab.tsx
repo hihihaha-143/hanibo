@@ -128,6 +128,14 @@ export function DictionaryTab() {
     setPage(1);
   }, []);
 
+  const handleReset = useCallback(() => {
+    setSearchInput("");
+    setDebouncedSearch("");
+    setTab("all");
+    setTopicId(null);
+    setPage(1);
+  }, []);
+
   const handlePageChange = useCallback((next: number) => {
     setPage(next);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -188,6 +196,10 @@ export function DictionaryTab() {
         topicId={topicId}
         onTopicChange={handleTopicChange}
         onOpenMiniGames={() => setMiniGamesOpen(true)}
+        onReset={handleReset}
+        hasFilters={
+          searchInput.trim() !== "" || tab !== "all" || topicId !== null
+        }
       />
 
       <div className="dictionary-tab__body">
@@ -204,6 +216,7 @@ export function DictionaryTab() {
             currentPage={words.meta.current_page}
             lastPage={words.meta.last_page}
             now={now}
+            onRetry={reloadWords}
             onPageChange={handlePageChange}
             onProgressChange={handleProgressChange}
           />

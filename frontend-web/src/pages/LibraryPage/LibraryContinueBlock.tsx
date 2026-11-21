@@ -32,7 +32,7 @@ export default function LibraryContinueBlock({
           Стр. {page} {total ? `из ${total}` : ""}
         </div>
       </div>
-      <div className="library-continue-block__btn">Продолжить</div>
+      <span className="btn btn--accent btn--sm library-continue-block__btn">Продолжить</span>
     </Link>
   );
 }

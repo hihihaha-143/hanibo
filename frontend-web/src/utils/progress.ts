@@ -100,15 +100,15 @@ export function setFinalPercent(itemId: number, percent: number): void {
 }
 
 export function isWordsPassed(itemId: number): boolean {
-  return getLessonProgress(itemId).wordsPercent > PASS_THRESHOLD;
+  return getLessonProgress(itemId).wordsPercent >= PASS_THRESHOLD;
 }
 
 export function isGrammarPassed(itemId: number): boolean {
-  return getLessonProgress(itemId).grammarPercent > PASS_THRESHOLD;
+  return getLessonProgress(itemId).grammarPercent >= PASS_THRESHOLD;
 }
 
 export function isFinalPassed(itemId: number): boolean {
-  return getLessonProgress(itemId).finalPercent > PASS_THRESHOLD;
+  return getLessonProgress(itemId).finalPercent >= PASS_THRESHOLD;
 }
 
 export function isItemCompleted(itemId: number): boolean {

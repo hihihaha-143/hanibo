@@ -10,6 +10,7 @@ interface PhrasesGridBlockProps {
   lastPage: number;
   now: number;
   onPageChange: (page: number) => void;
+  onRetry: () => void;
   onProgressChange: (phraseId: number, progress: PhraseProgress | null) => void;
 }
 
@@ -38,6 +39,7 @@ export function PhrasesGridBlock({
   lastPage,
   now,
   onPageChange,
+  onRetry,
   onProgressChange,
 }: PhrasesGridBlockProps) {
   if (error) {
@@ -46,6 +48,13 @@ export function PhrasesGridBlock({
         <p className="dictionary-grid__state-text dictionary-grid__state-text--error">
           {error}
         </p>
+        <button
+          type="button"
+          className="btn btn--primary btn--sm"
+          onClick={onRetry}
+        >
+          Повторить
+        </button>
       </div>
     );
   }

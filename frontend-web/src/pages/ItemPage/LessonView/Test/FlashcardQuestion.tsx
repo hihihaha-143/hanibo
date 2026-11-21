@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useHotkeys } from "react-hotkeys-hook";
 import type { TestQuestionFlashcard } from "../../../../utils/testGenerator";
@@ -21,6 +21,18 @@ export default function FlashcardQuestion({
 }: FlashcardQuestionProps) {
   const [flipped, setFlipped] = useState(false);
   const [known, setKnown] = useState(false);
+  const timers = useRef<number[]>([]);
+
+  const schedule = (fn: () => void, delay: number) => {
+    timers.current.push(window.setTimeout(fn, delay));
+  };
+
+  useEffect(() => {
+    return () => {
+      timers.current.forEach((id) => window.clearTimeout(id));
+      timers.current = [];
+    };
+  }, []);
 
   const handleKnown = () => {
     if (flipped) return;
@@ -28,9 +40,9 @@ export default function FlashcardQuestion({
     onAnswer(true);
     setFlipped(true);
     if (question.backAudio) {
-      setTimeout(() => speakKorean(question.backAudio!, 1), 400);
+      schedule(() => speakKorean(question.backAudio!, 1), 400);
     }
-    setTimeout(() => {
+    schedule(() => {
       onAutoNext();
     }, KNOWN_AUTO_DELAY);
   };
@@ -40,7 +52,7 @@ export default function FlashcardQuestion({
     onAnswer(false);
     setFlipped(true);
     if (question.backAudio) {
-      setTimeout(() => speakKorean(question.backAudio!, 1), 400);
+      schedule(() => speakKorean(question.backAudio!, 1), 400);
     }
   };
 

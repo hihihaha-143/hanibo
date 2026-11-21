@@ -6,6 +6,11 @@
 Стек фронтенда: React 19, TypeScript, Vite, SCSS, framer-motion,
 react-router-dom. Бэкенд — Laravel/PHP.
 
+## Аудит
+
+Результаты проверки кода, безопасности и компонентов — в
+[AUDIT.md](AUDIT.md).
+
 ## Запуск
 
 ```bash

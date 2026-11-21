@@ -10,6 +10,7 @@ interface DictionaryGridBlockProps {
   lastPage: number;
   now: number;
   onPageChange: (page: number) => void;
+  onRetry: () => void;
   onProgressChange: (wordId: number, progress: WordProgress | null) => void;
 }
 
@@ -38,6 +39,7 @@ export function DictionaryGridBlock({
   lastPage,
   now,
   onPageChange,
+  onRetry,
   onProgressChange,
 }: DictionaryGridBlockProps) {
   if (error) {
@@ -46,6 +48,13 @@ export function DictionaryGridBlock({
         <p className="dictionary-grid__state-text dictionary-grid__state-text--error">
           {error}
         </p>
+        <button
+          type="button"
+          className="btn btn--primary btn--sm"
+          onClick={onRetry}
+        >
+          Повторить
+        </button>
       </div>
     );
   }

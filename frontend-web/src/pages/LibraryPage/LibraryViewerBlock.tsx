@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import {
+  ArrowLeft,
   ChevronLeft,
   ChevronRight,
   Maximize2,
@@ -331,6 +333,15 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
   return (
     <div className="library-viewer-block" ref={containerRef}>
       <div className="library-viewer-block__controls">
+        <Link
+          to="/library"
+          className="btn btn--icon"
+          title="Назад в библиотеку"
+          aria-label="Назад в библиотеку"
+        >
+          <ArrowLeft size={18} />
+        </Link>
+
         {(outline.length > 0 || numPages > 0) && (
           <button
             type="button"
@@ -340,6 +351,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
               (panelOpen ? " btn--active" : "")
             }
             title="Панель навигации"
+            aria-label="Панель навигации"
           >
             <Menu size={18} />
           </button>
@@ -351,6 +363,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
           disabled={currentPage <= 1}
           className="btn btn--icon"
           title="Назад (←)"
+          aria-label="Предыдущая страница"
         >
           <ChevronLeft size={18} />
         </button>
@@ -365,6 +378,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
           disabled={numPages === 0 || currentPage >= numPages}
           className="btn btn--icon"
           title="Вперёд (→)"
+          aria-label="Следующая страница"
         >
           <ChevronRight size={18} />
         </button>
@@ -377,6 +391,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
           onClick={() => setZoom((z) => Math.max(0.5, z - 0.2))}
           className="btn btn--icon"
           title="Уменьшить"
+          aria-label="Уменьшить масштаб"
         >
           <ZoomOut size={16} />
         </button>
@@ -385,6 +400,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
           onClick={() => setZoom(1)}
           className="btn btn--icon"
           title="Сбросить масштаб"
+          aria-label="Сбросить масштаб"
         >
           100%
         </button>
@@ -393,6 +409,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
           onClick={() => setZoom((z) => Math.min(3, z + 0.2))}
           className="btn btn--icon"
           title="Увеличить"
+          aria-label="Увеличить масштаб"
         >
           <ZoomIn size={16} />
         </button>
@@ -404,6 +421,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
             "btn btn--icon" + (pagesPerView === 1 ? " btn--active" : "")
           }
           title="Одна страница"
+          aria-label="Показывать одну страницу"
         >
           1
         </button>
@@ -414,6 +432,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
             "btn btn--icon" + (pagesPerView === 2 ? " btn--active" : "")
           }
           title="Две страницы"
+          aria-label="Показывать две страницы"
         >
           2
         </button>
@@ -425,6 +444,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
             "btn btn--icon" + (fitMode === "page" ? " btn--active" : "")
           }
           title={fitMode === "page" ? "По ширине" : "По экрану"}
+          aria-label={fitMode === "page" ? "По ширине" : "По экрану"}
         >
           {fitMode === "page" ? (
             <Minimize2 size={16} />

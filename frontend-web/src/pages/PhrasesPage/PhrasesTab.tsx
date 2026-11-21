@@ -69,6 +69,14 @@ export function PhrasesTab() {
     return () => window.clearInterval(id);
   }, []);
 
+  const handleReset = useCallback(() => {
+    setSearchInput("");
+    setDebouncedSearch("");
+    setTab("all");
+    setTopicId(null);
+    setPage(1);
+  }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchInput);
@@ -187,6 +195,10 @@ export function PhrasesTab() {
         topicId={topicId}
         onTopicChange={handleTopicChange}
         onOpenMiniGames={() => setMiniGamesOpen(true)}
+        onReset={handleReset}
+        hasFilters={
+          searchInput.trim() !== "" || tab !== "all" || topicId !== null
+        }
       />
 
       <div className="dictionary-tab__body">
@@ -206,6 +218,7 @@ export function PhrasesTab() {
             currentPage={phrases.meta.current_page}
             lastPage={phrases.meta.last_page}
             now={now}
+            onRetry={reloadPhrases}
             onPageChange={handlePageChange}
             onProgressChange={handleProgressChange}
           />

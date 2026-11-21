@@ -58,11 +58,4 @@
     @include flex(row, flex-start, center, 6px);
     flex-shrink: 0;
   }
-
-  &__speak-button {
-    // Наследуем стили от .btn--ghost, но можем чуть скорректировать
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
 }
