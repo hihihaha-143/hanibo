@@ -1,7 +1,8 @@
-export type CourseTabId = "course" | "dictionary" | "stats";
+export type CourseTabId = "course" | "training" | "dictionary" | "stats";
 
 export const COURSE_TABS: { id: CourseTabId; label: string }[] = [
   { id: "course", label: "Курс" },
+  { id: "training", label: "Тренировки" },
   { id: "dictionary", label: "Мой словарь" },
   { id: "stats", label: "Статистика" },
 ];

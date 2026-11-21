@@ -3,7 +3,7 @@ import ChipsBlock from "../../components/ChipsBlock/ChipsBlock";
 import CourseListBlock from "./CourseListBlock";
 import MyDictionaryBlock from "./MyDictionaryBlock";
 import CourseStatsBlock from "./CourseStatsBlock";
-import CourseTrainingBlock from "./CourseTrainingBlock";
+import CourseTrainingTab from "./CourseTrainingTab";
 import {
   COURSE_TABS,
   DEFAULT_COURSE_TAB,
@@ -15,6 +15,10 @@ const TITLES: Record<CourseTabId, { title: string; subtitle: string }> = {
   course: {
     title: "Курс",
     subtitle: "Уроки, тесты и материалы по порядку",
+  },
+  training: {
+    title: "Тренировки",
+    subtitle: "Повторение и работа над ошибками",
   },
   dictionary: {
     title: "Мой словарь",
@@ -56,12 +60,8 @@ export default function CoursePage() {
       />
 
       <div className="course-page__content">
-        {activeTab === "course" && (
-          <>
-            <CourseListBlock />
-            <CourseTrainingBlock />
-          </>
-        )}
+        {activeTab === "course" && <CourseListBlock />}
+        {activeTab === "training" && <CourseTrainingTab />}
         {activeTab === "dictionary" && <MyDictionaryBlock />}
         {activeTab === "stats" && <CourseStatsBlock />}
       </div>

@@ -1,26 +1,20 @@
 @use '../../abstracts' as *;
 
-.course-training-block {
-  @include flex(column, flex-start, stretch, 0.5rem);
-  margin-top: 1.5rem;
-
-  &__title {
-    margin: 0;
-    font-size: 1.05rem;
-    font-weight: 700;
-  }
+.course-training-tab {
+  @include flex(column, flex-start, stretch, 0.75rem);
+  min-width: 0;
 
   &__intro {
     margin: 0;
     color: var(--color-text-secondary);
-    font-size: 0.82rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 
   &__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.75rem;
-    margin-top: 0.25rem;
 
     @include down('md') {
       grid-template-columns: 1fr;
@@ -29,7 +23,7 @@
 
   &__card {
     @include flex(row, flex-start, center, 0.75rem);
-    padding: 0.9rem 1rem;
+    padding: 1rem;
     color: var(--color-text);
     text-decoration: none;
     transition:
@@ -42,42 +36,65 @@
       background: var(--color-surface-alt);
       transform: translateY(-1px);
     }
+
+    &--disabled {
+      cursor: default;
+      opacity: 0.72;
+
+      &:hover {
+        border-color: var(--color-border);
+        background: var(--color-surface);
+        transform: none;
+      }
+    }
   }
 
   &__icon {
     display: grid;
     place-items: center;
     flex-shrink: 0;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     background: var(--color-accent-soft);
     color: var(--color-accent);
+
+    &--errors {
+      background: var(--color-error-bg);
+      color: var(--color-error);
+    }
   }
 
-  &__card--errors &__icon {
-    background: var(--color-error-bg);
-    color: var(--color-error);
-  }
-
-  &__card-body {
-    @include flex(column, flex-start, flex-start, 0.15rem);
+  &__body {
+    @include flex(column, flex-start, flex-start, 0.2rem);
     min-width: 0;
     flex: 1 1 auto;
 
     strong {
-      font-size: 0.92rem;
+      font-size: 0.95rem;
     }
 
-    span {
+    > span {
       color: var(--color-text-secondary);
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       line-height: 1.4;
     }
+  }
+
+  &__meta {
+    color: var(--color-text) !important;
+    font-weight: 600;
   }
 
   &__arrow {
     flex-shrink: 0;
     color: var(--color-text-secondary);
+  }
+
+  &__note {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.78rem;
+    line-height: 1.45;
   }
 }
