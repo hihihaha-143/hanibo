@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { fetchLibraryItems } from "../../api/library";
 import type { LibraryItem, LibraryItemType } from "../../types/library";
 import { readRecent, type RecentEntry } from "../../lib/libraryRecent";
@@ -10,19 +10,44 @@ import LibraryContinueBlock from "./LibraryContinueBlock";
 import LibraryRecentBlock from "./LibraryRecentBlock";
 import AchievementsStrip from "../../components/AchievementsStrip/AchievementsStrip";
 
+const LIBRARY_TYPES: LibraryItemType[] = [
+  "textbook",
+  "dictionary",
+  "book",
+  "workbook",
+  "flashcards",
+];
+const LIBRARY_SORTS: LibrarySort[] = ["newest", "title", "year"];
+
 export default function LibraryPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [items, setItems] = useState<LibraryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   const [recentData, setRecentData] = useState<RecentEntry[]>([]);
 
-  const [query, setQuery] = useState("");
-  const [activeType, setActiveType] = useState<LibraryItemType | null>(null);
-  const [activeLevel, setActiveLevel] = useState<string | null>(null);
-  const [activeLanguage, setActiveLanguage] = useState<string | null>(null);
-  const [activeYear, setActiveYear] = useState<number | null>(null);
-  const [sort, setSort] = useState<LibrarySort>("newest");
+  const [query, setQuery] = useState(() => searchParams.get("search") ?? "");
+  const [activeType, setActiveType] = useState<LibraryItemType | null>(() => {
+    const value = searchParams.get("type");
+    return LIBRARY_TYPES.includes(value as LibraryItemType)
+      ? (value as LibraryItemType)
+      : null;
+  });
+  const [activeLevel, setActiveLevel] = useState<string | null>(
+    () => searchParams.get("level") || null,
+  );
+  const [activeLanguage, setActiveLanguage] = useState<string | null>(
+    () => searchParams.get("language") || null,
+  );
+  const [activeYear, setActiveYear] = useState<number | null>(() => {
+    const value = Number(searchParams.get("year"));
+    return Number.isFinite(value) && value > 0 ? value : null;
+  });
+  const [sort, setSort] = useState<LibrarySort>(() => {
+    const value = searchParams.get("sort") as LibrarySort | null;
+    return value && LIBRARY_SORTS.includes(value) ? value : "newest";
+  });
 
   const location = useLocation();
 
@@ -48,12 +73,32 @@ export default function LibraryPage() {
     setRecentData(readRecent());
   }, [items, location.pathname]);
 
+  useEffect(() => {
+    const next = new URLSearchParams();
+    if (query.trim()) next.set("search", query.trim());
+    if (activeType) next.set("type", activeType);
+    if (activeLevel) next.set("level", activeLevel);
+    if (activeLanguage) next.set("language", activeLanguage);
+    if (activeYear !== null) next.set("year", String(activeYear));
+    if (sort !== "newest") next.set("sort", sort);
+    setSearchParams(next, { replace: true });
+  }, [
+    query,
+    activeType,
+    activeLevel,
+    activeLanguage,
+    activeYear,
+    sort,
+    setSearchParams,
+  ]);
+
   const handleReset = () => {
     setQuery("");
     setActiveType(null);
     setActiveLevel(null);
     setActiveLanguage(null);
     setActiveYear(null);
+    setSort("newest");
   };
 
   const levels = useMemo(() => {

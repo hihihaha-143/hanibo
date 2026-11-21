@@ -85,22 +85,8 @@ function App() {
               }
             />
 
-            <Route
-              path="/library"
-              element={
-                <ProtectedRoute>
-                  <LibraryPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/library/:id"
-              element={
-                <ProtectedRoute>
-                  <LibraryViewPage />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/library" element={<LibraryPage />} />
+            <Route path="/library/:id" element={<LibraryViewPage />} />
             <Route
               path="/practice"
               element={

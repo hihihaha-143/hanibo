@@ -107,6 +107,10 @@ export default function RegisterPage() {
           passwordToggle
         />
 
+        <p className="auth-password-hint">
+          Минимум 8 символов, заглавная буква и цифра
+        </p>
+
         <AuthField
           id="password_confirmation"
           label="Повторите пароль"

@@ -20,6 +20,7 @@ const guestItems = [
   { to: "/", label: "Главная", icon: Home },
   { to: "/course", label: "Курс", icon: BookOpen },
   { to: "/breakdowns", label: "Разборы", icon: Clapperboard },
+  { to: "/library", label: "Библиотека", icon: Library },
 ];
 
 const studentItems = [

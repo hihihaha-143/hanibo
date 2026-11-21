@@ -44,8 +44,8 @@ Route::get('/library/items/{libraryItem}/file', [LibraryItemController::class, '
 Route::get('/alphabet', [\App\Http\Controllers\Api\AlphabetController::class, 'index']);
 
 // --- Auth ---
-Route::post('/auth/register', [AuthController::class, 'register']);
-Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
+Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);

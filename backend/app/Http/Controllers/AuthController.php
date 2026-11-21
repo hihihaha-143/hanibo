@@ -28,7 +28,7 @@ class AuthController extends Controller
         $data = $request->validate([
             'nickname' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash', 'unique:users,nickname'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'confirmed', Password::min(8)],
+            'password' => ['required', 'string', 'confirmed', Password::min(8)->mixedCase()->numbers()],
         ]);
 
         $user = User::create([
@@ -54,13 +54,16 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $data = $request->validate([
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string'],
         ]);
 
-        if (! Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
+        $identifier = trim($data['email']);
+        $field = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'nickname';
+
+        if (! Auth::attempt([$field => $identifier, 'password' => $data['password']])) {
             return response()->json([
-                'message' => 'Неверный email или пароль.',
+                'message' => 'Неверный email/никнейм или пароль.',
             ], 401);
         }
 
@@ -164,7 +167,7 @@ class AuthController extends Controller
 
         $data = $request->validate([
             'current_password' => ['required', 'string'],
-            'password' => ['required', 'string', 'confirmed', Password::min(8)],
+            'password' => ['required', 'string', 'confirmed', Password::min(8)->mixedCase()->numbers()],
         ]);
 
         if (! Hash::check($data['current_password'], $user->password)) {
