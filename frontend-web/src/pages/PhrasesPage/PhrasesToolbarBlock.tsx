@@ -32,13 +32,17 @@ export function PhrasesToolbarBlock({
 }: PhrasesToolbarBlockProps) {
   return (
     <div className="library-toolbar-block">
-      <div className="library-toolbar-block__search">
-        <Search size={18} />
+      <div className="input-wrap library-toolbar-block__search">
+        <span className="input-wrap__icon" aria-hidden="true">
+          <Search size={18} />
+        </span>
         <input
-          type="text"
+          type="search"
+          className="input input--pill input--with-icon"
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Поиск по фразе или переводу..."
+          aria-label="Поиск по фразе или переводу..."
         />
       </div>
 
@@ -46,7 +50,7 @@ export function PhrasesToolbarBlock({
         <select
           value={tab}
           onChange={(e) => onTabChange(e.target.value as DictionaryTab)}
-          className="library-toolbar-block__select"
+          className="select"
         >
           {TABS.map((t) => (
             <option key={t.key} value={t.key}>
@@ -60,7 +64,7 @@ export function PhrasesToolbarBlock({
           onChange={(e) =>
             onTopicChange(e.target.value ? Number(e.target.value) : null)
           }
-          className="library-toolbar-block__select"
+          className="select"
         >
           <option value="">Тема: любая</option>
           {topics.map((topic) => (

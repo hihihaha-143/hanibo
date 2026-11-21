@@ -3,9 +3,6 @@
 .dictionary-card {
   @include flex(column, flex-start, stretch, 0.75rem);
   padding: 1rem;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 1rem;
   transition:
     border-color var(--transition-fast),
     transform var(--transition-fast);

@@ -12,11 +12,11 @@ import { DictionaryToolbarBlock } from "./DictionaryToolbarBlock";
 import { DictionaryGridBlock } from "./DictionaryGridBlock";
 import { DailyWordBlock } from "./DailyWordBlock";
 import { DailyQuizBlock } from "./DailyQuizBlock";
+import { MiniGamesModal } from "./MiniGame/MiniGamesModal";
 import {
-  MiniGamesModal,
   WORD_MINI_GAMES,
   type MiniGameId,
-} from "./MiniGame/MiniGamesModal";
+} from "./MiniGame/miniGamesData";
 import { TrueFalseGame } from "./MiniGame/TrueFalseGame";
 import { AudioChooseGame } from "./MiniGame/AudioChooseGame";
 import { MatchGame } from "./MiniGame/MatchGame";

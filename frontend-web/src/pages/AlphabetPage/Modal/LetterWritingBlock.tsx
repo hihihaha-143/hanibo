@@ -18,9 +18,10 @@ export default function LetterWritingBlock({
   const [quizKey, setQuizKey] = useState(0);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-    containerRef.current.innerHTML = "";
+    container.innerHTML = "";
     let feedbackTimer: ReturnType<typeof setTimeout>;
 
     const showFeedback = (type: "correct" | "wrong") => {
@@ -34,7 +35,7 @@ export default function LetterWritingBlock({
         .getPropertyValue("--color-accent")
         .trim() || "#3B82F6";
 
-    const writer = HangulWriter.create(containerRef.current, symbol, {
+    const writer = HangulWriter.create(container, symbol, {
       width: WRITER_SIZE,
       height: WRITER_SIZE,
       padding: 12,
@@ -58,8 +59,8 @@ export default function LetterWritingBlock({
 
     return () => {
       clearTimeout(feedbackTimer);
-      if (containerRef.current) {
-        containerRef.current.innerHTML = "";
+      if (container) {
+        container.innerHTML = "";
       }
       writerRef.current = null;
     };

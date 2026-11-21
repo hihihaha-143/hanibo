@@ -7,6 +7,7 @@ import {
   unequipShopItem,
 } from "../../api/shop";
 import type { ShopItem } from "../../types/shop";
+import type { User } from "../../types/user";
 import { useAuth } from "../../context/useAuth";
 
 type PendingAction = "buy" | "equip" | "unequip" | "activate";
@@ -25,7 +26,7 @@ interface UseShopResult {
 }
 
 export function useShop(): UseShopResult {
-  const { user, updateUser } = useAuth();
+  const { updateUser } = useAuth();
 
   const [items, setItems] = useState<ShopItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -42,7 +43,7 @@ export function useShop(): UseShopResult {
     try {
       const data = await fetchShopItems();
       setItems(data);
-    } catch (e) {
+    } catch {
       setError("Не удалось загрузить магазин.");
     } finally {
       setLoading(false);
@@ -54,7 +55,7 @@ export function useShop(): UseShopResult {
   }, [reload]);
 
   const applyUser = useCallback(
-    (updated: typeof user) => {
+    (updated: User | null) => {
       if (updated) {
         updateUser(updated);
       }

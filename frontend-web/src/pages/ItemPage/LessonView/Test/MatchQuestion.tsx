@@ -1,5 +1,3 @@
-// frontend-web/src/pages/ItemPage/LessonView/Test/MatchQuestion.tsx
-
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import type { TestQuestionMatch } from "../../../../utils/testGenerator";
@@ -12,7 +10,6 @@ interface MatchQuestionProps {
   onSubmit: (correct: boolean) => void;
 }
 
-// 4 цвета для пар — не пересекаются с --color-success / --color-error
 const PAIR_COLORS = ["#7aa2f7", "#bb9af7", "#7dcfff", "#f7768e"];
 
 export default function MatchQuestion({
@@ -22,11 +19,11 @@ export default function MatchQuestion({
 }: MatchQuestionProps) {
   const leftItems = useMemo(
     () => shuffle(question.pairs.map((p) => p.left)),
-    [question.id],
+    [question.pairs],
   );
   const rightItems = useMemo(
     () => shuffle(question.pairs.map((p) => p.right)),
-    [question.id],
+    [question.pairs],
   );
 
   const [pairs, setPairs] = useState<Record<string, string>>({});
@@ -38,9 +35,8 @@ export default function MatchQuestion({
     const map: Record<string, string> = {};
     for (const p of question.pairs) map[p.left] = p.right;
     return map;
-  }, [question.id]);
+  }, [question.pairs]);
 
-  // Порядковый номер пары для цвета
   const pairIndexByLeft: Record<string, number> = {};
   Object.keys(pairs).forEach((left, i) => {
     pairIndexByLeft[left] = i;
@@ -113,12 +109,12 @@ export default function MatchQuestion({
 
   const allPaired = Object.keys(pairs).length === question.pairs.length;
   const canCheck = allPaired && !answered;
+  const allCorrect =
+    allPaired &&
+    Object.keys(pairs).every((left) => correctMap[left] === pairs[left]);
 
   const handleCheck = () => {
     if (!canCheck) return;
-    const allCorrect = Object.keys(pairs).every(
-      (left) => correctMap[left] === pairs[left],
-    );
     onSubmit(allCorrect);
   };
 
@@ -137,8 +133,9 @@ export default function MatchQuestion({
     }
 
     return (
-      <motion.div
+      <motion.button
         key={left}
+        type="button"
         className={`match__item ${modifier}`}
         style={
           color && !answered
@@ -152,12 +149,13 @@ export default function MatchQuestion({
         draggable={!answered}
         onDragStart={() => handleDragStartLeft(left)}
         onClick={() => handleLeftClick(left)}
+        disabled={answered}
         whileHover={!answered ? { scale: 1.02 } : undefined}
         whileTap={!answered ? { scale: 0.98 } : undefined}
         transition={spring.bouncy}
       >
         {left}
-      </motion.div>
+      </motion.button>
     );
   };
 
@@ -178,8 +176,9 @@ export default function MatchQuestion({
     }
 
     return (
-      <motion.div
+      <motion.button
         key={right}
+        type="button"
         className={`match__item ${modifier}`}
         style={
           color && !answered
@@ -193,12 +192,13 @@ export default function MatchQuestion({
         onClick={() => handleRightClick(right)}
         onDragOver={(e) => e.preventDefault()}
         onDrop={() => handleDropOnRight(right)}
+        disabled={answered}
         whileHover={!answered ? { scale: 1.02 } : undefined}
         whileTap={!answered ? { scale: 0.98 } : undefined}
         transition={spring.bouncy}
       >
         {right}
-      </motion.div>
+      </motion.button>
     );
   };
 
@@ -211,15 +211,28 @@ export default function MatchQuestion({
         <div className="match__col">{rightItems.map(renderRight)}</div>
       </div>
 
+      {answered && (
+        <div
+          className={`choose-question__feedback ${
+            allCorrect
+              ? "choose-question__feedback--correct"
+              : "choose-question__feedback--wrong"
+          }`}
+          aria-live="polite"
+        >
+          {allCorrect ? "Верно" : "Есть ошибки в парах"}
+        </div>
+      )}
+
       {!answered && (
-        <div className="match__footer">
+        <div className="actions match__footer">
           <motion.button
             type="button"
-            className="btn btn--accent btn--lg match__check"
+            className="btn btn--primary"
             disabled={!canCheck}
             onClick={handleCheck}
-            whileHover={canCheck ? { y: -1, scale: 1.02 } : undefined}
-            whileTap={canCheck ? { scale: 0.97 } : undefined}
+            whileHover={canCheck ? { y: -1 } : undefined}
+            whileTap={canCheck ? { scale: 0.98 } : undefined}
             transition={spring.bouncy}
           >
             Проверить

@@ -52,7 +52,13 @@ export default function LibraryCardBlock({ item }: LibraryCardBlockProps) {
   }, [item.file_url, item.pages]);
 
   return (
-    <Link to={`/library/${item.id}`} className="library-card-block">
+    <Link
+      to={`/library/${item.id}`}
+      className="library-card-block"
+      aria-label={[item.title, item.author, item.level, item.year]
+        .filter(Boolean)
+        .join(". ")}
+    >
       <div className="library-card-block__cover">
         {item.cover_url ? (
           <img src={item.cover_url} alt={item.title} loading="lazy" />

@@ -54,7 +54,7 @@ export default function GrammarTab({
     setMode("cards");
   };
 
-  const handleFinish = (correct: number, total: number, _isPassed: boolean) => {
+  const handleFinish = (correct: number, total: number) => {
     const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
     setGrammarPercent(itemId, percent);
     onProgressChange();
@@ -92,17 +92,17 @@ export default function GrammarTab({
         ))}
       </motion.div>
 
-      <div className="grammar-tab__footer">
+      <div className="actions">
         <motion.button
           type="button"
-          className="btn btn--primary dictionary-tab__test-button"
+          className="btn btn--primary"
           onClick={startTest}
-          whileHover={{ y: -1, scale: 1.02 }}
-          whileTap={{ scale: 0.97 }}
+          whileHover={{ y: -1 }}
+          whileTap={{ scale: 0.98 }}
           transition={spring.bouncy}
         >
           <span>Пройти тест</span>
-          <ArrowRight size={18} />
+          <ArrowRight size={18} aria-hidden="true" />
         </motion.button>
       </div>
     </div>

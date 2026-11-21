@@ -46,14 +46,23 @@ export default function MobileNavSheet({ onClose }: MobileNavSheetProps) {
       {/* Bottom sheet */}
       <motion.div
         className="mobile-nav-sheet"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Меню"
         initial={{ y: "100%" }}
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
         transition={spring.bouncy}
       >
         <div className="mobile-nav-sheet__theme">
+          <span>Тёмная тема</span>
           <label className="theme-switch">
-            <input type="checkbox" checked={isDark} onChange={toggleTheme} />
+            <input
+              type="checkbox"
+              checked={isDark}
+              onChange={toggleTheme}
+              aria-label="Тёмная тема"
+            />
             <span className="theme-switch__slider" />
           </label>
         </div>

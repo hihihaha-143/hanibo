@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   getCourseTestData,
   type CourseItemDetails,
@@ -14,6 +14,7 @@ import {
 import { setTestPercent } from "../../../utils/progress";
 import Test from "../LessonView/Test/Test";
 import StateBlock from "../../../components/StateBlock/StateBlock";
+import BackLink from "../../../components/BackLink/BackLink";
 
 interface CourseTestViewProps {
   item: CourseItemDetails;
@@ -62,7 +63,7 @@ export default function CourseTestView({ item }: CourseTestViewProps) {
     };
   }, [item.id]);
 
-  const handleFinish = (correct: number, total: number, _isPassed: boolean) => {
+  const handleFinish = (correct: number, total: number) => {
     const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
     setTestPercent(item.id, percent);
   };
@@ -83,20 +84,27 @@ export default function CourseTestView({ item }: CourseTestViewProps) {
   };
 
   if (loading) {
-    return <StateBlock variant="loading" />;
+    return (
+      <div className="page item-page item-page--state">
+        <StateBlock variant="loading" text="Собираем вопросы…" />
+      </div>
+    );
   }
 
   if (error) {
-    return <StateBlock variant="error" />;
+    return (
+      <div className="page item-page item-page--state">
+        <StateBlock variant="error" text="Не удалось загрузить тест." />
+        <BackLink to="/course">Назад к курсу</BackLink>
+      </div>
+    );
   }
 
   if (!questions || questions.length === 0) {
     return (
-      <div className="item-page item-page--locked">
-        <p>Тест пока недоступен.</p>
-        <Link to="/course" className="item-page__back">
-          ← Назад к курсу
-        </Link>
+      <div className="page item-page item-page--state">
+        <StateBlock variant="empty" text="Тест пока недоступен." />
+        <BackLink to="/course">Назад к курсу</BackLink>
       </div>
     );
   }

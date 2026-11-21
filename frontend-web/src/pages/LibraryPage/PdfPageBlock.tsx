@@ -44,8 +44,6 @@ export default function PdfPageBlock({
 
         const canvas = canvasRef.current;
         if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
 
         const base = page.getViewport({ scale: 1 });
         const scale = width / base.width;
@@ -60,14 +58,16 @@ export default function PdfPageBlock({
         const transform = dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : undefined;
 
         task = page.render({
-          canvasContext: ctx,
+          canvas,
           viewport,
           transform,
-        } as any);
+        });
 
         await task.promise;
-      } catch (e: any) {
-        if (e?.name === "RenderingCancelledException") return;
+      } catch (e: unknown) {
+        if (e instanceof Error && e.name === "RenderingCancelledException") {
+          return;
+        }
         console.error("Ошибка рендера страницы", pageNumber, e);
       }
     };

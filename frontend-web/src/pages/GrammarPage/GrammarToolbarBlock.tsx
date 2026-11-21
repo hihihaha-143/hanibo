@@ -41,13 +41,17 @@ export function GrammarToolbarBlock({
 }: GrammarToolbarBlockProps) {
   return (
     <div className="library-toolbar-block">
-      <div className="library-toolbar-block__search">
-        <Search size={18} />
+      <div className="input-wrap library-toolbar-block__search">
+        <span className="input-wrap__icon" aria-hidden="true">
+          <Search size={18} />
+        </span>
         <input
-          type="text"
+          type="search"
+          className="input input--pill input--with-icon"
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Поиск по названию или конструкции..."
+          aria-label="Поиск по названию или конструкции..."
         />
       </div>
 
@@ -55,7 +59,7 @@ export function GrammarToolbarBlock({
         <select
           value={tab}
           onChange={(e) => onTabChange(e.target.value as GrammarTabId)}
-          className="library-toolbar-block__select"
+          className="select"
         >
           {TABS.map((t) => (
             <option key={t.key} value={t.key}>
@@ -69,7 +73,7 @@ export function GrammarToolbarBlock({
           onChange={(e) =>
             onFormChange(e.target.value ? Number(e.target.value) : null)
           }
-          className="library-toolbar-block__select"
+          className="select"
         >
           <option value="">Форма: любая</option>
           {forms.map((form) => (
@@ -84,7 +88,7 @@ export function GrammarToolbarBlock({
           onChange={(e) =>
             onLevelChange(e.target.value ? Number(e.target.value) : null)
           }
-          className="library-toolbar-block__select"
+          className="select"
         >
           <option value="">Уровень: любой</option>
           {levels.map((level) => (

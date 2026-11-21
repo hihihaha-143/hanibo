@@ -1,0 +1,26 @@
+@use '../../../abstracts' as *;
+
+.phrase-token {
+  position: relative;
+  display: inline-block;
+
+  &__text {
+    border-bottom: 1px dashed var(--color-accent);
+    cursor: help;
+    transition: border-color var(--transition-fast);
+
+    &:hover,
+    &:focus-visible {
+      border-bottom-color: var(--color-text);
+    }
+
+    &:focus-visible {
+      outline-offset: 3px;
+    }
+  }
+
+  &__tooltip {
+    top: calc(100% + 0.5rem);
+    left: 0;
+  }
+}

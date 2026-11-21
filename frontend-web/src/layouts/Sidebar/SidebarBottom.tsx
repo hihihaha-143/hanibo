@@ -34,12 +34,23 @@ export default function SidebarBottom({ expanded }: SidebarBottomProps) {
 
   return (
     <motion.div
-      className="sidebar-bottom"
+      className={
+        expanded
+          ? "sidebar-bottom"
+          : "sidebar-bottom sidebar-bottom--collapsed"
+      }
       animate={{ opacity: expanded ? 1 : 0 }}
       transition={spring.base}
+      aria-hidden={!expanded}
+      inert={!expanded}
     >
-      <label className="theme-switch">
-        <input type="checkbox" checked={isDark} onChange={toggleTheme} />
+      <label className="theme-switch" title="Переключить тему">
+        <input
+          type="checkbox"
+          checked={isDark}
+          onChange={toggleTheme}
+          aria-label="Тёмная тема"
+        />
         <span className="theme-switch__slider" />
       </label>
 

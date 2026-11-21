@@ -4,33 +4,36 @@
   position: fixed;
   inset: 0;
   z-index: var(--z-modal);
-  background: rgba(0, 0, 0, 0.5);
-  @include flex(row, center, center, 0);
-  padding: 16px;
+  @include flex(row, center, center);
+  padding: 1rem;
+  background: var(--color-backdrop);
+  backdrop-filter: blur(3px);
 
   &__panel {
     position: relative;
+    @include flex(column, flex-start, stretch, 1.25rem);
     width: 100%;
-    max-width: 480px;
-    max-height: 90vh;
-    max-height: 90dvh;
-    overflow-y: auto;
-    border-radius: 20px;
-    background: var(--color-surface);
+    max-width: 520px;
+    max-height: min(90vh, 90dvh);
+    padding: 2rem 1.25rem 1.25rem;
     border: 1px solid var(--color-border);
-    padding: 32px 20px 20px;
-    @include flex(column, flex-start, stretch, 20px);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    box-shadow: var(--shadow-lg);
   }
 
   &__close {
+    @include button-reset;
+    @include flex(row, center, center);
     position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 32px;
-    height: 32px;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     color: var(--color-text-secondary);
-    @include flex(row, center, center, 0);
     transition:
       background-color var(--transition-fast),
       color var(--transition-fast);
@@ -38,6 +41,15 @@
     &:hover {
       background: var(--color-surface-alt);
       color: var(--color-text);
+    }
+  }
+
+  @include down('sm') {
+    padding: 0.75rem;
+
+    &__panel {
+      padding: 1.5rem 1rem 1rem;
+      border-radius: var(--radius-md);
     }
   }
 }

@@ -1,0 +1,30 @@
+@use '../../abstracts' as *;
+
+.tooltip {
+  position: absolute;
+  z-index: 30;
+  width: max-content;
+  max-width: min(260px, calc(100vw - 2rem));
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: var(--shadow-md);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  text-align: left;
+  pointer-events: none;
+
+  &__line {
+    display: block;
+
+    + .tooltip__line {
+      margin-top: 0.25rem;
+    }
+
+    strong {
+      font-weight: 700;
+    }
+  }
+}

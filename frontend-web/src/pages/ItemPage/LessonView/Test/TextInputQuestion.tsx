@@ -1,9 +1,7 @@
-// frontend-web/src/pages/ItemPage/LessonView/Test/TextInputQuestion.tsx
-
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Volume2 } from "lucide-react";
 import type { TestQuestionTextInput } from "../../../../utils/testGenerator";
+import SpeakControls from "../../../../components/SpeakButton/SpeakControls";
 import { spring } from "../../../../lib/motion";
 
 interface TextInputQuestionProps {
@@ -20,14 +18,6 @@ export default function TextInputQuestion({
   onSubmit,
 }: TextInputQuestionProps) {
   const [value, setValue] = useState("");
-
-  const speak = (text: string, rate: number) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "ko-KR";
-    utterance.rate = rate;
-    speechSynthesis.cancel();
-    speechSynthesis.speak(utterance);
-  };
 
   const handleSubmit = () => {
     if (answered) return;
@@ -49,44 +39,18 @@ export default function TextInputQuestion({
 
       <div className="choose-question__prompt">
         <span className="choose-question__prompt-text">{question.prompt}</span>
-        {question.promptAudio && (
-          <div className="choose-question__speak">
-            <motion.button
-              type="button"
-              className="btn btn--ghost choose-question__speak-button"
-              onClick={() => speak(question.promptAudio!, 0.5)}
-              title="Медленно"
-              whileHover={{ y: -1, scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={spring.bouncy}
-            >
-              <Volume2 size={16} />
-              <span>0.5</span>
-            </motion.button>
-            <motion.button
-              type="button"
-              className="btn btn--ghost choose-question__speak-button"
-              onClick={() => speak(question.promptAudio!, 1)}
-              title="Обычно"
-              whileHover={{ y: -1, scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={spring.bouncy}
-            >
-              <Volume2 size={16} />
-              <span>1</span>
-            </motion.button>
-          </div>
-        )}
+        {question.promptAudio && <SpeakControls text={question.promptAudio} />}
       </div>
 
       <div className="text-input">
         <input
           type="text"
-          className="text-input__field"
+          className="input text-input__field"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={question.placeholder}
+          placeholder={question.placeholder ?? "Введите ответ"}
+          aria-label="Ответ"
           disabled={answered}
           autoFocus
         />
@@ -94,11 +58,11 @@ export default function TextInputQuestion({
         {!answered && (
           <motion.button
             type="button"
-            className="btn btn--accent btn--lg test__next"
+            className="btn btn--primary"
             onClick={handleSubmit}
             disabled={value.trim().length === 0}
-            whileHover={{ y: -1, scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ y: -1 }}
+            whileTap={{ scale: 0.98 }}
             transition={spring.bouncy}
           >
             Ответить
@@ -108,14 +72,15 @@ export default function TextInputQuestion({
 
       {answered && (
         <motion.div
-          className={
+          className={`choose-question__feedback ${
             isCorrect
-              ? "choose-question__feedback choose-question__feedback--correct"
-              : "choose-question__feedback choose-question__feedback--wrong"
-          }
+              ? "choose-question__feedback--correct"
+              : "choose-question__feedback--wrong"
+          }`}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={spring.base}
+          aria-live="polite"
         >
           {isCorrect ? "Верно" : `Правильный ответ: ${question.correctAnswer}`}
         </motion.div>

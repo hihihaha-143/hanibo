@@ -1,0 +1,30 @@
+@use '../../../../abstracts' as *;
+
+.audio-choose {
+  &__player {
+    @include flex(column, center, center, 1rem);
+  }
+
+  &__play-button {
+    @include button-reset;
+    @include flex(row, center, center);
+    width: 5rem;
+    height: 5rem;
+    border: 2px solid var(--color-accent);
+    border-radius: 50%;
+    background: var(--color-surface);
+    color: var(--color-accent);
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast);
+
+    &:hover {
+      background: var(--color-accent-soft);
+    }
+  }
+
+  &__speeds {
+    display: flex;
+    gap: 0.375rem;
+  }
+}

@@ -1,0 +1,8 @@
+@use '../../abstracts' as *;
+
+// Базовая поверхность карточки. Отступы задаёт сам блок.
+.card {
+  @include card-surface;
+  min-width: 0;
+
+}

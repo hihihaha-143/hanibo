@@ -3,31 +3,33 @@
 .sidebar-bottom {
   @include flex(column, flex-start, stretch, 0.75rem);
   padding: 0 0.5rem;
+  transition: opacity var(--transition-base);
+
+  &--collapsed {
+    opacity: 0;
+    pointer-events: none;
+  }
 
   &__login,
   &__register {
     @include flex(row, flex-start, center, 0.75rem);
     height: 48px;
     padding: 0 0.75rem;
-    border-radius: 8px;
-    color: var(--color-on-primary);
+    border-radius: var(--radius-sm);
+    color: var(--color-neutral-light);
     white-space: nowrap;
     transition:
       color var(--transition-fast),
       background-color var(--transition-fast);
 
     &:hover {
-      color: var(--color-text);
-      background-color: var(--color-surface-alt);
+      color: var(--color-on-primary);
+      background: color-mix(in srgb, var(--color-on-primary) 10%, transparent);
     }
   }
 
   &__register {
-    color: var(--color-text-secondary);
-
-    &:hover {
-      color: var(--color-text);
-    }
+    color: color-mix(in srgb, var(--color-neutral-light) 72%, transparent);
   }
 
   &__icon {
@@ -42,53 +44,157 @@
 
   &__user {
     @include flex(row, space-between, center, 0.5rem);
-    padding: 0 0.25rem;
     min-width: 0;
+    padding: 0 0.25rem;
   }
 
   &__user-info {
     @include flex(row, flex-start, center, 0.6rem);
-    min-width: 0;
     flex: 1;
+    min-width: 0;
+  }
+
+  &__user-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    @include flex(row, center, center);
+
+    &--framed {
+      width: 52px;
+      height: 58px;
+
+      .sidebar-bottom__user-avatar {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 1;
+        width: 36px;
+        height: 36px;
+        border: none;
+        transform: translate(-50%, -50%);
+      }
+    }
   }
 
   &__user-avatar {
     flex-shrink: 0;
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     object-fit: cover;
 
     &--placeholder {
       @include flex(row, center, center);
-      background-color: var(--color-accent);
+      background: var(--color-accent);
       color: var(--color-on-accent);
-      font-weight: 700;
       font-size: 1rem;
+      font-weight: 700;
     }
   }
 
+  &__user-frame {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
   &__user-text {
-    @include flex(column, center, flex-start, 0.1rem);
-    min-width: 0;
+    @include flex(column, flex-start, flex-start, 0.1rem);
     flex: 1;
+    min-width: 0;
   }
 
   &__user-title {
     @include truncate(1);
+    color: var(--color-accent);
     font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-    color: var(--color-accent);
     text-transform: uppercase;
+  }
+
+  &__user-nickname-row {
+    @include flex(row, flex-start, center, 0.35rem);
+    min-width: 0;
+    max-width: 100%;
   }
 
   &__user-nickname {
     @include truncate(1);
-    color: var(--color-on-primary);
-    font-weight: 700;
-    font-size: 0.9375rem;
     max-width: 100%;
+    color: var(--color-neutral-light);
+    font-size: 0.9375rem;
+    font-weight: 700;
+  }
+
+  &__user-icons {
+    @include flex(row, flex-start, center, 0.2rem);
+    flex-shrink: 0;
+  }
+
+  &__user-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+
+    &--fallback {
+      @include flex(row, center, center);
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--color-surface);
+      color: var(--color-text-secondary);
+      font-size: 0.6rem;
+      font-weight: 700;
+    }
+  }
+
+  &__user-status {
+    @include truncate(1);
+    color: color-mix(in srgb, var(--color-neutral-light) 75%, transparent);
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+
+  &__user-actions {
+    @include flex(row, center, center, 0.25rem);
+    flex-shrink: 0;
+  }
+
+  &__user-medal {
+    @include flex(row, center, center);
+    width: 24px;
+    height: 24px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__logout {
+    @include button-reset;
+    @include flex(row, center, center);
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    color: color-mix(in srgb, var(--color-neutral-light) 75%, transparent);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast);
+
+    &:hover {
+      color: var(--color-error);
+      background: color-mix(in srgb, var(--color-on-primary) 10%, transparent);
+    }
   }
 }
 
@@ -99,6 +205,7 @@
   width: 3.5em;
   height: 2em;
   font-size: 14px;
+  flex-shrink: 0;
 
   input {
     @include visually-hidden;
@@ -108,9 +215,9 @@
     position: absolute;
     inset: 0;
     cursor: pointer;
-    background-color: var(--color-surface-alt);
     border: 1px solid var(--color-border);
-    border-radius: 30px;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-alt);
     transition:
       background-color var(--transition-base),
       border-color var(--transition-base);
@@ -118,12 +225,12 @@
     &::before {
       position: absolute;
       content: '';
-      height: 1.4em;
-      width: 1.4em;
-      border-radius: 50%;
       left: 0.27em;
       bottom: 0.25em;
-      background-color: var(--color-text-secondary);
+      width: 1.4em;
+      height: 1.4em;
+      border-radius: 50%;
+      background: var(--color-text-secondary);
       transition:
         transform var(--transition-base),
         background-color var(--transition-base);
@@ -131,13 +238,17 @@
   }
 
   input:checked + &__slider {
-    background-color: var(--color-accent);
     border-color: var(--color-accent);
+    background: var(--color-accent);
 
     &::before {
+      background: var(--color-bg);
       transform: translateX(1.4em);
-      background-color: var(--bg);
     }
+  }
+
+  input:focus-visible + &__slider {
+    @include focus-ring;
   }
 
   &:active &__slider::before {

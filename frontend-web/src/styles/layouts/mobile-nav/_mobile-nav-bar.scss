@@ -2,24 +2,27 @@
 
 .mobile-nav-bar {
   position: fixed;
+  right: 0;
   bottom: 0;
   left: 0;
-  right: 0;
   z-index: var(--z-mobile-bar);
   @include flex(row, space-around, stretch);
-  background-color: var(--color-surface);
+  padding: 0.35rem 0 max(0.35rem, env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--color-border);
-  padding: 0.5rem 0;
+  background: var(--color-surface);
 
   &__item {
-    flex: 1;
-    @include flex(column, center, center, 0.25rem);
+    @include button-reset;
     position: relative;
-    padding: 0.5rem;
-    color: var(--color-text-secondary);
-    font-size: 0.75rem;
-    transition: color var(--transition-fast);
     z-index: 1;
+    flex: 1;
+    @include flex(column, center, center, 0.2rem);
+    min-height: 48px;
+    padding: 0.35rem;
+    color: var(--color-text-secondary);
+    font-size: 0.7rem;
+    line-height: 1.1;
+    transition: color var(--transition-fast);
 
     &:hover,
     &:focus-visible,
@@ -30,21 +33,20 @@
 
   &__highlight {
     position: absolute;
-    inset: 0.25rem 0.5rem;
-    background-color: rgba(59, 130, 246, 0.12);
-    background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
-    border-radius: 8px;
+    inset: 0.2rem 0.5rem;
     z-index: -1;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-soft);
   }
 
   &__icon {
     position: relative;
     z-index: 2;
+    display: flex;
   }
 
   &__label {
     position: relative;
     z-index: 2;
-    line-height: 1;
   }
 }

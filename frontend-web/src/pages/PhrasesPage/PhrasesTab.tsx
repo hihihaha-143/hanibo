@@ -12,11 +12,11 @@ import { PhrasesToolbarBlock } from "./PhrasesToolbarBlock";
 import { PhrasesGridBlock } from "./PhrasesGridBlock";
 import { DailyPhraseBlock } from "./DailyPhraseBlock";
 import { DailyPhraseQuizBlock } from "./DailyPhraseQuizBlock";
+import { MiniGamesModal } from "../DictionaryPage/MiniGame/MiniGamesModal";
 import {
-  MiniGamesModal,
   PHRASE_MINI_GAMES,
   type PhraseMiniGameId,
-} from "../DictionaryPage/MiniGame/MiniGamesModal";
+} from "../DictionaryPage/MiniGame/miniGamesData";
 import { PhraseTrueFalseGame } from "./PhraseMiniGame/PhraseTrueFalseGame";
 import { PhraseAudioChooseGame } from "./PhraseMiniGame/PhraseAudioChooseGame";
 import { PhraseMatchGame } from "./PhraseMiniGame/PhraseMatchGame";

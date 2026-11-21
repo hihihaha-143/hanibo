@@ -52,15 +52,12 @@ export default function PdfThumbBlock({
         canvas.width = scaledViewport.width;
         canvas.height = scaledViewport.height;
 
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
         await page.render({
-          canvasContext: ctx,
+          canvas,
           viewport: scaledViewport,
-        } as any).promise;
+        }).promise;
         if (!cancelled) setRendered(true);
-      } catch (e) {
+      } catch {
         // Игнорируем ошибки рендера миниатюр
       }
     };

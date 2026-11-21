@@ -1,5 +1,5 @@
-import { Volume2 } from "lucide-react";
 import type { TestQuestionChoose } from "../../../../utils/testGenerator";
+import SpeakControls from "../../../../components/SpeakButton/SpeakControls";
 
 interface ChooseQuestionProps {
   question: TestQuestionChoose;
@@ -14,13 +14,11 @@ export default function ChooseQuestion({
   answered,
   onSelect,
 }: ChooseQuestionProps) {
-  const speak = (text: string, rate: number) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "ko-KR";
-    utterance.rate = rate;
-    speechSynthesis.cancel();
-    speechSynthesis.speak(utterance);
-  };
+  const isCorrect =
+    selectedIndex !== null && question.correctIndices.includes(selectedIndex);
+  const correctAnswer = question.correctIndices
+    .map((index) => question.variants[index])
+    .join(", ");
 
   return (
     <div className="choose-question">
@@ -28,36 +26,15 @@ export default function ChooseQuestion({
 
       <div className="choose-question__prompt">
         <span className="choose-question__prompt-text">{question.prompt}</span>
-        {question.promptAudio && (
-          <div className="choose-question__speak">
-            <button
-              type="button"
-              className="btn btn--ghost choose-question__speak-button"
-              onClick={() => speak(question.promptAudio!, 0.5)}
-              title="Медленно"
-            >
-              <Volume2 size={16} />
-              <span>0.5</span>
-            </button>
-            <button
-              type="button"
-              className="btn btn--ghost choose-question__speak-button"
-              onClick={() => speak(question.promptAudio!, 1)}
-              title="Обычно"
-            >
-              <Volume2 size={16} />
-              <span>1</span>
-            </button>
-          </div>
-        )}
+        {question.promptAudio && <SpeakControls text={question.promptAudio} />}
       </div>
 
       <div className="choose-question__variants">
         {question.variants.map((variant, index) => {
-          const isCorrect = question.correctIndices.includes(index);
+          const variantIsCorrect = question.correctIndices.includes(index);
           let modifier = "";
           if (answered) {
-            if (isCorrect) modifier = "choose-question__variant--correct";
+            if (variantIsCorrect) modifier = "choose-question__variant--correct";
             else if (index === selectedIndex)
               modifier = "choose-question__variant--wrong";
           }
@@ -75,6 +52,19 @@ export default function ChooseQuestion({
           );
         })}
       </div>
+
+      {answered && (
+        <div
+          className={`choose-question__feedback ${
+            isCorrect
+              ? "choose-question__feedback--correct"
+              : "choose-question__feedback--wrong"
+          }`}
+          aria-live="polite"
+        >
+          {isCorrect ? "Верно" : `Правильный ответ: ${correctAnswer}`}
+        </div>
+      )}
     </div>
   );
 }

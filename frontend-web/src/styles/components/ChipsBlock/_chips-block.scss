@@ -3,13 +3,17 @@
 .chips-block {
   position: relative;
   width: 100%;
+  min-width: 0;
 
   &__scroller {
-    @include flex(row, safe center, center, 0.75rem);
+    display: flex;
+    align-items: center;
+    justify-content: safe center;
+    gap: 0.5rem;
     width: 100%;
+    padding-block: 0.25rem;
     overflow-x: auto;
     overflow-y: hidden;
-    padding-block: 0.25rem;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
 
@@ -27,14 +31,14 @@
 
   &::before,
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 2.5rem;
-    pointer-events: none;
     z-index: 2;
+    width: 2.5rem;
     opacity: 0;
+    pointer-events: none;
     transition: opacity var(--transition-fast);
   }
 
@@ -57,16 +61,23 @@
   }
 
   &__chip {
+    @include button-reset;
     position: relative;
     flex-shrink: 0;
-    padding: 0.625rem 1.25rem;
-    border-radius: 999px;
+    min-height: 40px;
+    padding: 0.55rem 1.1rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
     background: var(--color-surface-alt);
     color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
     line-height: 1;
+    white-space: nowrap;
     transition:
       color var(--transition-base),
-      background-color var(--transition-base);
+      background-color var(--transition-base),
+      border-color var(--transition-base);
 
     &:hover {
       color: var(--color-text);
@@ -81,7 +92,7 @@
     position: absolute;
     inset: 0;
     z-index: 0;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: var(--color-accent);
   }
 

@@ -1,0 +1,21 @@
+@use '../../abstracts' as *;
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  width: max-content;
+  min-height: 32px;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: var(--color-text);
+  }
+}

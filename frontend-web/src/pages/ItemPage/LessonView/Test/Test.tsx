@@ -15,6 +15,7 @@ import CorrectSpellingQuestion from "./CorrectSpellingQuestion";
 import FlashcardQuestion from "./FlashcardQuestion";
 import SyllableGapQuestion from "./SyllableGapQuestion";
 import TestResult from "./TestResult";
+import StateBlock from "../../../../components/StateBlock/StateBlock";
 import { spring } from "../../../../lib/motion";
 
 interface TestProps {
@@ -28,7 +29,26 @@ interface TestProps {
   onAnswer?: (question: TestQuestion, isCorrect: boolean) => void;
 }
 
-export default function Test({
+export default function Test(props: TestProps) {
+  const { questions, onBack, backLabel } = props;
+
+  if (questions.length === 0) {
+    return (
+      <div className="test">
+        <StateBlock variant="empty" text="Вопросы для этого теста не найдены." />
+        <div className="actions">
+          <button type="button" className="btn btn--primary" onClick={onBack}>
+            {backLabel ?? "Назад"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return <TestRunner {...props} />;
+}
+
+function TestRunner({
   questions,
   onFinish,
   onRepeat,
@@ -59,26 +79,6 @@ export default function Test({
 
   const total = questions.length;
   const gradableTotal = questions.filter((q) => q.type !== "flashcard").length;
-
-  if (total === 0) {
-    return (
-      <div className="test">
-        <div className="test__empty">Вопросы для этого теста не найдены.</div>
-        <div className="test__footer">
-          <motion.button
-            type="button"
-            className="test__next"
-            onClick={onBack}
-            whileHover={{ y: -1, scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
-            transition={spring.bouncy}
-          >
-            {backLabel ?? "Назад"}
-          </motion.button>
-        </div>
-      </div>
-    );
-  }
 
   const current = questions[currentIndex];
 
@@ -132,8 +132,7 @@ export default function Test({
 
   const handleFillBlankSelect = (index: number) => {
     if (answered) return;
-    if (current.type !== "fill-blank") return;
-    if (current.mode !== "choice") return;
+    if (current.type !== "fill-blank" || current.mode !== "choice") return;
     const correct = index === current.correctIndex;
     setSelectedIndex(index);
     setFillBlankCorrect(correct);
@@ -144,8 +143,7 @@ export default function Test({
 
   const handleFillBlankSubmit = (value: string) => {
     if (answered) return;
-    if (current.type !== "fill-blank") return;
-    if (current.mode !== "input") return;
+    if (current.type !== "fill-blank" || current.mode !== "input") return;
     const correct = checkTextAnswer(value, current.correctAnswer);
     setFillBlankCorrect(correct);
     setAnswered(true);
@@ -163,8 +161,7 @@ export default function Test({
 
   const handleSyllableGapSelect = (index: number) => {
     if (answered) return;
-    if (current.type !== "syllable-gap") return;
-    if (current.mode !== "choice") return;
+    if (current.type !== "syllable-gap" || current.mode !== "choice") return;
     const correct = index === current.correctIndex;
     setSelectedIndex(index);
     setSyllableGapCorrect(correct);
@@ -175,8 +172,7 @@ export default function Test({
 
   const handleSyllableGapSubmit = (value: string) => {
     if (answered) return;
-    if (current.type !== "syllable-gap") return;
-    if (current.mode !== "input") return;
+    if (current.type !== "syllable-gap" || current.mode !== "input") return;
     const correct = checkTextAnswer(value, current.correctAnswer);
     setSyllableGapCorrect(correct);
     setAnswered(true);
@@ -184,9 +180,19 @@ export default function Test({
     onAnswer?.(current, correct);
   };
 
-  const handleFlashcardAnswer = (_known: boolean) => {
+  const handleFlashcardAnswer = () => {
     if (answered) return;
     setAnswered(true);
+  };
+
+  const resetAnswerState = () => {
+    setAnswered(false);
+    setSelectedIndex(null);
+    setSelectedValue(null);
+    setTextInputCorrect(null);
+    setFillBlankCorrect(null);
+    setWordOrderCorrect(null);
+    setSyllableGapCorrect(null);
   };
 
   const handleNext = () => {
@@ -198,30 +204,19 @@ export default function Test({
       onFinish(correctCount, gradableTotal, passed);
     } else {
       setCurrentIndex((i) => i + 1);
-      setAnswered(false);
-      setSelectedIndex(null);
-      setSelectedValue(null);
-      setTextInputCorrect(null);
-      setFillBlankCorrect(null);
-      setWordOrderCorrect(null);
-      setSyllableGapCorrect(null);
+      resetAnswerState();
     }
   };
 
   const handleRepeatInternal = () => {
     setCurrentIndex(0);
-    setAnswered(false);
-    setSelectedIndex(null);
-    setSelectedValue(null);
-    setTextInputCorrect(null);
-    setFillBlankCorrect(null);
-    setWordOrderCorrect(null);
-    setSyllableGapCorrect(null);
+    resetAnswerState();
     setCorrectCount(0);
     setFinished(false);
     onRepeat();
   };
 
+  // 1–4: выбор варианта для choose-подобных типов.
   useHotkeys(
     "1,2,3,4",
     (e) => {
@@ -246,6 +241,7 @@ export default function Test({
     [current, answered],
   );
 
+  // 1,2: верно/неверно.
   useHotkeys(
     "1,2",
     (e) => {
@@ -256,6 +252,7 @@ export default function Test({
     [current, answered],
   );
 
+  // Enter: «Далее», когда ответ уже дан.
   useHotkeys(
     "enter",
     (e) => {
@@ -290,15 +287,22 @@ export default function Test({
 
   return (
     <div className="test">
-      <div className="progress-bar">
+      <div
+        className="test__progress"
+        role="progressbar"
+        aria-valuemin={1}
+        aria-valuemax={total}
+        aria-valuenow={currentIndex + 1}
+        aria-label="Прогресс теста"
+      >
         <motion.div
-          className="progress-bar__fill"
+          className="test__progress-bar"
           animate={{ width: `${progressPercent}%` }}
           transition={spring.bouncy}
         />
       </div>
 
-      <div className="test__counter">
+      <div className="test__counter" aria-live="polite">
         {currentIndex + 1} / {total}
       </div>
 
@@ -406,13 +410,13 @@ export default function Test({
       </div>
 
       {answered && current.type !== "flashcard" && (
-        <div className="test__footer">
+        <div className="actions">
           <motion.button
             type="button"
-            className="btn btn--accent btn--lg test__next"
+            className="btn btn--primary"
             onClick={handleNext}
-            whileHover={{ y: -1, scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ y: -1 }}
+            whileTap={{ scale: 0.98 }}
             transition={spring.bouncy}
           >
             Далее

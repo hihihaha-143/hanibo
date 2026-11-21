@@ -1,69 +1,94 @@
-// Светлая тема — по умолчанию.
-// Тёмная тема переопределяет эти же токены ниже.
+@use 'sass:map';
+
+// =============================================================================
+// ТОКЕНЫ ДИЗАЙН-СИСТЕМЫ
+// Светлая тема — по умолчанию, тёмная переопределяет те же токены.
+// =============================================================================
 
 :root {
+  // --- Z-index layers ---
+  --z-banner: 100;
+  --z-sidebar: 100;
+  --z-overlay: 200;
+  --z-sheet: 210;
+  --z-mobile-bar: 220;
+  --z-toast: 1200;
+  --z-modal: 1000;
+  --z-tooltip: 1100;
 
-
-    // --- Z-index layers ---
-  --z-banner:      100;
-  --z-sidebar:     100;
-  --z-overlay:     200;
-  --z-sheet:       210;
-  --z-mobile-bar:  220;
-  --z-modal:      1000;
-  --z-tooltip:    1100;
-
-
-  
   // --- Background / Surface ---
-  --color-bg:            #F3EBDD;
-  --color-surface:       #FAF4EA;
-  --color-surface-alt:   #E8DFCE;
+  --color-bg: #f3ebdd;
+  --color-surface: #faf4ea;
+  --color-surface-alt: #e8dfce;
 
   // --- Text ---
-  --color-text:           #1D223F;
-  --color-text-secondary: #51446B;
+  --color-text: #1d223f;
+  --color-text-secondary: #51446b;
 
   // --- Border ---
-  --color-border:        #D4C8B8;
+  --color-border: #d4c8b8;
 
   // --- Primary (тёмно-синий, бренд) ---
-  --color-primary:       #1D223F;
-  --color-primary-hover: #2D3455;
+  --color-primary: #1d223f;
+  --color-primary-hover: #2d3455;
 
   // --- Secondary (лаванда, фоны блоков) ---
-  --color-secondary:     #888CBB;
+  --color-secondary: #888cbb;
 
-  // --- Accent (яркий голубой — CTA, кнопки, hover) ---
-  --color-accent:        #3B82F6;
-  --color-accent-hover:  #2E6FD4;
+  // --- Accent (CTA, ссылки, активные состояния) ---
+  // #2563EB выбран вместо #3B82F6: белый текст проходит WCAG AA.
+  --color-accent: #1d4ed8;
+  --color-accent-hover: #1e40af;
+  --color-accent-soft: rgba(29, 78, 216, 0.1);
 
-  // --- Yellow (семантика прогресса — «заполнено») ---
-  --color-yellow:         #E8B04A;
-  --color-yellow-hover:   #D49B36;
+  // --- Yellow (прогресс) ---
+  --color-yellow: #e8b04a;
+  --color-yellow-hover: #d49b36;
 
   // --- Neutral ---
-  --color-neutral-light: #F3EBDD;
+  --color-neutral-light: #f3ebdd;
 
   // --- Semantic ---
-  --color-success:       #4A8B5C;
-  --color-success-bg:    rgba(74, 139, 92, 0.12);
-  --color-warning:       #D9963B;
-  --color-error:         #B84A52;
-  --color-error-bg:      rgba(184, 74, 82, 0.12);
+  --color-warning: #9a5b12;
+  --color-success: #2f6b43;
+  --color-success-bg: rgba(47, 107, 67, 0.12);
+  --color-error: #a83a44;
+  --color-error-bg: rgba(168, 58, 68, 0.12);
 
-  // --- Progress (использует --color-yellow) ---
-  --color-progress-partial:  var(--color-yellow);
-  --color-progress-complete: var(--color-yellow);
+  // --- Progress ---
+  --color-progress-partial: var(--color-yellow);
+  --color-progress-complete: #e8c24f;
 
   // --- On-colored (текст на цветных фонах) ---
-  --color-on-primary: #F3EBDD;
-  --color-on-accent:  #FFFFFF;
+  --color-on-primary: #f3ebdd;
+  --color-on-accent: #ffffff;
 
-  // --- Glow (свечение для complete) ---
-  --glow-color:        color-mix(in srgb, var(--color-yellow) 60%, transparent);
-  --glow-color-bright: color-mix(in srgb, var(--color-yellow) 85%, transparent);
-  --glow-white:        rgba(255, 255, 255, 0.85);
+  // --- Glow (свечение complete) ---
+  --glow-color: rgba(230, 150, 30, 0.6);
+  --glow-color-bright: rgba(230, 150, 30, 0.85);
+  --glow-white: rgba(255, 255, 255, 0.85);
+
+  // --- Overlay / shadow / focus ---
+  --color-backdrop: rgba(12, 16, 34, 0.45);
+  --color-focus: var(--color-accent);
+  --shadow-sm: 0 2px 6px rgba(29, 34, 63, 0.08);
+  --shadow-md: 0 8px 20px rgba(29, 34, 63, 0.12);
+  --shadow-lg: 0 18px 40px rgba(29, 34, 63, 0.18);
+
+  // --- Radii ---
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  // --- Layout ---
+  --content-max: 1200px;
+  --reading-max: 900px;
+  --page-gap: 1.5rem;
+  --banner-height: 120px;
+  --mobile-nav-height: 64px;
+  --sidebar-width: 64px;
+  --sidebar-width-expanded: 220px;
 }
 
 // =============================================================================
@@ -71,50 +96,62 @@
 // =============================================================================
 
 [data-theme="dark"] {
-  // --- Background / Surface ---
-  --color-bg:            #1D223F;
-  --color-surface:       #262B4A;
-  --color-surface-alt:   #313659;
+  --color-bg: #1d223f;
+  --color-surface: #262b4a;
+  --color-surface-alt: #313659;
 
-  // --- Text ---
-  --color-text:           #F3EBDD;
-  --color-text-secondary: #A8A8C4;
+  --color-text: #f3ebdd;
+  --color-text-secondary: #a8a8c4;
+  --color-border: #3d4368;
 
-  // --- Border ---
-  --color-border:        #3D4368;
+  --color-primary: #313659;
+  --color-primary-hover: #3e4472;
+  --color-secondary: #5b6190;
 
-  // --- Primary ---
-  --color-primary:       #313659;
-  --color-primary-hover: #3E4472;
+  --color-accent: #60a5fa;
+  --color-accent-hover: #93c5fd;
+  --color-accent-soft: rgba(96, 165, 250, 0.15);
+  --color-on-accent: #111827;
 
-  // --- Secondary ---
-  --color-secondary:     #6C72A0;
+  --color-yellow: #f0c765;
+  --color-yellow-hover: #e0b050;
+  --color-neutral-light: #f3ebdd;
 
-  // --- Accent (яркий голубой — тот же) ---
-  --color-accent:        #3B82F6;
-  --color-accent-hover:  #5A98F8;
+  --color-warning: #e8b158;
+  --color-success: #7bc48f;
+  --color-success-bg: rgba(123, 196, 143, 0.15);
+  --color-error: #f08a92;
+  --color-error-bg: rgba(240, 138, 146, 0.15);
+  --color-progress-complete: #f0d77a;
 
-  // --- Yellow ---
-  --color-yellow:         #F0C765;
-  --color-yellow-hover:   #E0B050;
+  --color-on-primary: #f3ebdd;
+  --glow-color: rgba(255, 235, 120, 0.7);
+  --glow-color-bright: rgba(255, 245, 150, 0.95);
+  --glow-white: rgba(255, 255, 255, 0.9);
 
-  // --- Semantic ---
-  --color-success:       #6BB17D;
-  --color-success-bg:    rgba(107, 177, 125, 0.15);
-  --color-warning:       #E8B158;
-  --color-error:         #D9676F;
-  --color-error-bg:      rgba(217, 103, 111, 0.15);
+  --color-backdrop: rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
 
-  // --- Progress ---
-  --color-progress-partial:  var(--color-yellow);
-  --color-progress-complete: var(--color-yellow);
+// Высота баннера меняется вместе с адаптивом — от неё зависят сайдбар
+// и отступы контента, поэтому значение живёт в токенах.
+@media (max-width: 1024px) {
+  :root {
+    --banner-height: 100px;
+  }
+}
 
-  // --- On-colored ---
-  --color-on-primary: #F3EBDD;
-  --color-on-accent:  #FFFFFF;
+@media (max-width: 767px) {
+  :root {
+    --banner-height: 80px;
+    --mobile-nav-height: 64px;
+  }
+}
 
-  // --- Glow (наследует переопределённый --color-yellow через color-mix) ---
-  --glow-color:        color-mix(in srgb, var(--color-yellow) 70%, transparent);
-  --glow-color-bright: color-mix(in srgb, var(--color-yellow) 95%, transparent);
-  --glow-white:        rgba(255, 255, 255, 0.9);
+@media (max-width: 480px) {
+  :root {
+    --banner-height: 60px;
+  }
 }

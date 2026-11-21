@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { useParams } from "react-router-dom";
 import {
   getCourseItem,
   getCourseItems,
@@ -11,9 +10,8 @@ import { getItemStatus } from "../../utils/courseStatus";
 import ExtraView from "./ExtraView/ExtraView";
 import LessonView from "./LessonView/LessonView";
 import CourseTestView from "./CourseTestView/CourseTestView";
-import { spring } from "../../lib/motion";
-
-const MotionLink = motion.create(Link);
+import BackLink from "../../components/BackLink/BackLink";
+import StateBlock from "../../components/StateBlock/StateBlock";
 
 export default function ItemPage() {
   const { id } = useParams<{ id: string }>();
@@ -45,22 +43,18 @@ export default function ItemPage() {
   }, [id]);
 
   if (loading) {
-    return <div className="item-page item-page--loading">Загрузка...</div>;
+    return (
+      <div className="page item-page item-page--state">
+        <StateBlock variant="loading" text="Загружаем материал…" />
+      </div>
+    );
   }
 
   if (error || !item || !items) {
     return (
-      <div className="item-page item-page--error">
-        <p>Не удалось загрузить материал.</p>
-        <MotionLink
-          to="/course"
-          className="item-page__back"
-          whileHover={{ x: -2 }}
-          whileTap={{ scale: 0.96 }}
-          transition={spring.bouncy}
-        >
-          ← Назад к курсу
-        </MotionLink>
+      <div className="page item-page item-page--state">
+        <StateBlock variant="error" text="Не удалось загрузить материал." />
+        <BackLink to="/course">Назад к курсу</BackLink>
       </div>
     );
   }
@@ -69,17 +63,12 @@ export default function ItemPage() {
 
   if (status === "locked") {
     return (
-      <div className="item-page item-page--locked">
-        <p>Урок заблокирован, пройди предыдущие.</p>
-        <MotionLink
-          to="/course"
-          className="item-page__back"
-          whileHover={{ x: -2 }}
-          whileTap={{ scale: 0.96 }}
-          transition={spring.bouncy}
-        >
-          ← Назад к курсу
-        </MotionLink>
+      <div className="page item-page item-page--state">
+        <StateBlock
+          variant="empty"
+          text="Урок заблокирован. Пройдите предыдущие материалы."
+        />
+        <BackLink to="/course">Назад к курсу</BackLink>
       </div>
     );
   }
@@ -97,17 +86,9 @@ export default function ItemPage() {
   }
 
   return (
-    <div className="item-page item-page--unknown">
-      <p>Этот тип пока не поддерживается.</p>
-      <MotionLink
-        to="/course"
-        className="item-page__back"
-        whileHover={{ x: -2 }}
-        whileTap={{ scale: 0.96 }}
-        transition={spring.bouncy}
-      >
-        ← Назад к курсу
-      </MotionLink>
+    <div className="page item-page item-page--state">
+      <StateBlock variant="empty" text="Этот тип материала пока не поддерживается." />
+      <BackLink to="/course">Назад к курсу</BackLink>
     </div>
   );
 }

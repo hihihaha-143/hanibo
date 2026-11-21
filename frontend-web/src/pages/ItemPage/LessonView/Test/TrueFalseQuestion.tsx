@@ -1,5 +1,5 @@
-import { Volume2 } from "lucide-react";
 import type { TestQuestionTrueFalse } from "../../../../utils/testGenerator";
+import SpeakControls from "../../../../components/SpeakButton/SpeakControls";
 
 interface TrueFalseQuestionProps {
   question: TestQuestionTrueFalse;
@@ -14,18 +14,12 @@ export default function TrueFalseQuestion({
   answered,
   onSelect,
 }: TrueFalseQuestionProps) {
-  const speak = (text: string, rate: number) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "ko-KR";
-    utterance.rate = rate;
-    speechSynthesis.cancel();
-    speechSynthesis.speak(utterance);
-  };
-
   const options: { value: boolean; label: string; key: number }[] = [
     { value: true, label: "Верно", key: 1 },
     { value: false, label: "Неверно", key: 2 },
   ];
+
+  const isCorrect = selectedValue === question.correct;
 
   return (
     <div className="choose-question choose-question--true-false">
@@ -33,36 +27,15 @@ export default function TrueFalseQuestion({
 
       <div className="choose-question__prompt">
         <span className="choose-question__prompt-text">{question.prompt}</span>
-        {question.promptAudio && (
-          <div className="choose-question__speak">
-            <button
-              type="button"
-              className="choose-question__speak-button"
-              onClick={() => speak(question.promptAudio!, 0.5)}
-              title="Медленно"
-            >
-              <Volume2 size={16} />
-              <span>0.5</span>
-            </button>
-            <button
-              type="button"
-              className="choose-question__speak-button"
-              onClick={() => speak(question.promptAudio!, 1)}
-              title="Обычно"
-            >
-              <Volume2 size={16} />
-              <span>1</span>
-            </button>
-          </div>
-        )}
+        {question.promptAudio && <SpeakControls text={question.promptAudio} />}
       </div>
 
       <div className="choose-question__variants choose-question__variants--tf">
         {options.map(({ value, label, key }) => {
-          const isCorrect = value === question.correct;
+          const optionIsCorrect = value === question.correct;
           let modifier = "";
           if (answered) {
-            if (isCorrect) modifier = "choose-question__variant--correct";
+            if (optionIsCorrect) modifier = "choose-question__variant--correct";
             else if (value === selectedValue)
               modifier = "choose-question__variant--wrong";
           }
@@ -80,6 +53,19 @@ export default function TrueFalseQuestion({
           );
         })}
       </div>
+
+      {answered && (
+        <div
+          className={`choose-question__feedback ${
+            isCorrect
+              ? "choose-question__feedback--correct"
+              : "choose-question__feedback--wrong"
+          }`}
+          aria-live="polite"
+        >
+          {isCorrect ? "Верно" : "Неверно"}
+        </div>
+      )}
     </div>
   );
 }

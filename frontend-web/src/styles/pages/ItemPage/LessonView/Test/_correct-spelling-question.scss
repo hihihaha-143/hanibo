@@ -1,0 +1,11 @@
+@use '../../../../abstracts' as *;
+
+.choose-question--correct-spelling {
+  .choose-question__variant--hangul {
+    justify-content: center;
+    padding: 1.25rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-align: center;
+  }
+}

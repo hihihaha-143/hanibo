@@ -30,7 +30,7 @@ const STORAGE_ZOOM = "hanibo:library:zoom";
 
 interface OutlineItem {
   title: string;
-  dest: string | any[] | null;
+  dest: string | unknown[] | null;
   items: OutlineItem[];
 }
 
@@ -173,25 +173,25 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
     }
   }, []);
 
-  const goPrev = () => {
+  const goPrev = useCallback(() => {
     const next = Math.max(1, currentPage - pagesPerView);
     setCurrentPage(next);
     scrollToPage(next);
-  };
+  }, [currentPage, pagesPerView, scrollToPage]);
 
-  const goNext = () => {
+  const goNext = useCallback(() => {
     const next = Math.min(numPages, currentPage + pagesPerView);
     setCurrentPage(next);
     scrollToPage(next);
-  };
+  }, [currentPage, numPages, pagesPerView, scrollToPage]);
 
-  const handleOutlineClick = async (dest: string | any[] | null) => {
+  const handleOutlineClick = async (dest: string | unknown[] | null) => {
     if (!pdf || !dest) return;
     try {
       const destination =
         typeof dest === "string" ? await pdf.getDestination(dest) : dest;
       if (!destination) return;
-      const ref = destination[0];
+      const ref = destination[0] as Parameters<typeof pdf.getPageIndex>[0];
       const pageIndex = await pdf.getPageIndex(ref);
       const pageNum = pageIndex + 1;
       setCurrentPage(pageNum);
@@ -308,7 +308,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
 
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [currentPage, numPages, pagesPerView, scrollToPage]);
+  }, [currentPage, numPages, pagesPerView, scrollToPage, goNext, goPrev]);
 
   if (!item.file_url) {
     return <StateBlock variant="empty" />;
@@ -336,8 +336,8 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
             type="button"
             onClick={() => setPanelOpen((p) => !p)}
             className={
-              "library-viewer-block__btn" +
-              (panelOpen ? " library-viewer-block__btn--active" : "")
+              "btn btn--icon" +
+              (panelOpen ? " btn--active" : "")
             }
             title="Панель навигации"
           >
@@ -349,7 +349,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
           type="button"
           onClick={goPrev}
           disabled={currentPage <= 1}
-          className="library-viewer-block__btn"
+          className="btn btn--icon"
           title="Назад (←)"
         >
           <ChevronLeft size={18} />
@@ -363,7 +363,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
           type="button"
           onClick={goNext}
           disabled={numPages === 0 || currentPage >= numPages}
-          className="library-viewer-block__btn"
+          className="btn btn--icon"
           title="Вперёд (→)"
         >
           <ChevronRight size={18} />
@@ -375,7 +375,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
         <button
           type="button"
           onClick={() => setZoom((z) => Math.max(0.5, z - 0.2))}
-          className="library-viewer-block__btn"
+          className="btn btn--icon"
           title="Уменьшить"
         >
           <ZoomOut size={16} />
@@ -383,7 +383,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
         <button
           type="button"
           onClick={() => setZoom(1)}
-          className="library-viewer-block__btn"
+          className="btn btn--icon"
           title="Сбросить масштаб"
         >
           100%
@@ -391,7 +391,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
         <button
           type="button"
           onClick={() => setZoom((z) => Math.min(3, z + 0.2))}
-          className="library-viewer-block__btn"
+          className="btn btn--icon"
           title="Увеличить"
         >
           <ZoomIn size={16} />
@@ -401,8 +401,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
           type="button"
           onClick={() => setPagesPerView(1)}
           className={
-            "library-viewer-block__btn" +
-            (pagesPerView === 1 ? " library-viewer-block__btn--active" : "")
+            "btn btn--icon" + (pagesPerView === 1 ? " btn--active" : "")
           }
           title="Одна страница"
         >
@@ -412,8 +411,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
           type="button"
           onClick={() => setPagesPerView(2)}
           className={
-            "library-viewer-block__btn" +
-            (pagesPerView === 2 ? " library-viewer-block__btn--active" : "")
+            "btn btn--icon" + (pagesPerView === 2 ? " btn--active" : "")
           }
           title="Две страницы"
         >
@@ -424,8 +422,7 @@ export default function LibraryViewerBlock({ item }: LibraryViewerBlockProps) {
           type="button"
           onClick={() => setFitMode((m) => (m === "width" ? "page" : "width"))}
           className={
-            "library-viewer-block__btn" +
-            (fitMode === "page" ? " library-viewer-block__btn--active" : "")
+            "btn btn--icon" + (fitMode === "page" ? " btn--active" : "")
           }
           title={fitMode === "page" ? "По ширине" : "По экрану"}
         >

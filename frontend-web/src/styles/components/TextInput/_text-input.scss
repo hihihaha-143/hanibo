@@ -1,29 +1,21 @@
 @use '../../abstracts' as *;
 
+// Раскладка «поле + кнопка ответа». Само поле стилизуется классом .input.
 .text-input {
   display: flex;
+  align-items: stretch;
   gap: 0.75rem;
 
   &__field {
     flex: 1;
-    padding: 1rem 1.25rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.75rem;
-    background: var(--color-surface);
-    color: var(--color-text);
-    font-size: 1rem;
+    min-width: 0;
+  }
 
-    &::placeholder {
-      color: var(--color-text-secondary);
-    }
+  @include down('sm') {
+    flex-direction: column;
 
-    &:focus {
-      border-color: var(--color-primary);
-    }
-
-    &:disabled {
-      opacity: 0.7;
-      cursor: default;
+    .btn {
+      width: 100%;
     }
   }
 }

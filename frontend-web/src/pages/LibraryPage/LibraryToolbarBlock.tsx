@@ -85,11 +85,9 @@ export default function LibraryToolbarBlock({
       <div className="library-toolbar-block__chips">
         <button
           type="button"
-          className={
-            "library-toolbar-block__chip" +
-            (activeType === null ? " library-toolbar-block__chip--active" : "")
-          }
+          className={`chip${activeType === null ? " chip--active" : ""}`}
           onClick={() => onTypeChange(null)}
+          aria-pressed={activeType === null}
         >
           Все
         </button>
@@ -97,26 +95,26 @@ export default function LibraryToolbarBlock({
           <button
             key={type}
             type="button"
-            className={
-              "library-toolbar-block__chip" +
-              (activeType === type
-                ? " library-toolbar-block__chip--active"
-                : "")
-            }
+            className={`chip${activeType === type ? " chip--active" : ""}`}
             onClick={() => toggleType(type)}
+            aria-pressed={activeType === type}
           >
             {TYPE_LABELS[type]}
           </button>
         ))}
       </div>
 
-      <div className="library-toolbar-block__search">
-        <Search size={18} />
+      <div className="input-wrap library-toolbar-block__search">
+        <span className="input-wrap__icon" aria-hidden="true">
+          <Search size={18} />
+        </span>
         <input
-          type="text"
+          type="search"
+          className="input input--pill input--with-icon"
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
-          placeholder="Поиск по названию или автору..."
+          placeholder="Поиск по названию или автору…"
+          aria-label="Поиск по названию или автору"
         />
       </div>
 
@@ -124,7 +122,8 @@ export default function LibraryToolbarBlock({
         <select
           value={activeLevel ?? ""}
           onChange={(e) => onLevelChange(e.target.value || null)}
-          className="library-toolbar-block__select"
+          className="select"
+          aria-label="Фильтр по уровню"
         >
           <option value="">Уровень: любой</option>
           {levels.map((level) => (
@@ -137,7 +136,8 @@ export default function LibraryToolbarBlock({
         <select
           value={activeLanguage ?? ""}
           onChange={(e) => onLanguageChange(e.target.value || null)}
-          className="library-toolbar-block__select"
+          className="select"
+          aria-label="Фильтр по языку"
         >
           <option value="">Язык: любой</option>
           {languages.map((lang) => (
@@ -152,7 +152,8 @@ export default function LibraryToolbarBlock({
           onChange={(e) =>
             onYearChange(e.target.value ? Number(e.target.value) : null)
           }
-          className="library-toolbar-block__select"
+          className="select"
+          aria-label="Фильтр по году"
         >
           <option value="">Год: любой</option>
           {years.map((year) => (
@@ -165,7 +166,8 @@ export default function LibraryToolbarBlock({
         <select
           value={sort}
           onChange={(e) => onSortChange(e.target.value as LibrarySort)}
-          className="library-toolbar-block__select"
+          className="select"
+          aria-label="Сортировка"
         >
           {(Object.keys(SORT_LABELS) as LibrarySort[]).map((key) => (
             <option key={key} value={key}>
@@ -177,7 +179,7 @@ export default function LibraryToolbarBlock({
         {hasActiveFilters && (
           <button
             type="button"
-            className="library-toolbar-block__reset"
+            className="btn btn--secondary btn--sm"
             onClick={onReset}
             title="Сбросить фильтры"
           >

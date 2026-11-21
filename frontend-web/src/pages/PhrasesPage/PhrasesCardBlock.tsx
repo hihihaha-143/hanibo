@@ -120,7 +120,7 @@ export function PhrasesCardBlock({
   };
 
   return (
-    <article className="dictionary-card">
+    <article className="card dictionary-card">
       <header className="dictionary-card__header">
         <div className="dictionary-card__main">
           <h3 className="dictionary-card__hangul">{phrase.hangul}</h3>

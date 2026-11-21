@@ -129,7 +129,14 @@ export default function LibraryPage() {
   }, [items, continueItem, recentData]);
 
   return (
-    <div className="library-page">
+    <div className="page library-page">
+      <header className="page__header library-page__header">
+        <h1 className="page__title">Библиотека</h1>
+        <p className="library-page__subtitle">
+          Учебники, словари и материалы для чтения
+        </p>
+      </header>
+
       {continueItem && <LibraryContinueBlock item={continueItem} />}
 
       <LibraryToolbarBlock

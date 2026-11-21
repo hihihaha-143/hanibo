@@ -1,0 +1,14 @@
+@use '../../../abstracts' as *;
+
+.lesson-view {
+  &__content {
+    min-height: 160px;
+    min-width: 0;
+  }
+
+  @include down('sm') {
+    &__content {
+      min-height: 120px;
+    }
+  }
+}

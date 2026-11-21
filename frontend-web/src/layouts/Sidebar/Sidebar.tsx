@@ -9,9 +9,15 @@ export default function Sidebar() {
 
   return (
     <motion.aside
-      className="sidebar"
+      className={expanded ? "sidebar sidebar--expanded" : "sidebar"}
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={() => setExpanded(false)}
+      onFocus={() => setExpanded(true)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          setExpanded(false);
+        }
+      }}
       animate={{ width: expanded ? 220 : 64 }}
       transition={spring.bouncy}
       initial={false}

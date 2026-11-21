@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import type { TestQuestionSyllableGap } from "../../../../utils/testGenerator";
+import SpeakControls from "../../../../components/SpeakButton/SpeakControls";
 import { spring } from "../../../../lib/motion";
 
 interface SyllableGapQuestionProps {
@@ -53,36 +54,34 @@ export default function SyllableGapQuestion({
 
       <div className="choose-question__prompt">
         <span className="choose-question__prompt-text">{renderPrompt()}</span>
+        {question.promptAudio && <SpeakControls text={question.promptAudio} />}
       </div>
 
       {question.mode === "choice" && (
         <div className="choose-question__variants choose-question__variants--syllable">
           {question.variants.map((variant, index) => {
-            const isCorrectVariant = index === question.correctIndex;
+            const variantIsCorrect = index === question.correctIndex;
             let modifier = "";
             if (answered) {
-              if (isCorrectVariant) {
+              if (variantIsCorrect) {
                 modifier = "choose-question__variant--correct";
               } else if (index === selectedIndex) {
                 modifier = "choose-question__variant--wrong";
               }
             }
             return (
-              <motion.button
+              <button
                 key={index}
                 type="button"
                 className={`choose-question__variant ${modifier}`}
                 onClick={() => onSelect(index)}
                 disabled={answered}
-                whileHover={!answered ? { y: -1, scale: 1.01 } : undefined}
-                whileTap={!answered ? { scale: 0.98 } : undefined}
-                transition={spring.bouncy}
               >
                 <span className="choose-question__variant-key">
                   {index + 1}
                 </span>
                 <span className="choose-question__variant-text">{variant}</span>
-              </motion.button>
+              </button>
             );
           })}
         </div>
@@ -92,22 +91,23 @@ export default function SyllableGapQuestion({
         <div className="text-input">
           <input
             type="text"
-            className="text-input__field"
+            className="input text-input__field"
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Введите слог"
+            aria-label="Пропущенный слог"
             disabled={answered}
             autoFocus
           />
           {!answered && (
             <motion.button
               type="button"
-              className="btn btn--accent btn--lg"
+              className="btn btn--primary"
               onClick={handleSubmit}
               disabled={value.trim().length === 0}
-              whileHover={{ y: -1, scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={{ y: -1 }}
+              whileTap={{ scale: 0.98 }}
               transition={spring.bouncy}
             >
               Ответить
@@ -118,14 +118,15 @@ export default function SyllableGapQuestion({
 
       {answered && (
         <motion.div
-          className={
+          className={`choose-question__feedback ${
             isCorrect
-              ? "choose-question__feedback choose-question__feedback--correct"
-              : "choose-question__feedback choose-question__feedback--wrong"
-          }
+              ? "choose-question__feedback--correct"
+              : "choose-question__feedback--wrong"
+          }`}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={spring.base}
+          aria-live="polite"
         >
           {isCorrect
             ? "Верно"

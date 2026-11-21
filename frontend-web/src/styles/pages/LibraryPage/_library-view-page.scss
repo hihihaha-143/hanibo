@@ -1,8 +1,15 @@
 @use '../../abstracts' as *;
 
 .library-view-page {
-  width: 100%;
-  height: calc(95vh - 8rem);
-  height: calc(95dvh - 8rem);
   @include flex(column, flex-start, stretch, 0);
+  width: 100%;
+  height: calc(100dvh - var(--banner-height) - 2rem);
+  min-height: 420px;
+
+  @include mobile-nav {
+    height: calc(
+      100dvh - var(--banner-height) - var(--mobile-nav-height) - 2rem
+    );
+    min-height: 360px;
+  }
 }

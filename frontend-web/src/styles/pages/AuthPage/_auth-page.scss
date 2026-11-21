@@ -1,0 +1,91 @@
+@use '../../abstracts' as *;
+
+.auth-page {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 1.5rem 1rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+
+  &__card {
+    @include card-surface;
+    width: 100%;
+    max-width: 420px;
+    padding: 2rem 1.75rem;
+    box-shadow: var(--shadow-lg);
+  }
+
+  &__logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+
+    img {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  &__title {
+    margin-bottom: 1.25rem;
+    color: var(--color-text);
+    font-size: 1.75rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  &__error-general {
+    margin-bottom: 1rem;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid var(--color-error);
+    border-radius: var(--radius-sm);
+    background: var(--color-error-bg);
+    color: var(--color-error);
+    font-size: 0.875rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  &__switch {
+    margin-top: 1.25rem;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    text-align: center;
+
+    a {
+      color: var(--color-accent);
+      font-weight: 700;
+
+      &:hover {
+        color: var(--color-accent-hover);
+      }
+    }
+  }
+
+  @include down('sm') {
+    padding: 1rem 0.75rem;
+
+    &__card {
+      padding: 1.5rem 1.25rem;
+    }
+
+    &__logo img {
+      width: 80px;
+      height: 80px;
+    }
+
+    &__title {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

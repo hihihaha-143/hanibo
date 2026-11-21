@@ -1,0 +1,49 @@
+@use '../../../../abstracts' as *;
+
+.test {
+  @include flex(column, flex-start, stretch, 1.25rem);
+  width: 100%;
+  max-width: var(--reading-max);
+  margin-inline: auto;
+  min-width: 0;
+
+  &__progress {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--color-surface-alt);
+    overflow: hidden;
+  }
+
+  &__progress-bar {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--color-accent);
+  }
+
+  &__counter {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+
+  &__question {
+    min-height: 220px;
+  }
+
+  &__empty {
+    padding: 2rem;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  @include down('sm') {
+    gap: 1rem;
+
+    &__question {
+      min-height: 180px;
+    }
+  }
+}

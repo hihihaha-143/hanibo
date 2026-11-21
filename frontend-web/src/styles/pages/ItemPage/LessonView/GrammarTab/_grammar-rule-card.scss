@@ -1,0 +1,49 @@
+@use '../../../../abstracts' as *;
+
+.grammar-rule-card {
+  @include flex(column, flex-start, stretch, 1rem);
+  padding: 1.25rem;
+
+  &__header {
+    @include flex(row, flex-start, center, 0.75rem);
+    flex-wrap: wrap;
+  }
+
+  &__title {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  &__form {
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-alt);
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  &__construction {
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-alt);
+    color: var(--color-text);
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 1rem;
+    overflow-x: auto;
+  }
+
+  &__phrases {
+    @include flex(column, flex-start, stretch, 0.75rem);
+  }
+
+  @include down('sm') {
+    padding: 1rem;
+
+    &__title {
+      font-size: 1.125rem;
+    }
+  }
+}

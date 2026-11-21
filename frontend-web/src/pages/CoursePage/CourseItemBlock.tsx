@@ -15,6 +15,13 @@ interface CourseItemBlockProps {
   onClick?: () => void;
 }
 
+const STATUS_LABELS: Record<CourseItemStatus, string> = {
+  locked: "заблокировано",
+  active: "доступно",
+  partial: "в процессе",
+  complete: "завершено",
+};
+
 export default function CourseItemBlock({
   item,
   status,
@@ -29,7 +36,7 @@ export default function CourseItemBlock({
         return (
           <img
             src={blueberryIcon}
-            alt="Доп. материал"
+            alt=""
             className="course-item-block__image"
           />
         );
@@ -37,7 +44,7 @@ export default function CourseItemBlock({
         return (
           <img
             src={strawberryIcon}
-            alt="Тест"
+            alt=""
             className="course-item-block__image"
           />
         );
@@ -51,13 +58,18 @@ export default function CourseItemBlock({
     ? ({ "--fill-percent": `${progressPercent}%` } as CSSProperties)
     : undefined;
 
+  const hint = isDisabled
+    ? `${item.title} — заблокировано, пройдите предыдущий материал`
+    : `${item.title} — ${STATUS_LABELS[status]}`;
+
   return (
     <motion.button
       type="button"
-      className={`course-item-block course-item-block--${item.type} course-item-block--${status}`}
+      className={`course-item-block course-item-block--${status}`}
       onClick={onClick}
       disabled={isDisabled}
-      title={item.title}
+      title={hint}
+      aria-label={hint}
       style={buttonStyle}
       whileHover={isDisabled ? undefined : { x: 4 }}
       whileTap={isDisabled ? undefined : { scale: 0.97 }}
@@ -69,7 +81,7 @@ export default function CourseItemBlock({
       {status === "complete" && (
         <span className="course-item-block__shine" aria-hidden="true" />
       )}
-      <span className="course-item-block__inner">
+      <span className="course-item-block__inner" aria-hidden="true">
         <span className="course-item-block__icon">{icon}</span>
       </span>
       <span className="course-item-block__title">{item.title}</span>

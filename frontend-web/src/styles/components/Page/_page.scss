@@ -1,0 +1,29 @@
+@use '../../abstracts' as *;
+
+// Общий каркас страницы: вертикальный ритм и заголовок.
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+  width: 100%;
+  min-width: 0;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-text);
+  }
+
+  &--reading {
+    max-width: var(--reading-max);
+    margin-inline: auto;
+  }
+}

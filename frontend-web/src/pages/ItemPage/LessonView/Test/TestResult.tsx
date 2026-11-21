@@ -26,7 +26,7 @@ export default function TestResult({
   nextLabel,
 }: TestResultProps) {
   return (
-    <div className="test-result">
+    <div className="card test-result">
       <div className="test-result__score">
         {correct} / {total}
       </div>
@@ -39,13 +39,13 @@ export default function TestResult({
         {passed ? "Пройдено" : "Не пройдено"}
       </div>
 
-      <div className="test-result__actions">
+      <div className="actions actions--center test-result__actions">
         <motion.button
           type="button"
-          className="test-result__button test-result__button--secondary"
+          className="btn btn--secondary"
           onClick={onRepeat}
-          whileHover={{ y: -1, scale: 1.02 }}
-          whileTap={{ scale: 0.97 }}
+          whileHover={{ y: -1 }}
+          whileTap={{ scale: 0.98 }}
           transition={spring.bouncy}
         >
           Пройти снова
@@ -54,10 +54,10 @@ export default function TestResult({
         {!passed && (
           <motion.button
             type="button"
-            className="test-result__button test-result__button--secondary"
+            className="btn btn--secondary"
             onClick={onBack}
-            whileHover={{ y: -1, scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ y: -1 }}
+            whileTap={{ scale: 0.98 }}
             transition={spring.bouncy}
           >
             {backLabel ?? "Назад"}
@@ -67,14 +67,14 @@ export default function TestResult({
         {passed && onNext && (
           <motion.button
             type="button"
-            className="test-result__button test-result__button--primary"
+            className="btn btn--primary"
             onClick={onNext}
-            whileHover={{ y: -1, scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ y: -1 }}
+            whileTap={{ scale: 0.98 }}
             transition={spring.bouncy}
           >
             <span>{nextLabel ?? "Далее"}</span>
-            <ArrowRight size={18} />
+            <ArrowRight size={18} aria-hidden="true" />
           </motion.button>
         )}
       </div>

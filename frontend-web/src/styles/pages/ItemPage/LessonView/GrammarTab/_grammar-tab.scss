@@ -1,0 +1,11 @@
+@use '../../../../abstracts' as *;
+
+.grammar-tab {
+  @include flex(column, flex-start, stretch, 1.5rem);
+  min-width: 0;
+
+  &__cards {
+    @include flex(column, flex-start, stretch, 1.25rem);
+    min-width: 0;
+  }
+}

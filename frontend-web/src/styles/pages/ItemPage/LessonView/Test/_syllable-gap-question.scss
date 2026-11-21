@@ -1,0 +1,37 @@
+@use '../../../../abstracts' as *;
+
+.choose-question--syllable-gap {
+  .choose-question__variants--syllable {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    .choose-question__variant {
+      justify-content: center;
+      padding: 1.25rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-align: center;
+    }
+  }
+
+  @include down('md') {
+    .choose-question__variants--syllable {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @include down('sm') {
+    .choose-question__variants--syllable {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+
+.syllable-gap__gap {
+  display: inline-block;
+  min-width: 2.5rem;
+  padding: 0 0.5rem;
+  border-bottom: 2px solid var(--color-accent);
+  color: var(--color-accent);
+  font-weight: 700;
+  text-align: center;
+}

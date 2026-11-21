@@ -2,11 +2,21 @@
 
 .about-block {
   @include flex(column, flex-start, stretch, 1rem);
-  background-color: var(--color-secondary);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  padding: 2rem;
-  border-radius: 1rem;
-  line-height: 1.4;
   height: 100%;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-secondary);
+  color: var(--color-text);
+  line-height: 1.7;
+
+  p {
+    margin: 0;
+  }
+
+  @include down('sm') {
+    padding: 1.1rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
 }

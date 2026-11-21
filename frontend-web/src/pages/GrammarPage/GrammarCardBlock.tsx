@@ -23,7 +23,7 @@ export function GrammarCardBlock({ rule, onOpen }: GrammarCardBlockProps) {
 
   return (
     <article
-      className="dictionary-card"
+      className="card dictionary-card"
       onClick={() => onOpen(rule.id)}
       role="button"
       tabIndex={0}

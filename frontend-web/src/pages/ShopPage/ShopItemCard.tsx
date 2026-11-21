@@ -157,7 +157,7 @@ export function ShopItemCard({
         return (
           <button
             type="button"
-            className="shop-card__button"
+            className="btn btn--primary btn--sm shop-card__button"
             disabled={pending || !canAfford}
             onClick={() => onBuy(item)}
           >
@@ -173,7 +173,7 @@ export function ShopItemCard({
       return (
         <button
           type="button"
-          className="shop-card__button shop-card__button--activate"
+          className="btn btn--accent btn--sm shop-card__button"
           disabled={pending}
           onClick={() => onActivate(item)}
         >
@@ -188,7 +188,7 @@ export function ShopItemCard({
       return (
         <button
           type="button"
-          className="shop-card__button"
+          className="btn btn--primary btn--sm shop-card__button"
           disabled={pending || !canAfford}
           onClick={() => onBuy(item)}
         >
@@ -205,7 +205,7 @@ export function ShopItemCard({
       return (
         <button
           type="button"
-          className="shop-card__button shop-card__button--owned"
+          className="btn btn--success btn--sm shop-card__button"
           disabled={pending}
           onClick={() => onUnequip(item)}
         >
@@ -218,7 +218,7 @@ export function ShopItemCard({
     return (
       <button
         type="button"
-        className="shop-card__button shop-card__button--equip"
+        className="btn btn--accent btn--sm shop-card__button"
         disabled={pending}
         onClick={() => onEquip(item)}
       >
@@ -229,7 +229,7 @@ export function ShopItemCard({
 
   return (
     <div
-      className={`shop-card${isActive ? " shop-card--active" : ""}${isOwned ? " shop-card--owned" : ""}`}
+      className={`card shop-card${isActive ? " shop-card--active" : ""}${isOwned ? " shop-card--owned" : ""}`}
     >
       <div className="shop-card__preview-wrap">{renderPreview()}</div>
 

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowLeft } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   getCourseItemWords,
@@ -14,13 +13,17 @@ import {
   generateFinalTest,
   type TestQuestion,
 } from "../../../utils/testGenerator";
-import { getLessonProgress, PASS_THRESHOLD } from "../../../utils/progress";
+import {
+  getLessonProgress,
+  PASS_THRESHOLD,
+  setFinalPercent,
+} from "../../../utils/progress";
 import DictionaryTab from "./DictionaryTab/DictionaryTab";
 import GrammarTab from "./GrammarTab/GrammarTab";
-import FinalTestTab from "./FinalTestTab";
+import Test from "./Test/Test";
+import BackLink from "../../../components/BackLink/BackLink";
+import StateBlock from "../../../components/StateBlock/StateBlock";
 import { spring } from "../../../lib/motion";
-
-const MotionLink = motion.create(Link);
 
 type Tab = "words" | "grammar" | "test";
 
@@ -120,22 +123,22 @@ export default function LessonView({ item }: LessonViewProps) {
     test: finalLocked,
   };
 
+  const lockHint = (id: Tab): string | undefined => {
+    if (!lockedMap[id]) return undefined;
+    if (id === "grammar") return "Сначала пройдите тест по словарю";
+    if (id === "test") return "Сначала пройдите тест по грамматике";
+    return undefined;
+  };
+
   return (
-    <div className="lesson-view">
-      <MotionLink
-        to="/course"
-        className="lesson-view__back"
-        whileHover={{ x: -2 }}
-        whileTap={{ scale: 0.96 }}
-        transition={spring.bouncy}
-      >
-        <ArrowLeft size={18} />
-        <span>Назад к курсу</span>
-      </MotionLink>
+    <div className="page lesson-view">
+      <BackLink to="/course">Назад к курсу</BackLink>
 
-      <h1 className="lesson-view__title">{item.title}</h1>
+      <header className="page__header">
+        <h1 className="page__title">{item.title}</h1>
+      </header>
 
-      <div className="lesson-view__tabs">
+      <div className="tabs" role="tablist" aria-label="Разделы урока">
         {TABS.map(({ id, label }) => {
           const isActive = tab === id;
           const isLocked = lockedMap[id];
@@ -143,20 +146,25 @@ export default function LessonView({ item }: LessonViewProps) {
             <motion.button
               key={id}
               type="button"
-              className={`lesson-view__tab${isActive ? " lesson-view__tab--active" : ""}${isLocked ? " lesson-view__tab--locked" : ""}`}
+              role="tab"
+              aria-selected={isActive}
+              className={`tabs__tab${isActive ? " tabs__tab--active" : ""}${
+                isLocked ? " tabs__tab--locked" : ""
+              }`}
               onClick={() => {
                 if (isLocked) return;
                 if (id === "test") goToFinalTest();
                 else setTab(id);
               }}
               disabled={isLocked}
+              title={lockHint(id)}
               whileTap={isLocked ? undefined : { scale: 0.97 }}
               transition={spring.bouncy}
             >
               {label}
               {isActive && (
                 <motion.span
-                  className="lesson-view__tab-indicator"
+                  className="tabs__indicator"
                   layoutId="lesson-tab-indicator"
                   transition={spring.bouncy}
                 />
@@ -169,8 +177,12 @@ export default function LessonView({ item }: LessonViewProps) {
       <div className="lesson-view__content">
         {tab === "words" && (
           <>
-            {wordsLoading && <p>Загрузка...</p>}
-            {wordsError && <p>Не удалось загрузить слова.</p>}
+            {wordsLoading && (
+              <StateBlock variant="loading" text="Загружаем слова…" />
+            )}
+            {wordsError && (
+              <StateBlock variant="error" text="Не удалось загрузить слова." />
+            )}
             {words && (
               <DictionaryTab
                 itemId={item.id}
@@ -187,8 +199,15 @@ export default function LessonView({ item }: LessonViewProps) {
 
         {tab === "grammar" && (
           <>
-            {grammarLoading && <p>Загрузка...</p>}
-            {grammarError && <p>Не удалось загрузить грамматику.</p>}
+            {grammarLoading && (
+              <StateBlock variant="loading" text="Загружаем грамматику…" />
+            )}
+            {grammarError && (
+              <StateBlock
+                variant="error"
+                text="Не удалось загрузить грамматику."
+              />
+            )}
             {grammar && (
               <GrammarTab
                 itemId={item.id}
@@ -204,16 +223,22 @@ export default function LessonView({ item }: LessonViewProps) {
         {tab === "test" && (
           <>
             {finalQuestions ? (
-              <FinalTestTab
-                itemId={item.id}
+              <Test
                 questions={finalQuestions}
+                onFinish={(correct, total) => {
+                  const percent =
+                    total > 0 ? Math.round((correct / total) * 100) : 0;
+                  setFinalPercent(item.id, percent);
+                  refreshProgress();
+                }}
                 onRepeat={handleFinalRepeat}
                 onBack={handleFinalBack}
+                backLabel="В курс"
                 onNext={item.next ? handleFinalNext : undefined}
                 nextLabel={item.next ? item.next.title : undefined}
               />
             ) : (
-              <p>Загрузка...</p>
+              <StateBlock variant="loading" text="Собираем итоговый тест…" />
             )}
           </>
         )}

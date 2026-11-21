@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BookOpen, Globe } from "lucide-react";
 import { getRandomTip, type Tip } from "../../api/tips";
 
-const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 минут
+const REFRESH_INTERVAL = 5 * 60 * 1000;
 
 export default function TipBlock() {
   const [tip, setTip] = useState<Tip | null>(null);
@@ -28,8 +28,12 @@ export default function TipBlock() {
 
   if (loading) {
     return (
-      <div className="tip-block tip-block--loading">
-        <p className="tip-block__content">Загрузка...</p>
+      <div
+        className="tip-block tip-block--loading"
+        role="status"
+        aria-live="polite"
+      >
+        <p className="tip-block__content">Загрузка совета…</p>
       </div>
     );
   }
@@ -42,7 +46,7 @@ export default function TipBlock() {
 
   return (
     <div className="tip-block">
-      <span className="tip-block__icon">
+      <span className="tip-block__icon" aria-hidden="true">
         <Icon size={22} />
       </span>
       <p className="tip-block__content">{tip.content}</p>

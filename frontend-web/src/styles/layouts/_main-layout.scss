@@ -3,23 +3,34 @@
 
 .main-layout {
   min-height: 100vh;
+  min-height: 100dvh;
 
   &__content {
     min-width: 0;
     padding: 1rem;
-    padding-left: calc(64px + 2rem);
+    padding-left: calc(var(--sidebar-width) + 2rem);
+    padding-bottom: 2rem;
     transition: padding-left var(--transition-theme);
+  }
 
-    @include mobile-nav {
-      padding-left: 1rem;
-    }
+  &__inner {
+    width: 100%;
+    max-width: var(--content-max);
+    margin-inline: auto;
+    min-width: 0;
   }
 
   &:has(.sidebar--expanded) .main-layout__content {
-    padding-left: calc(220px + 2rem);
+    padding-left: calc(var(--sidebar-width-expanded) + 2rem);
+  }
 
-    @include mobile-nav {
+  @include mobile-nav {
+    &__content,
+    &:has(.sidebar--expanded) .main-layout__content {
       padding-left: 1rem;
+      padding-bottom: calc(
+        var(--mobile-nav-height) + env(safe-area-inset-bottom, 0px) + 1rem
+      );
     }
   }
 }

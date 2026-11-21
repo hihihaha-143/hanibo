@@ -1,11 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { CourseItemDetails } from "../../../api/course";
 import ExtraContentBlock from "./ExtraContentBlock";
+import BackLink from "../../../components/BackLink/BackLink";
+import StateBlock from "../../../components/StateBlock/StateBlock";
 import { spring } from "../../../lib/motion";
-
-const MotionLink = motion.create(Link);
 
 interface ExtraViewProps {
   item: CourseItemDetails;
@@ -16,17 +16,9 @@ export default function ExtraView({ item }: ExtraViewProps) {
 
   if (!item.extra) {
     return (
-      <div className="extra-page extra-page--error">
-        <p>У этого материала нет содержимого.</p>
-        <MotionLink
-          to="/course"
-          className="extra-page__back"
-          whileHover={{ x: -2 }}
-          whileTap={{ scale: 0.96 }}
-          transition={spring.bouncy}
-        >
-          ← Назад к курсу
-        </MotionLink>
+      <div className="page page--reading extra-page">
+        <BackLink to="/course">Назад к курсу</BackLink>
+        <StateBlock variant="empty" text="У этого материала нет содержимого." />
       </div>
     );
   }
@@ -38,37 +30,30 @@ export default function ExtraView({ item }: ExtraViewProps) {
   };
 
   return (
-    <div className="extra-page">
-      <MotionLink
-        to="/course"
-        className="extra-page__back"
-        whileHover={{ x: -2 }}
-        whileTap={{ scale: 0.96 }}
-        transition={spring.bouncy}
-      >
-        <ArrowLeft size={18} />
-        <span>Назад к курсу</span>
-      </MotionLink>
+    <article className="page page--reading extra-page">
+      <BackLink to="/course">Назад к курсу</BackLink>
 
-      <h1 className="extra-page__title">{item.extra.title}</h1>
+      <header className="page__header">
+        <h1 className="page__title">{item.extra.title}</h1>
+      </header>
 
       <ExtraContentBlock content={item.extra.content} />
 
       {item.next && (
-        <div className="extra-page__footer">
+        <div className="actions">
           <motion.button
             type="button"
-            className="extra-page__next"
+            className="btn btn--primary"
             onClick={handleNext}
-            whileHover={{ y: -2, scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.98 }}
             transition={spring.bouncy}
           >
             <span>{item.next.title}</span>
-            <ArrowRight size={18} />
+            <ArrowRight size={18} aria-hidden="true" />
           </motion.button>
         </div>
       )}
-    </div>
+    </article>
   );
 }

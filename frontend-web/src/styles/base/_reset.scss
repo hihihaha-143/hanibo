@@ -1,4 +1,8 @@
-*, *::before, *::after {
+@use '../abstracts' as *;
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -8,6 +12,7 @@
     color var(--transition-theme);
 }
 
+// Пользователь отключил анимации — уважаем выбор.
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -19,8 +24,14 @@
   }
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -44,11 +55,7 @@ select {
   background: transparent;
   border: none;
   outline: none;
-}
-
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+  min-width: 0;
 }
 
 button {
@@ -72,4 +79,14 @@ ol {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
+
+// Единое кольцо фокуса вместо outline: none.
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  @include focus-ring;
+}
+
+::selection {
+  background: var(--color-accent-soft);
+  color: var(--color-text);
 }

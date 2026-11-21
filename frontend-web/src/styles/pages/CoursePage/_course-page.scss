@@ -1,14 +1,3 @@
 @use '../../abstracts' as *;
 @use './course-list-block';
 @use './course-item-block';
-
-.course-page {
-  @include flex(column, flex-start, stretch, 1.5rem);
-
-  &__title {
-    margin: 0;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--color-text);
-  }
-}

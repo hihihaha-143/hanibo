@@ -49,11 +49,6 @@ export function MatchGame({ onClose }: MatchGameProps) {
     return map;
   }, [words]);
 
-  const wordIdByHangul = useMemo(() => {
-    const map: Record<string, number> = {};
-    for (const w of words) map[w.hangul] = w.id;
-    return map;
-  }, [words]);
 
   const loadGame = useCallback(() => {
     setPhase("loading");

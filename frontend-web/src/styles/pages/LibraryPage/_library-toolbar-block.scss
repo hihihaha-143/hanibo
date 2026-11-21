@@ -5,124 +5,60 @@
   width: 100%;
 
   &__chips {
-    @include flex(row, center, center, 0.5rem);
+    display: flex;
     flex-wrap: wrap;
-  }
-
-  &__chip {
-    padding: 0.4rem 0.9rem;
-    border-radius: 999px;
-    border: 1px solid var(--color-border);
-    background: var(--color-surface);
-    color: var(--color-text-secondary);
-    font-size: 0.9rem;
-    transition:
-      background-color var(--transition-fast),
-      color var(--transition-fast),
-      border-color var(--transition-fast);
-
-    &:hover {
-      border-color: var(--color-accent);
-      color: var(--color-text);
-    }
-
-    &--active {
-      background: var(--color-accent);
-      border-color: var(--color-accent);
-      color: var(--color-on-accent);
-    }
+    justify-content: center;
+    gap: 0.5rem;
   }
 
   &__search {
-    @include flex(row, flex-start, center, 0.5rem);
     width: 100%;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    padding: 0.6rem 1.1rem;
-    color: var(--color-text-secondary);
+  }
 
-    input {
+  &__filters {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+
+    .select {
       flex: 1;
-      min-width: 0;
-      color: var(--color-text);
+      min-width: 140px;
+    }
 
-      &::placeholder {
-        color: var(--color-text-secondary);
+    .btn {
+      flex-shrink: 0;
+    }
+  }
+
+  @include down('md') {
+    &__filters {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      .btn {
+        grid-column: 1 / -1;
+        justify-self: start;
       }
     }
   }
 
-  &__filters {
-    @include flex(row, flex-start, center, 0.75rem);
-    width: 100%;
-    flex-wrap: wrap;
-
-    @include down('sm') {
-      @include flex(column, flex-start, stretch, 0.5rem);
-    }
-  }
-
-  &__select {
-    flex: 1;
-    min-width: 140px;
-    padding: 0.45rem 0.9rem;
-    border-radius: 8px;
-    border: 1px solid var(--color-border);
-    background: var(--color-surface);
-    color: var(--color-text);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: border-color var(--transition-fast);
-
-    &:hover,
-    &:focus {
-      border-color: var(--color-accent);
-    }
-  }
-
-  &__view {
-    @include flex(row, center, center, 0);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    overflow: hidden;
-    background: var(--color-surface);
-  }
-
-  &__view-btn {
-    @include flex(row, center, center, 0);
-    width: 2.2rem;
-    height: 2.2rem;
-    color: var(--color-text-secondary);
-    transition:
-      background-color var(--transition-fast),
-      color var(--transition-fast);
-
-    &:hover {
-      color: var(--color-text);
+  @include down('sm') {
+    &__chips {
+      justify-content: flex-start;
     }
 
-    &--active {
-      background: var(--color-accent);
-      color: var(--color-on-accent);
-    }
-  }
+    &__filters {
+      grid-template-columns: 1fr;
 
-  &__reset {
-    @include flex(row, center, center, 0.4rem);
-    padding: 0.45rem 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--color-border);
-    background: var(--color-surface);
-    color: var(--color-text-secondary);
-    font-size: 0.9rem;
-    transition:
-      border-color var(--transition-fast),
-      color var(--transition-fast);
+      .select,
+      .btn {
+        width: 100%;
+      }
 
-    &:hover {
-      border-color: var(--color-accent);
-      color: var(--color-text);
+      .btn {
+        grid-column: auto;
+      }
     }
   }
 }

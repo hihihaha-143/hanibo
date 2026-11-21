@@ -10,6 +10,7 @@ import {
   isAlphabetTabId,
 } from "./alphabetTabs";
 import { useAlphabet } from "./useAlphabet";
+import StateBlock from "../../components/StateBlock/StateBlock";
 import VowelsBlock from "./VowelsBlock";
 import ConsonantsBlock from "./ConsonantsBlock";
 import DiphthongsBlock from "./DiphthongsBlock";
@@ -52,14 +53,10 @@ export default function AlphabetPage() {
 
   const renderTab = () => {
     if (loading) {
-      return <p className="alphabet-page__status">Загрузка…</p>;
+      return <StateBlock variant="loading" text="Загружаем алфавит…" />;
     }
     if (error) {
-      return (
-        <p className="alphabet-page__status alphabet-page__status--error">
-          {error}
-        </p>
-      );
+      return <StateBlock variant="error" text={error} />;
     }
 
     switch (activeTab) {
@@ -98,6 +95,13 @@ export default function AlphabetPage() {
 
   return (
     <div className="alphabet-page">
+      <header className="page__header alphabet-page__header">
+        <h1 className="page__title">Алфавит</h1>
+        <p className="alphabet-page__subtitle">
+          Гласные, согласные, дифтонги и правила ассимиляции
+        </p>
+      </header>
+
       <div className="alphabet-page__top">
         <ChipsBlock
           tabs={ALPHABET_TABS}
@@ -108,7 +112,6 @@ export default function AlphabetPage() {
 
         {isLetterTab && (
           <div className="alphabet-page__controls">
-            {" "}
             <motion.button
               type="button"
               className="btn btn--accent"
@@ -123,9 +126,7 @@ export default function AlphabetPage() {
             </motion.button>
             <motion.button
               type="button"
-              className={`alphabet-page__progress-toggle${
-                showProgress ? " alphabet-page__progress-toggle--active" : ""
-              }`}
+              className={`btn btn--outline${showProgress ? " btn--active" : ""}`}
               onClick={() => setShowProgress((v) => !v)}
               whileHover={{ y: -1, scale: 1.02 }}
               whileTap={{ scale: 0.97 }}

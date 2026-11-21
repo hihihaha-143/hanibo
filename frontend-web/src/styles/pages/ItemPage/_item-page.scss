@@ -1,32 +1,17 @@
 @use '../../abstracts' as *;
 
 .item-page {
-  @include flex(column, flex-start, stretch, 1rem);
+  &--state {
+    @include flex(column, center, stretch, 0.5rem);
+    min-height: 50vh;
 
-  &--loading,
-  &--error,
-  &--locked,
-  &--unknown {
-    padding: 2rem;
-    border-radius: 0.75rem;
-    background: var(--color-surface);
-    color: var(--color-text);
-  }
+    .state-block {
+      flex: 1;
+      justify-content: center;
+    }
 
-  &--error,
-  &--locked {
-    color: var(--color-text-secondary);
-  }
-
-  &__back {
-    @include flex(row, flex-start, center, 0.375rem);
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    font-size: 0.875rem;
-    transition: color var(--transition-fast);
-
-    &:hover {
-      color: var(--color-text);
+    .back-link {
+      align-self: center;
     }
   }
 }

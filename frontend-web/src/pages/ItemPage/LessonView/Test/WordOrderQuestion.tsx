@@ -1,5 +1,3 @@
-// frontend-web/src/pages/ItemPage/LessonView/Test/WordOrderQuestion.tsx
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { TestQuestionWordOrder } from "../../../../utils/testGenerator";
@@ -19,24 +17,17 @@ export default function WordOrderQuestion({
   isCorrect,
   onSubmit,
 }: WordOrderQuestionProps) {
-  // Доступные токены (перемешанные) — те, что ещё не поставлены в ответ
   const [available, setAvailable] = useState<string[]>(() =>
     shuffle(question.tokens),
   );
-  // Собранный ответ — массив токенов в порядке, выбранном гостем
   const [picked, setPicked] = useState<string[]>([]);
-  // Для drag внутри picked: какой индекс тащим
   const [dragFromPicked, setDragFromPicked] = useState<number | null>(null);
-  // Для drag внутри available: какой индекс тащим
   const [dragFromAvailable, setDragFromAvailable] = useState<number | null>(
     null,
   );
-  // Куда бросили в picked (позиция вставки)
   const [dropIndex, setDropIndex] = useState<number | null>(null);
 
   const canCheck = picked.length === question.tokens.length && !answered;
-
-  // ---------- клики ----------
 
   const handleAvailableClick = (index: number) => {
     if (answered) return;
@@ -52,8 +43,6 @@ export default function WordOrderQuestion({
     setAvailable((a) => [...a, token]);
   };
 
-  // ---------- drag & drop ----------
-
   const handleAvailableDragStart = (index: number) => {
     if (answered) return;
     setDragFromAvailable(index);
@@ -67,7 +56,6 @@ export default function WordOrderQuestion({
   const handleDropOnPicked = (targetIndex: number) => {
     if (answered) return;
 
-    // Тащили из available → вставляем в picked по позиции
     if (dragFromAvailable !== null) {
       const token = available[dragFromAvailable];
       setAvailable((a) => a.filter((_, i) => i !== dragFromAvailable));
@@ -81,7 +69,6 @@ export default function WordOrderQuestion({
       return;
     }
 
-    // Тащили из picked → переставляем внутри picked
     if (dragFromPicked !== null) {
       if (dragFromPicked === targetIndex) {
         setDragFromPicked(null);
@@ -104,7 +91,6 @@ export default function WordOrderQuestion({
   const handleDropOnAvailable = () => {
     if (answered) return;
 
-    // Тащили из picked → возвращаем в available
     if (dragFromPicked !== null) {
       const token = picked[dragFromPicked];
       setPicked((p) => p.filter((_, i) => i !== dragFromPicked));
@@ -114,18 +100,13 @@ export default function WordOrderQuestion({
     }
   };
 
-  // ---------- проверка ----------
-
   const handleCheck = () => {
     if (!canCheck) return;
-    const correct = arraysEqual(picked, question.correctOrder);
-    onSubmit(correct);
+    onSubmit(arraysEqual(picked, question.correctOrder));
   };
 
-  // ---------- рендер ----------
-
-  const renderAvailable = () => {
-    return available.map((token, index) => (
+  const renderAvailable = () =>
+    available.map((token, index) => (
       <motion.button
         key={`av-${index}-${token}`}
         type="button"
@@ -135,14 +116,13 @@ export default function WordOrderQuestion({
         onDragEnd={() => setDragFromAvailable(null)}
         onClick={() => handleAvailableClick(index)}
         disabled={answered}
-        whileHover={!answered ? { y: -2, scale: 1.03 } : undefined}
-        whileTap={!answered ? { scale: 0.97 } : undefined}
+        whileHover={!answered ? { y: -2 } : undefined}
+        whileTap={!answered ? { scale: 0.98 } : undefined}
         transition={spring.bouncy}
       >
         {token}
       </motion.button>
     ));
-  };
 
   const renderPicked = () => {
     if (picked.length === 0) {
@@ -189,15 +169,14 @@ export default function WordOrderQuestion({
               onDrop={() => handleDropOnPicked(index)}
               onClick={() => handlePickedClick(index)}
               disabled={answered}
-              whileHover={!answered ? { y: -2, scale: 1.03 } : undefined}
-              whileTap={!answered ? { scale: 0.97 } : undefined}
+              whileHover={!answered ? { y: -2 } : undefined}
+              whileTap={!answered ? { scale: 0.98 } : undefined}
               transition={spring.bouncy}
             >
               {token}
             </motion.button>
           );
         })}
-        {/* drop-зона в конце — чтобы можно было положить в самый конец */}
         <div
           className="word-order__tail"
           onDragOver={(e) => e.preventDefault()}
@@ -225,14 +204,15 @@ export default function WordOrderQuestion({
 
       {answered && (
         <motion.div
-          className={
+          className={`choose-question__feedback ${
             isCorrect
-              ? "choose-question__feedback choose-question__feedback--correct"
-              : "choose-question__feedback choose-question__feedback--wrong"
-          }
+              ? "choose-question__feedback--correct"
+              : "choose-question__feedback--wrong"
+          }`}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={spring.base}
+          aria-live="polite"
         >
           {isCorrect
             ? "Верно"
@@ -241,14 +221,14 @@ export default function WordOrderQuestion({
       )}
 
       {!answered && (
-        <div className="word-order__footer">
+        <div className="actions word-order__footer">
           <motion.button
             type="button"
-            className="btn btn--accent btn--lg word-order__check"
+            className="btn btn--primary"
             disabled={!canCheck}
             onClick={handleCheck}
-            whileHover={canCheck ? { y: -1, scale: 1.02 } : undefined}
-            whileTap={canCheck ? { scale: 0.97 } : undefined}
+            whileHover={canCheck ? { y: -1 } : undefined}
+            whileTap={canCheck ? { scale: 0.98 } : undefined}
             transition={spring.bouncy}
           >
             Проверить

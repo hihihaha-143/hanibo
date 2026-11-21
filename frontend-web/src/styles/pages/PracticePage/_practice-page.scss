@@ -1,22 +1,35 @@
 @use '../../abstracts' as *;
 
 .practice-page {
-  @include flex(column, flex-start, stretch, 24px);
+  @include flex(column, flex-start, stretch, var(--page-gap));
   width: 100%;
-  padding-block: 24px;
+  min-width: 0;
 
-  &__content {
+  &__header {
+    gap: 0.35rem;
+  }
+
+  &__subtitle {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+  }
+
+  &__content,
+  &__panel {
     position: relative;
     width: 100%;
+    min-width: 0;
   }
 
   &__panel {
-    @include flex(column, flex-start, stretch, 16px);
-    width: 100%;
+    @include flex(column, flex-start, stretch, var(--page-gap));
   }
 
   &__placeholder {
+    padding: 2rem 1rem;
     color: var(--color-text-secondary);
-    font-size: 18px;
+    font-size: 1rem;
+    text-align: center;
   }
 }

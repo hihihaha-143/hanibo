@@ -1,10 +1,9 @@
-// frontend-web/src/pages/ItemPage/LessonView/Test/FlashcardQuestion.tsx
-
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Volume2 } from "lucide-react";
 import { useHotkeys } from "react-hotkeys-hook";
 import type { TestQuestionFlashcard } from "../../../../utils/testGenerator";
+import SpeakControls from "../../../../components/SpeakButton/SpeakControls";
+import { speakKorean } from "../../../../lib/speech";
 import { spring } from "../../../../lib/motion";
 
 interface FlashcardQuestionProps {
@@ -23,21 +22,13 @@ export default function FlashcardQuestion({
   const [flipped, setFlipped] = useState(false);
   const [known, setKnown] = useState(false);
 
-  const speak = (text: string, rate: number) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "ko-KR";
-    utterance.rate = rate;
-    speechSynthesis.cancel();
-    speechSynthesis.speak(utterance);
-  };
-
   const handleKnown = () => {
     if (flipped) return;
     setKnown(true);
     onAnswer(true);
     setFlipped(true);
     if (question.backAudio) {
-      setTimeout(() => speak(question.backAudio!, 1), 400);
+      setTimeout(() => speakKorean(question.backAudio!, 1), 400);
     }
     setTimeout(() => {
       onAutoNext();
@@ -49,11 +40,10 @@ export default function FlashcardQuestion({
     onAnswer(false);
     setFlipped(true);
     if (question.backAudio) {
-      setTimeout(() => speak(question.backAudio!, 1), 400);
+      setTimeout(() => speakKorean(question.backAudio!, 1), 400);
     }
   };
 
-  // 1 — Не знаю
   useHotkeys(
     "1",
     (e) => {
@@ -64,7 +54,6 @@ export default function FlashcardQuestion({
     [flipped],
   );
 
-  // 2 — Знаю
   useHotkeys(
     "2",
     (e) => {
@@ -75,13 +64,11 @@ export default function FlashcardQuestion({
     [flipped],
   );
 
-  // Enter — Далее (после «Не знаю»)
   useHotkeys(
     "enter",
     (e) => {
       e.preventDefault();
-      if (!flipped) return;
-      if (known) return;
+      if (!flipped || known) return;
       onAutoNext();
     },
     [flipped, known],
@@ -93,70 +80,16 @@ export default function FlashcardQuestion({
 
       <div className={`flashcard ${flipped ? "flashcard--flipped" : ""}`}>
         <div className="flashcard__inner">
-          {/* FRONT */}
           <div className="flashcard__face flashcard__face--front">
             <span className="flashcard__text">{question.front}</span>
             {question.frontAudio && (
-              <div className="choose-question__speak">
-                <motion.button
-                  type="button"
-                  className="btn btn--ghost choose-question__speak-button"
-                  onClick={() => speak(question.frontAudio!, 0.5)}
-                  title="Медленно"
-                  whileHover={{ y: -1, scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={spring.bouncy}
-                >
-                  <Volume2 size={16} />
-                  <span>0.5</span>
-                </motion.button>
-                <motion.button
-                  type="button"
-                  className="btn btn--ghost choose-question__speak-button"
-                  onClick={() => speak(question.frontAudio!, 1)}
-                  title="Обычно"
-                  whileHover={{ y: -1, scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={spring.bouncy}
-                >
-                  <Volume2 size={16} />
-                  <span>1</span>
-                </motion.button>
-              </div>
+              <SpeakControls text={question.frontAudio} />
             )}
           </div>
 
-          {/* BACK */}
           <div className="flashcard__face flashcard__face--back">
             <span className="flashcard__text">{question.back}</span>
-            {question.backAudio && (
-              <div className="choose-question__speak">
-                <motion.button
-                  type="button"
-                  className="btn btn--ghost choose-question__speak-button"
-                  onClick={() => speak(question.backAudio!, 0.5)}
-                  title="Медленно"
-                  whileHover={{ y: -1, scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={spring.bouncy}
-                >
-                  <Volume2 size={16} />
-                  <span>0.5</span>
-                </motion.button>
-                <motion.button
-                  type="button"
-                  className="btn btn--ghost choose-question__speak-button"
-                  onClick={() => speak(question.backAudio!, 1)}
-                  title="Обычно"
-                  whileHover={{ y: -1, scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={spring.bouncy}
-                >
-                  <Volume2 size={16} />
-                  <span>1</span>
-                </motion.button>
-              </div>
-            )}
+            {question.backAudio && <SpeakControls text={question.backAudio} />}
           </div>
         </div>
       </div>
@@ -165,10 +98,10 @@ export default function FlashcardQuestion({
         <div className="flashcard__actions">
           <motion.button
             type="button"
-            className="btn btn--danger btn--lg flashcard__action"
+            className="flashcard__action flashcard__action--unknown"
             onClick={handleUnknown}
-            whileHover={{ y: -1, scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ y: -1 }}
+            whileTap={{ scale: 0.98 }}
             transition={spring.bouncy}
           >
             <span className="flashcard__key">1</span>
@@ -176,10 +109,10 @@ export default function FlashcardQuestion({
           </motion.button>
           <motion.button
             type="button"
-            className="btn btn--success btn--lg flashcard__action"
+            className="flashcard__action flashcard__action--known"
             onClick={handleKnown}
-            whileHover={{ y: -1, scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ y: -1 }}
+            whileTap={{ scale: 0.98 }}
             transition={spring.bouncy}
           >
             <span className="flashcard__key">2</span>
@@ -192,10 +125,10 @@ export default function FlashcardQuestion({
         <div className="flashcard__actions">
           <motion.button
             type="button"
-            className="btn btn--primary btn--lg"
+            className="flashcard__action flashcard__action--known"
             onClick={onAutoNext}
-            whileHover={{ y: -1, scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ y: -1 }}
+            whileTap={{ scale: 0.98 }}
             transition={spring.bouncy}
           >
             Далее

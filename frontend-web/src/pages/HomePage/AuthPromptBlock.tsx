@@ -13,12 +13,12 @@ export default function AuthPromptBlock() {
       </p>
       <MotionLink
         to="/login"
-        className="btn btn--accent auth-prompt-block__button"
-        whileHover={{ y: -1, scale: 1.02 }}
-        whileTap={{ scale: 0.97 }}
+        className="btn btn--accent btn--block auth-prompt-block__button"
+        whileHover={{ y: -1 }}
+        whileTap={{ scale: 0.98 }}
         transition={spring.bouncy}
       >
-        <LogIn size={18} />
+        <LogIn size={18} aria-hidden="true" />
         <span>Войти</span>
       </MotionLink>
     </div>

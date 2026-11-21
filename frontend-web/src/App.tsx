@@ -19,8 +19,8 @@ const AlphabetTestPage = lazy(
   () => import("./pages/AlphabetPage/Test/AlphabetTestPage"),
 );
 
-const LoginPage = lazy(() => import("./pages/LoginPage"));
-const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const LoginPage = lazy(() => import("./pages/AuthPage/LoginPage"));
+const RegisterPage = lazy(() => import("./pages/AuthPage/RegisterPage"));
 
 function App() {
   return (

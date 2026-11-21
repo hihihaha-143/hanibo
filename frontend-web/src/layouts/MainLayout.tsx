@@ -9,7 +9,9 @@ export default function MainLayout() {
       <Banner />
       <Sidebar />
       <main className="main-layout__content">
-        <Outlet />
+        <div className="main-layout__inner">
+          <Outlet />
+        </div>
       </main>
       <MobileNav />
     </div>

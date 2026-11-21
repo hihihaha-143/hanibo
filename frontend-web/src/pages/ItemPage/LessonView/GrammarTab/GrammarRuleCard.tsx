@@ -10,7 +10,7 @@ interface GrammarRuleCardProps {
 export default function GrammarRuleCard({ rule }: GrammarRuleCardProps) {
   return (
     <motion.div
-      className="grammar-rule-card"
+      className="card grammar-rule-card"
       variants={{
         hidden: { opacity: 0, y: 8 },
         visible: { opacity: 1, y: 0 },

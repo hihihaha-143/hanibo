@@ -44,6 +44,13 @@ export default function PracticePage() {
 
   return (
     <div className="practice-page">
+      <header className="page__header practice-page__header">
+        <h1 className="page__title">Практика</h1>
+        <p className="practice-page__subtitle">
+          Алфавит, слова, фразы и грамматика в одном месте
+        </p>
+      </header>
+
       <ChipsBlock
         tabs={PRACTICE_TABS}
         activeTab={activeTab}

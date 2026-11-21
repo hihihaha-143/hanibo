@@ -3,9 +3,7 @@
 .shop-card {
   position: relative;
   @include flex(column, flex-start, stretch, 0);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   transition:
     box-shadow var(--transition-base),
@@ -167,54 +165,5 @@
     color: var(--color-text-secondary);
   }
 
-  &__button {
-    margin-top: auto;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.5rem;
-    background: var(--color-primary);
-    color: var(--color-on-primary);
-    font-size: 0.875rem;
-    font-weight: 600;
-    @include flex(row, center, center, 0.25rem);
-    transition:
-      background-color var(--transition-fast),
-      opacity var(--transition-fast);
 
-    &:hover:not(:disabled) {
-      background: var(--color-primary-hover);
-    }
-
-    &:disabled {
-      opacity: 0.4;
-      cursor: default;
-      background: var(--color-surface-alt);
-      color: var(--color-text-secondary);
-    }
-
-    &--equip {
-      background: var(--color-accent);
-      color: var(--color-on-accent);
-
-      &:hover:not(:disabled) {
-        opacity: 0.85;
-        background: var(--color-accent);
-      }
-    }
-
-    &--owned {
-      background: var(--color-success-bg);
-      color: var(--color-success);
-      border: 1px solid var(--color-success);
-    }
-
-    &--activate {
-      background: var(--color-accent);
-      color: var(--color-on-accent);
-
-      &:hover:not(:disabled) {
-        opacity: 0.85;
-        background: var(--color-accent);
-      }
-    }
-  }
 }

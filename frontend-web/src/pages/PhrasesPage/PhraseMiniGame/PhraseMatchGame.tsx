@@ -49,11 +49,6 @@ export function PhraseMatchGame({ onClose }: PhraseMatchGameProps) {
     return map;
   }, [phrases]);
 
-  const phraseIdByHangul = useMemo(() => {
-    const map: Record<string, number> = {};
-    for (const p of phrases) map[p.hangul] = p.id;
-    return map;
-  }, [phrases]);
 
   const loadGame = useCallback(() => {
     setPhase("loading");
