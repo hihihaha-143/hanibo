@@ -121,9 +121,9 @@
 - логи: последние 200 строк `laravel.log`.
 
 Создание администратора — через `AdminUserSeeder` и переменные
-`ADMIN_EMAIL` / `ADMIN_PASSWORD` в `backend/.env`. В локальной среде
-используется `admin@hanibo.local` / `Admin12345`; **смените пароль** после
-первого входа и не используйте эти данные в продакшене.
+`ADMIN_EMAIL` / `ADMIN_PASSWORD` в `backend/.env`. В репозитории нет готового
+пароля: задайте свои значения и выполните `db:seed`. Не коммитьте `.env` и не
+используйте одинаковый пароль в продакшене.
 
 ### Гость
 
@@ -300,9 +300,9 @@ MAIL_MAILER=log
 MAIL_FROM_ADDRESS=hello@example.com
 MAIL_FROM_NAME="${APP_NAME}"
 
-# Локальный администратор для AdminUserSeeder
-ADMIN_EMAIL=admin@hanibo.local
-ADMIN_PASSWORD=Admin12345
+# Задайте свои значения и запустите AdminUserSeeder
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=change-me
 
 WWWUSER=1000
 WWWGROUP=1000
@@ -640,6 +640,34 @@ PHP на Windows/WSL без `pdo_mysql`. Не запускайте `php artisan`
 
 По умолчанию `MAIL_MAILER=log`; письмо пишется в
 `backend/storage/logs/laravel.log`. Для реальной отправки настройте SMTP.
+
+## Передача проекта
+
+Код и история лежат в Git-репозитории. Локальная папка проекта:
+
+```text
+/home/bhhhh/projects/hanibo          # внутри WSL
+\\wsl.localhost\Ubuntu\home\bhhhh\projects\hanibo  # из Windows
+```
+
+Git remote:
+
+```text
+git@github.com:hihihaha-143/hanibo.git
+https://github.com/hihihaha-143/hanibo
+```
+
+Перед передачей другому человеку:
+
+1. Не передавайте свой `backend/.env` с реальными паролями и ключами.
+2. Получатель копирует `backend/.env.example` в `.env` и задаёт `APP_KEY`,
+   `DB_*`, `FRONTEND_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`.
+3. В `frontend-web/vite.config.ts` нужно заменить proxy target на адрес его
+   backend.
+4. Выполнить `composer install`/`npm ci`, миграции, сидеры и
+   `AdminUserSeeder`.
+5. Проверить, что `backend/storage` и загруженные PDF/обложки переданы
+   отдельно, если они не входят в Git.
 
 ## Git
 
