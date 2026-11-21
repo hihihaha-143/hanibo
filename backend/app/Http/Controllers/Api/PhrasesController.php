@@ -40,12 +40,12 @@ class PhrasesController extends Controller
         if ($tab === 'progress') {
             $query->whereHas('progress', function ($q) use ($userId) {
                 $q->where('user_id', $userId)
-                    ->where('interval_days', 0);
+                    ->where('interval_days', '<', 30);
             });
         } elseif ($tab === 'learned') {
             $query->whereHas('progress', function ($q) use ($userId) {
                 $q->where('user_id', $userId)
-                    ->where('interval_days', '>', 0);
+                    ->where('interval_days', '>=', 30);
             });
         } elseif ($tab === 'review') {
             $query->whereHas('progress', function ($q) use ($userId) {

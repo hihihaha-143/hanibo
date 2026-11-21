@@ -7,6 +7,7 @@ import {
   type DictionaryPhrase,
 } from "../../api/dictionary";
 import { useAuth } from "../../context/useAuth";
+import SpeakControls from "../../components/SpeakButton/SpeakControls";
 
 const TICK_MS = 60_000;
 
@@ -118,6 +119,7 @@ export function DailyPhraseBlock() {
       <div className="daily-word-block__body">
         <p className="daily-word-block__hangul">{phrase.hangul}</p>
         <p className="daily-word-block__translation">{phrase.translation}</p>
+        <SpeakControls text={phrase.hangul} className="daily-word-block__speak" />
       </div>
 
       <button

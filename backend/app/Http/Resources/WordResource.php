@@ -27,7 +27,7 @@ class WordResource extends JsonResource
                 return [
                     'interval_days' => $progress->interval_days,
                     'next_review_at' => $progress->next_review_at?->toIso8601String(),
-                    'is_learned' => $progress->interval_days > 0,
+                    'is_learned' => $progress->interval_days >= 30,
                 ];
             }),
         ];

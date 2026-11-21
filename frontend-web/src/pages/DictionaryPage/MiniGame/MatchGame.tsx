@@ -204,9 +204,12 @@ export function MatchGame({ onClose }: MatchGameProps) {
     }
 
     return (
-      <motion.div
+      <motion.button
+        type="button"
         key={left}
         className={`match__item ${modifier}`}
+        disabled={answered}
+        aria-pressed={isSelected}
         style={
           color && !answered
             ? {
@@ -224,7 +227,7 @@ export function MatchGame({ onClose }: MatchGameProps) {
         transition={spring.bouncy}
       >
         {left}
-      </motion.div>
+      </motion.button>
     );
   };
 
@@ -245,9 +248,12 @@ export function MatchGame({ onClose }: MatchGameProps) {
     }
 
     return (
-      <motion.div
+      <motion.button
+        type="button"
         key={right}
         className={`match__item ${modifier}`}
+        disabled={answered}
+        aria-pressed={isSelected}
         style={
           color && !answered
             ? {
@@ -265,7 +271,7 @@ export function MatchGame({ onClose }: MatchGameProps) {
         transition={spring.bouncy}
       >
         {right}
-      </motion.div>
+      </motion.button>
     );
   };
 

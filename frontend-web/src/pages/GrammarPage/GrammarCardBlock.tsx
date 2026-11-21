@@ -1,3 +1,4 @@
+import SpeakControls from "../../components/SpeakButton/SpeakControls";
 import type { GrammarRule } from "../../api/grammar";
 
 interface GrammarCardBlockProps {
@@ -45,6 +46,14 @@ export function GrammarCardBlock({ rule, onOpen }: GrammarCardBlockProps) {
           {status.text}
         </span>
       </header>
+
+      <div
+        className="dictionary-card__speak"
+        onClick={(event) => event.stopPropagation()}
+        onKeyDown={(event) => event.stopPropagation()}
+      >
+        <SpeakControls text={rule.construction} />
+      </div>
 
       <div className="dictionary-card__meta">
         {rule.form && (

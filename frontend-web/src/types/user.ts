@@ -47,5 +47,6 @@ export interface User {
   streak_extended_today: boolean;
   streak_frozen_today: boolean;
   streak_freezes: number;
+  streak_rewards_claimed: number;
   created_at: string;
 }

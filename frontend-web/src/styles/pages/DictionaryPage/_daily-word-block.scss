@@ -63,6 +63,11 @@
     word-break: break-word;
   }
 
+  &__speak {
+    align-self: flex-start;
+    margin-top: 0.25rem;
+  }
+
   &__translation {
     font-size: 0.875rem;
     color: var(--color-text-secondary);

@@ -203,9 +203,12 @@ export function PhraseMatchGame({ onClose }: PhraseMatchGameProps) {
     }
 
     return (
-      <motion.div
+      <motion.button
+        type="button"
         key={left}
         className={`match__item ${modifier}`}
+        disabled={answered}
+        aria-pressed={isSelected}
         style={
           color && !answered
             ? {
@@ -223,7 +226,7 @@ export function PhraseMatchGame({ onClose }: PhraseMatchGameProps) {
         transition={spring.bouncy}
       >
         {left}
-      </motion.div>
+      </motion.button>
     );
   };
 
@@ -244,9 +247,12 @@ export function PhraseMatchGame({ onClose }: PhraseMatchGameProps) {
     }
 
     return (
-      <motion.div
+      <motion.button
+        type="button"
         key={right}
         className={`match__item ${modifier}`}
+        disabled={answered}
+        aria-pressed={isSelected}
         style={
           color && !answered
             ? {
@@ -264,7 +270,7 @@ export function PhraseMatchGame({ onClose }: PhraseMatchGameProps) {
         transition={spring.bouncy}
       >
         {right}
-      </motion.div>
+      </motion.button>
     );
   };
 

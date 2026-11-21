@@ -28,8 +28,12 @@
       background-color var(--transition-fast),
       color var(--transition-fast);
 
-    &:hover {
+    &:hover:not(:disabled) {
       border-color: var(--color-accent);
+    }
+
+    &:disabled {
+      cursor: default;
     }
 
     &--selected {

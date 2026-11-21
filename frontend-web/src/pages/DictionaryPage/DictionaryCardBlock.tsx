@@ -6,6 +6,7 @@ import {
   type WordProgress,
 } from "../../api/dictionary";
 import { useAuth } from "../../context/useAuth";
+import SpeakControls from "../../components/SpeakButton/SpeakControls";
 
 interface DictionaryCardBlockProps {
   word: DictionaryWord;
@@ -56,10 +57,6 @@ function getProgressLabel(
     return { text: "Не изучено", mod: "new" };
   }
 
-  if (!progress.is_learned) {
-    return { text: "В процессе", mod: "progress" };
-  }
-
   if (progress.next_review_at) {
     const target = new Date(progress.next_review_at).getTime();
     if (target <= now) {
@@ -67,8 +64,12 @@ function getProgressLabel(
     }
     return {
       text: `Повтор ${formatReviewDate(progress.next_review_at, now)}`,
-      mod: "learned",
+      mod: progress.is_learned ? "learned" : "progress",
     };
+  }
+
+  if (!progress.is_learned) {
+    return { text: "В процессе", mod: "progress" };
   }
 
   return { text: "Изучено", mod: "learned" };
@@ -123,6 +124,10 @@ export function DictionaryCardBlock({
           {status.text}
         </span>
       </header>
+
+      <div className="dictionary-card__speak">
+        <SpeakControls text={word.hangul} />
+      </div>
 
       <div className="dictionary-card__meta">
         {word.part_of_speech && (

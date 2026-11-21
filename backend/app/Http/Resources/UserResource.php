@@ -37,22 +37,22 @@ class UserResource extends JsonResource
 
         $wordsLearning = UserWord::query()
             ->where('user_id', $this->id)
-            ->where('interval_days', 0)
+            ->where('interval_days', '<', 30)
             ->count();
 
         $wordsLearned = UserWord::query()
             ->where('user_id', $this->id)
-            ->where('interval_days', '>', 0)
+            ->where('interval_days', '>=', 30)
             ->count();
 
         $phrasesLearning = UserPhrase::query()
             ->where('user_id', $this->id)
-            ->where('interval_days', 0)
+            ->where('interval_days', '<', 30)
             ->count();
 
         $phrasesLearned = UserPhrase::query()
             ->where('user_id', $this->id)
-            ->where('interval_days', '>', 0)
+            ->where('interval_days', '>=', 30)
             ->count();
 
         $grammarLearning = UserGrammarRule::query()
@@ -111,6 +111,7 @@ class UserResource extends JsonResource
             'streak_extended_today' => $streakExtendedToday,
             'streak_frozen_today' => $streakFrozenToday,
             'streak_freezes' => $this->streak_freezes,
+            'streak_rewards_claimed' => $this->streak_rewards_claimed ?? 0,
             'strawberry' => $this->strawberry,
             'blueberry' => $this->blueberry,
             'words_learning' => $wordsLearning,

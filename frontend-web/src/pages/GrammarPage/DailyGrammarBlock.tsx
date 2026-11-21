@@ -7,6 +7,7 @@ import {
   type GrammarRule,
 } from "../../api/grammar";
 import { useAuth } from "../../context/useAuth";
+import SpeakControls from "../../components/SpeakButton/SpeakControls";
 import { GrammarRuleModal } from "./GrammarRuleModal";
 
 function currentDayKey(): string {
@@ -103,6 +104,7 @@ export function DailyGrammarBlock() {
           {rule.title}
         </button>
         <p className="daily-word-block__translation">{rule.construction}</p>
+        <SpeakControls text={rule.construction} className="daily-word-block__speak" />
       </div>
 
       <button

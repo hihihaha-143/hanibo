@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Volume2, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import {
   getGrammarRule,
   getGrammarRules,
@@ -9,7 +9,7 @@ import {
   type GrammarRuleDetail,
 } from "../../api/grammar";
 import { useAuth } from "../../context/useAuth";
-import { useSpeech } from "../../lib/useSpeech";
+import SpeakControls from "../../components/SpeakButton/SpeakControls";
 
 interface GrammarRuleModalProps {
   ruleId: number;
@@ -23,7 +23,6 @@ export function GrammarRuleModal({
   onChanged,
 }: GrammarRuleModalProps) {
   const { refreshUser } = useAuth();
-  const { speak } = useSpeech();
 
   const [rule, setRule] = useState<GrammarRuleDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -227,14 +226,10 @@ export function GrammarRuleModal({
                         <p className="dictionary-card__example-hangul">
                           {p.hangul}
                         </p>
-                        <button
-                          type="button"
+                        <SpeakControls
+                          text={p.hangul}
                           className="grammar-rule-modal__speak"
-                          onClick={() => speak(p.hangul)}
-                          aria-label="Озвучить пример"
-                        >
-                          <Volume2 size={16} />
-                        </button>
+                        />
                       </div>
                       <p className="dictionary-card__example-translation">
                         {p.translation}
